@@ -50,4 +50,13 @@ public interface CmdHotDao {
      * @return
      */
     int deleteCommodityHot (@Param("listCode")List<String> listCode, @Param("userId") String userId);
+
+    /**
+     * 展示商品数量设置
+     * @param userId
+     * @param showNum
+     * @param version
+     * @return
+     */
+    int showCommodityHotNum (@Param("userId")String userId,@Param("showNum")String showNum, @Param("version")String version);
 }

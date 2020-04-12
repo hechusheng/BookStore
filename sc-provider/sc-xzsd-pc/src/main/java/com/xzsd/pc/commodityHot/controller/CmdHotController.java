@@ -113,4 +113,22 @@ public class CmdHotController {
             throw e;
         }
     }
+
+    /**
+     * 设置展示商品数量
+     * @param showNum
+     * @param version
+     * @return
+     */
+    @PostMapping("showCommodityHotNum")
+    public AppResponse showCommodityHotNum(String showNum,String version) {
+        try {
+            String userId = SecurityUtils.getCurrentUserId();
+            return cmdHotService.showCommodityHotNum(userId,showNum,version);
+        }catch (Exception e) {
+            logger.error("设置展示数量失败", e);
+            System.out.println(e.toString());
+            throw e;
+        }
+    }
 }

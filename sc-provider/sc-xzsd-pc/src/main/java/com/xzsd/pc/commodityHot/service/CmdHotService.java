@@ -105,4 +105,12 @@ public class CmdHotService {
         }
         return AppResponse.success("热门商品删除成功");
     }
+
+    public AppResponse showCommodityHotNum (String userId, String showNum, String version) {
+        int result = cmdHotDao.showCommodityHotNum(userId,showNum,version);
+        if(0 == result){
+            return AppResponse.bizError("设置失败");
+        }
+        return AppResponse.success("设置成功");
+    }
 }

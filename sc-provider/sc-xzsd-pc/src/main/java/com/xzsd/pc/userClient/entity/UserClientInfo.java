@@ -1,5 +1,7 @@
 package com.xzsd.pc.userClient.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.util.Date;
 
 public class UserClientInfo {
@@ -56,21 +58,23 @@ public class UserClientInfo {
      */
     private int isDelete;
     /**
-     * 创建时间
-     */
-    private Date createTime;
-    /**
      * 创建者
      */
     private String createUser;
     /**
-     * 更新时间
+     * 创建时间
      */
-    private Date updateTime;
+    @JsonFormat(shape = JsonFormat.Shape.STRING , pattern = "yyyy-MM-dd HH:mm:ss" , timezone = "GMT+8")
+    private Date createTime;
     /**
      * 更新者
      */
     private String updateUser;
+    /**
+     * 更新时间
+     */
+    @JsonFormat(shape = JsonFormat.Shape.STRING , pattern = "yyyy-MM-dd HH:mm:ss" , timezone = "GMT+8")
+    private Date updateTime;
     /**
      * 版本号
      */
