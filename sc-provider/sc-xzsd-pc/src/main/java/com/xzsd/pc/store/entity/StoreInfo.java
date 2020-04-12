@@ -33,6 +33,7 @@ public class StoreInfo {
      */
     private String businessLicense;
     /**
-     *
+     *所在省份编号
      */
+    private String provinceCode;
 }
