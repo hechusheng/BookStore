@@ -32,4 +32,7 @@ public class StoreInfo {
      *营业执照编号
      */
     private String businessLicense;
+    /**
+     *
+     */
 }
