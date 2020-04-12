@@ -87,6 +87,7 @@ public class StoreInfo {
      */
     private String version;
 
+
     public String getStoreCode() {
         return storeCode;
     }
