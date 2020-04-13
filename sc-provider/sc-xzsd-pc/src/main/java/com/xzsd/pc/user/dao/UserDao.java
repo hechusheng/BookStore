@@ -66,5 +66,4 @@ public interface UserDao {
      */
     UserInfo userLogin(@Param("userAccount") String userAccount, @Param("userPassword") String userPassword);
 
-
 }

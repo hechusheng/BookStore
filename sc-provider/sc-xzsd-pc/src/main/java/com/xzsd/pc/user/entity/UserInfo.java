@@ -11,59 +11,46 @@ public class UserInfo {
      */
     private int pageSize;
 
-
-
     /**
      * 页数
      */
     private int pageNum;
-
     /**
      * 用户编号
      */
     private String userCode;
-
     /**
      * 用户名称
      */
     private String userName;
-
     /**
      * 用户登录账号
      */
     private String userAccount;
-
     /**
      * 用户密码
      */
     private String userPassword;
-
     /**
      * 身份证号码
      */
     private String idCard;
-
     /**
      * 性别 1男 0女
      */
     private String sex;
-
     /**
      * 手机号码
      */
     private String phone;
-
     /**
      * 电子邮件
      */
     private String email;
-
     /**
      * 头像
      */
     private String photo;
-
-
     /**
      * 角色（0管理员，1店长）
      */

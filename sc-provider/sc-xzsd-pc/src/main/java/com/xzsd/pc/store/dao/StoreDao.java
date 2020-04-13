@@ -1,7 +1,13 @@
 package com.xzsd.pc.store.dao;
 
+import com.xzsd.pc.store.entity.AreaInfo;
+import com.xzsd.pc.store.entity.CityInfo;
+import com.xzsd.pc.store.entity.ProvinceInfo;
 import com.xzsd.pc.store.entity.StoreInfo;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 @Mapper
 public interface StoreDao {
@@ -39,4 +45,39 @@ public interface StoreDao {
      * @return
      */
     int updateStoreByCode (StoreInfo storeInfo);
+
+    /**
+     * 查询门店信息列表(分页)
+     * @param storeInfo
+     * @return
+     */
+    List<StoreInfo> listStoreByPage (StoreInfo storeInfo);
+
+    /**
+     * 删除门店
+     * @param listCode
+     * @param userId
+     * @return
+     */
+    int deleteStore(@Param("listCode") List<String> listCode, @Param("userId") String userId);
+
+    /**
+     * 省下拉查询
+     * @return
+     */
+    List<ProvinceInfo> listProvince ();
+
+    /**
+     * 市下拉查询
+     * @param provinceCode
+     * @return
+     */
+    List<CityInfo> listCity (String provinceCode);
+
+    /**
+     * 区/县下拉查询
+     * @param cityCode
+     * @return
+     */
+    List<AreaInfo> listArea (String cityCode);
 }

@@ -2,13 +2,21 @@ package com.xzsd.pc.store.service;
 
 import com.neusoft.core.restful.AppResponse;
 import com.neusoft.util.StringUtil;
+import com.xzsd.pc.commoditySort.entity.FirstClassSort;
 import com.xzsd.pc.store.dao.StoreDao;
+import com.xzsd.pc.store.entity.AreaInfo;
+import com.xzsd.pc.store.entity.CityInfo;
+import com.xzsd.pc.store.entity.ProvinceInfo;
 import com.xzsd.pc.store.entity.StoreInfo;
 import com.xzsd.pc.util.RandomUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.Arrays;
+import java.util.List;
+
+import static com.neusoft.core.page.PageUtils.getPageInfo;
 
 /**
  * @DescriptionDemo 实现类
@@ -77,5 +85,62 @@ public class StoreService {
             return AppResponse.bizError("修改门店失败!");
         }
         return AppResponse.success("修改门店成功");
+    }
+
+    /**
+     * 查询门店信息列表(分页)
+     * @param storeInfo
+     * @return
+     */
+    public AppResponse listStoreByPage (StoreInfo storeInfo) {
+        List<StoreInfo> storeInfoList = storeDao.listStoreByPage(storeInfo);
+        return AppResponse.success("查询门店列表成功！",getPageInfo(storeInfoList));
+    }
+
+    /**
+     * 删除门店
+     * @param storeCode
+     * @param userId
+     * @return
+     */
+    @Transactional(rollbackFor = Exception.class)
+    public AppResponse deleteStore(String storeCode,String userId) {
+        List<String> listCode = Arrays.asList(storeCode.split(","));
+        AppResponse appResponse = AppResponse.success("删除成功！");
+        // 删除门店
+        int count = storeDao.deleteStore(listCode,userId);
+        if(0 == count) {
+            appResponse = AppResponse.bizError("删除失败，请重试！");
+        }
+        return appResponse;
+    }
+
+    /**
+     * 省下拉查询
+     * @return
+     */
+    public AppResponse listProvince () {
+        List<ProvinceInfo> provinceList = storeDao.listProvince();
+        return AppResponse.success("省下拉查询成功",provinceList);
+    }
+
+    /**
+     * 市下拉查询
+     * @param provinceCode
+     * @return
+     */
+    public AppResponse listCity (String provinceCode) {
+        List<CityInfo> cityList = storeDao.listCity(provinceCode);
+        return AppResponse.success("市下拉查询成功",cityList);
+    }
+
+    /**
+     * 区/县下拉查询
+     * @param cityCode
+     * @return
+     */
+    public AppResponse listArea (String cityCode) {
+        List<AreaInfo> areaList = storeDao.listArea(cityCode);
+        return AppResponse.success("市下拉查询成功",areaList);
     }
 }

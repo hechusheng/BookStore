@@ -2,6 +2,7 @@ package com.xzsd.pc.store.controller;
 
 import com.neusoft.core.restful.AppResponse;
 import com.neusoft.security.client.utils.SecurityUtils;
+import com.neusoft.util.AuthUtils;
 import com.xzsd.pc.store.entity.StoreInfo;
 import com.xzsd.pc.store.service.StoreService;
 import org.slf4j.Logger;
@@ -72,6 +73,90 @@ public class StoreController {
             return storeService.updateStoreByCode(storeInfo);
         }catch (Exception e){
             logger.error("修改门店失败", e);
+            System.out.println(e.toString());
+            throw e;
+        }
+    }
+
+    /**
+     * 查询门店信息列表(分页)
+     * @param storeInfo
+     * @return
+     */
+    @RequestMapping("listStoreByPage")
+    public AppResponse listStoreByPage (StoreInfo storeInfo) {
+        try {
+            return storeService.listStoreByPage(storeInfo);
+        }catch (Exception e){
+            logger.error("查询门店信息列表失败", e);
+            System.out.println(e.toString());
+            throw e;
+        }
+    }
+
+    /**
+     * 删除门店
+     * @param storeCode
+     * @return
+     */
+    @PostMapping("deleteStore")
+    public AppResponse deleteStore(String storeCode) {
+        try {
+            //获取用户id
+            String userId = SecurityUtils.getCurrentUserId();
+            return storeService.deleteStore(storeCode,userId);
+        } catch (Exception e) {
+            logger.error("门店删除错误", e);
+            System.out.println(e.toString());
+            throw e;
+        }
+    }
+
+    /**
+     * 查询省份列表
+     * @return
+     */
+    @RequestMapping("listProvince")
+    public AppResponse listProvince(){
+        try{
+            AppResponse appResponse = storeService.listProvince();
+            return appResponse;
+        }catch (Exception e){
+            logger.error("查询失败");
+            System.out.println(e.toString());
+            throw e;
+        }
+    }
+
+    /**
+     * 查询城市列表
+     * @param provinceCode
+     * @return
+     */
+    @RequestMapping("listCity")
+    public AppResponse listCity(String provinceCode){
+        try{
+            AppResponse appResponse = storeService.listCity(provinceCode);
+            return appResponse;
+        }catch (Exception e){
+            logger.error("查询失败");
+            System.out.println(e.toString());
+            throw e;
+        }
+    }
+
+    /**
+     * 查询区列表
+     * @param cityCode
+     * @return
+     */
+    @RequestMapping("listArea")
+    public AppResponse listArea(String cityCode){
+        try{
+            AppResponse appResponse = storeService.listArea(cityCode);
+            return appResponse;
+        }catch (Exception e){
+            logger.error("查询失败");
             System.out.println(e.toString());
             throw e;
         }

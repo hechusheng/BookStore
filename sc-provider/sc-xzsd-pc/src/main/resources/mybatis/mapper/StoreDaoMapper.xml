@@ -124,4 +124,102 @@
         and
             version = #{version}
     </update>
+    <!--查询门店信息列表-->
+    <select id="listStoreByPage" parameterType="com.xzsd.pc.store.entity.StoreInfo" resultType="com.xzsd.pc.store.entity.StoreInfo">
+        SELECT
+            st.store_code storeCode,
+            st.store_name storeName,
+            st.store_phone storePhone,
+            st.store_address storeAddress,
+            us.user_name userName,
+            st.invite_code inviteCode,
+            us.user_acc userAccount
+        FROM
+            t_store st
+        LEFT JOIN
+            t_sys_user us
+        ON
+            st.user_code = us.user_code
+        where
+            st.is_delete =  0
+        <if test="role !=null and role !='' and role == 1">
+            AND st.user_code = #{userId}
+        </if>
+        <if test="storeCode != null and storeCode !=''">
+            AND st.store_code like concat ('%',#{storeCode},'%')
+        </if>
+        <if test="storeName != null and storeName !=''">
+            AND st.store_name like concat ('%',#{storeName},'%')
+        </if>
+        <if test="userName != null and userName !=''">
+            AND us.user_name like concat ('%',#{userName},'%')
+        </if>
+        <if test="provinceCode != null and provinceCode !=''">
+            AND st.province_code = #{provinceCode}
+        </if>
+        <if test="cityCode != null and cityCode !=''">
+            AND st.city_code = #{cityCode}
+        </if>
+        <if test="areaCode != null and areaCode !=''">
+            AND st.area_code = #{areaCode}
+        </if>
+        order by st.create_time desc
+    </select>
+    <!--删除门店信息-->
+    <update id="deleteStore" parameterType="com.xzsd.pc.store.entity.StoreInfo">
+        update
+            t_store
+        set
+            is_delete = 1,
+            update_time = now(),
+            update_user = #{userId},
+            version = version + 1
+        where
+            store_code
+        in
+        <foreach item="item" index="index" collection="listCode" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </update>
+    <!--    查询省份列表-->
+    <select id="listProvince" resultType="com.xzsd.pc.store.entity.ProvinceInfo">
+        select
+            id provinceCode,
+            city_name province
+        from
+            city
+        where
+            type_level = 1
+        order by
+            id desc
+    </select>
+    <!--    查询城市列表-->
+    <select id="listCity" resultType="com.xzsd.pc.store.entity.CityInfo">
+        select
+            id cityCode,
+            city_name city
+        from
+            city
+        where
+            type_level = 2
+        and
+            pid = #{provinceCode}
+        order by
+            id desc
+    </select>
+    <!--    查询区列表-->
+    <select id="listArea" resultType="com.xzsd.pc.store.entity.AreaInfo">
+       select
+            id areaCode,
+            city_name area
+        from
+            city
+        where
+            type_level = 3
+        and
+            pid = #{cityCode}
+        order by
+            id desc
+    </select>
+
 </mapper>

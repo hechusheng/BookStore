@@ -86,6 +86,54 @@ public class StoreInfo {
      * 版本号
      */
     private String version;
+    /**
+     * 登录人id
+     */
+    private String userId;
+    /**
+     * 角色
+     */
+    private String role;
+    /**
+     * 用户名称
+     */
+    private String userName;
+    /**
+     * 用户登录账号
+     */
+    private String userAccount;
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public String getUserAccount() {
+        return userAccount;
+    }
+
+    public void setUserAccount(String userAccount) {
+        this.userAccount = userAccount;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
 
     public String getStoreCode() {
         return storeCode;
