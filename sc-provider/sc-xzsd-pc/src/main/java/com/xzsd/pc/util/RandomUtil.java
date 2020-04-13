@@ -35,6 +35,7 @@ public class RandomUtil {
         return sb.toString();
     }
     public static void main(String[] args) {
+
         System.err.println(radmonkey(32));
     }
 
