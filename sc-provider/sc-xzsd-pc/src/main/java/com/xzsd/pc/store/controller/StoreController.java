@@ -37,10 +37,43 @@ public class StoreController {
             storeInfo.setUpdateUser(userId);
             return storeService.addStore(storeInfo);
         }catch (Exception e){
-            logger.error("新增热门商品失败", e);
+            logger.error("新增门店失败", e);
             System.out.println(e.toString());
             throw e;
         }
     }
 
+    /**
+     * 查询门店详情
+     * @param storeCode
+     * @return
+     */
+    @RequestMapping("findStoreByCode")
+    public AppResponse findStoreByCode (String storeCode) {
+        try {
+            return storeService.findStoreByCode(storeCode);
+        }catch (Exception e){
+            logger.error("查询门店失败", e);
+            System.out.println(e.toString());
+            throw e;
+        }
+    }
+
+    /**
+     * 修改门店信息
+     * @param storeInfo
+     * @return
+     */
+    @PostMapping("updateStoreByCode")
+    public AppResponse updateStoreByCode (StoreInfo storeInfo) {
+        try {
+            String userId = SecurityUtils.getCurrentUserId();
+            storeInfo.setUpdateUser(userId);
+            return storeService.updateStoreByCode(storeInfo);
+        }catch (Exception e){
+            logger.error("修改门店失败", e);
+            System.out.println(e.toString());
+            throw e;
+        }
+    }
 }

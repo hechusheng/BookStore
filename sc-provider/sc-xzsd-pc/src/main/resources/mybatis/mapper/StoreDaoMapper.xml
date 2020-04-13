@@ -3,13 +3,27 @@
 <mapper namespace="com.xzsd.pc.store.dao.StoreDao">
     <!--统计门店数量-->
     <select id="countStore" parameterType="com.xzsd.pc.store.entity.StoreInfo" resultType="int">
+        SELECT
+            count(*)
+        FROM
+            t_store st
+        where
+            st.is_delete = 0
+        and
+            (st.invite_code = #{inviteCode}
+            or
+                st.business_license = #{businessLicense})
+        <if test="storeCode != null and storeCode != ''">
+            and store_code != #{storeCode}
+        </if>
+    </select>
+    <!--    统计店长编号数量-->
+    <select id="countUserCode" parameterType="com.xzsd.pc.store.entity.StoreInfo" resultType="int">
         select
             count(*)
         from
-            t_store
+            t_sys_user
         where
-            is_delete = 0
-        and
             user_code = #{userCode}
         and
             is_delete = 0
@@ -19,18 +33,17 @@
     <!--新增门店-->
     <insert id="addStore" parameterType="com.xzsd.pc.store.entity.StoreInfo">
         insert into t_store
-                (
+            (
                  store_code,
                  store_name,
+                 store_phone,
                  user_code,
                  business_license,
                  province_code,
                  city_code,
                  area_code,
-                 privince,
-                 city,
-                 area,
                  store_address,
+                 invite_code,
                  is_delete,
                  create_time,
                  create_user,
@@ -39,9 +52,16 @@
                  version)
                 values
                    (
-                    #{hotCode},
-                    #{hotNum},
-                    #{comCode},
+                    #{storeCode},
+                    #{storeName},
+                    #{storePhone},
+                    #{userCode},
+                    #{businessLicense},
+                    #{provinceCode},
+                    #{cityCode},
+                    #{areaCode},
+                    #{storeAddress},
+                    #{inviteCode},
                     #{isDelete},
                     now(),
                     #{createUser},
@@ -49,4 +69,59 @@
                     #{updateUser},
                     0)
     </insert>
+    <!--查询门店详情-->
+    <select id="findStoreByCode" parameterType="com.xzsd.pc.store.entity.StoreInfo" resultType="com.xzsd.pc.store.entity.StoreInfo">
+        SELECT
+            st.store_code storeCode,
+            st.store_name storeName,
+            st.user_code userCode,
+            st.store_phone storePhone,
+            st.invite_code inviteCode,
+            c.city_name province,
+            b.city_name city,
+            a.city_name area,
+            st.store_address storeAddress,
+            st.version version
+        FROM
+            t_store st
+        LEFT JOIN
+            city a
+        ON
+            st.area_code = a.id
+        LEFT JOIN
+             city b
+        ON
+            a.pid = b.id
+        LEFT JOIN
+            city c
+        ON
+            b.pid = c.id
+        where
+            st.is_delete =  0
+        and
+            st.store_code = #{storeCode}
+    </select>
+    <!--    修改门店信息-->
+    <update id="updateStoreByCode" parameterType="com.xzsd.pc.store.entity.StoreInfo" >
+        update
+            t_store
+        set
+            store_name = #{storeName},
+            store_phone = #{storePhone},
+            user_code = #{userCode},
+            business_license = #{businessLicense},
+            province_code = #{provinceCode},
+            city_code = #{cityCode},
+            area_code = #{areaCode},
+            store_address = #{storeAddress},
+            update_user = #{updateUser},
+            update_time = now(),
+            version = version + 1
+        where
+            is_delete = 0
+        and
+            store_code = #{storeCode}
+        and
+            version = #{version}
+    </update>
 </mapper>

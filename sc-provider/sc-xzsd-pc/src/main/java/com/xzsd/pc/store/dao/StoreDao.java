@@ -13,9 +13,30 @@ public interface StoreDao {
     int countStore (StoreInfo storeInfo);
 
     /**
+     * 统计店长数量
+     * @param storeInfo
+     * @return
+     */
+    int countUserCode(StoreInfo storeInfo);
+
+    /**
      * 新增门店
      * @param storeInfo
      * @return
      */
     int addStore (StoreInfo storeInfo);
+
+    /**
+     * 查询门店详情
+     * @param storeCode
+     * @return
+     */
+    StoreInfo findStoreByCode (String storeCode);
+
+    /**
+     * 修改门店信息
+     * @param storeInfo
+     * @return
+     */
+    int updateStoreByCode (StoreInfo storeInfo);
 }

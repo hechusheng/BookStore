@@ -100,6 +100,7 @@ public class CmdHotService {
      * @param userId
      * @return
      */
+    @Transactional(rollbackFor = Exception.class)
     public AppResponse deleteCommodityHot(String hotCode, String userId) {
         //逗号分开（多个删除）
         List<String> listCode = Arrays.asList(hotCode.split(","));
