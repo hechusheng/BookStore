@@ -12,6 +12,11 @@ import javax.annotation.Resource;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * @DescriptionDemo 实现类
+ * @Author hechusheng
+ * @Date 2020-04-12
+ */
 @Service
 public class CmdHotService {
     @Resource

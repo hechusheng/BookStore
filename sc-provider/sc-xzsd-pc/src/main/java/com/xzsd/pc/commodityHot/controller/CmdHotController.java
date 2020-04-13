@@ -16,6 +16,11 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.annotation.Resource;
 import javax.validation.Valid;
 
+/**
+ * @author hechusheng
+ * @Descritption增删查改CommodityHot
+ * @Date 2020-04-12
+ */
 @RestController
 @RequestMapping("/commodityHot")
 @Validated

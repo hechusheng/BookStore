@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xzsd.pc.store.dao.StoreDao">
+    <!--统计门店数量-->
+    <select id="countStore" parameterType="com.xzsd.pc.store.entity.StoreInfo" resultType="int">
+        select
+            count(*)
+        from
+            t_store
+        where
+            is_delete = 0
+        and
+            user_code = #{userCode}
+        and
+            is_delete = 0
+        and
+            role = 1
+    </select>
+    <!--新增门店-->
+    <insert id="addStore" parameterType="com.xzsd.pc.store.entity.StoreInfo">
+        insert into t_store
+                (
+                 store_code,
+                 store_name,
+                 user_code,
+                 business_license,
+                 province_code,
+                 city_code,
+                 area_code,
+                 privince,
+                 city,
+                 area,
+                 store_address,
+                 is_delete,
+                 create_time,
+                 create_user,
+                 update_time,
+                 update_user,
+                 version)
+                values
+                   (
+                    #{hotCode},
+                    #{hotNum},
+                    #{comCode},
+                    #{isDelete},
+                    now(),
+                    #{createUser},
+                    now(),
+                    #{updateUser},
+                    0)
+    </insert>
+</mapper>
