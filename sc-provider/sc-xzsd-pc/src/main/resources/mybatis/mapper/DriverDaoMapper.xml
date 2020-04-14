@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xzsd.pc.driver.dao.DriverDao">
+    <!--统计司机数量-->
+    <select id="countUserAccount" parameterType="com.xzsd.pc.driver.entity.DriverInfo" resultType="int" >
+        SELECT
+            COUNT(user_acc)
+        FROM
+            t_sys_user
+        WHERE
+            user_acc = #{userAccount}
+        <if test="userCode != null and userCode != ''">
+            AND user_code != #{userCode}
+        </if>
+    </select>
+    <!--统计身份证数量-->
+    <select id="countIdCard" parameterType="com.xzsd.pc.driver.entity.DriverInfo" resultType="int" >
+        SELECT
+            COUNT(idcard)
+        FROM
+            t_sys_user
+        WHERE
+            idcard = #{idCard}
+        <if test="userCode != null and userCode != ''">
+            AND user_code != #{userCode}
+        </if>
+    </select>
+    <!--    新增司机信息(用户表)-->
+    <insert id="addUser" parameterType="com.xzsd.pc.driver.entity.DriverInfo">
+       insert into t_sys_user
+            (user_code,
+            user_name,
+            user_acc,
+            user_pass,
+            role,
+            idcard,
+            sex,
+            phone,
+            photo,
+            is_delete,
+            create_time,
+            create_user,
+            update_time,
+            update_user,
+            version)
+        values
+           (#{userCode},
+            #{userName},
+            #{userAccount},
+            #{userPassword},
+            2,
+            #{idCard},
+            #{sex},
+            #{phone},
+            #{photo},
+            #{isDelete},
+            now(),
+            #{createUser},
+            now(),
+            #{updateUser},
+            0)
+    </insert>
+    <!--新增司机(子表)-->
+    <insert id="addDriver" parameterType="com.xzsd.pc.driver.entity.DriverInfo">
+        insert into t_user_driver(
+            user_code,
+            province_code,
+            city_code,
+            area_code,
+            is_delete,
+            create_time,
+            create_user,
+            update_time,
+            update_user,
+            version
+        )values
+            (#{userCode},
+            #{provinceCode},
+            #{cityCode},
+            #{areaCode},
+            #{isDelete},
+            now(),
+            #{createUser},
+            now(),
+            #{updateUser},
+            0)
+    </insert>
+    <!--查询司机详情-->
+    <select id="findDriverByCode" parameterType="com.xzsd.pc.driver.entity.DriverInfo" resultType="com.xzsd.pc.driver.entity.DriverInfo">
+        SELECT
+            u.user_acc userAccount,
+            u.user_name userName,
+            u.phone phone,
+            u.idcard idCard,
+            u.user_pass userPassword,
+            c1.city_name province,
+            c2.city_name city,
+            c3.city_name area
+        FROM
+            t_user_driver d
+        LEFT JOIN
+            t_sys_user u
+        ON
+            u.user_code = d.user_code
+        LEFT JOIN
+            city c3
+        ON
+            c3.id = d.area_code
+        LEFT JOIN
+            city c2
+        ON
+            c2.id = c3.pid
+        LEFT JOIN
+            city c1
+        ON
+            c1.id = c2.pid
+        WHERE
+            d.is_delete = 0
+        AND
+            u.user_code = #{userCode}
+    </select>
+</mapper>

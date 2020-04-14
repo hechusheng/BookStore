@@ -52,7 +52,7 @@ public interface UserDao {
     int deleteUser(@Param("listCode") List<String> listCode, @Param("userId") String userId);
 
     /**
-     * 查询用户信息
+     * 查询用户详情信息
      * @param userCode 用户编号
      * @return 用户信息
      */

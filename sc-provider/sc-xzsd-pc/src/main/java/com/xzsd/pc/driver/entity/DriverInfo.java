@@ -1,24 +1,41 @@
-package com.xzsd.pc.user.entity;
+package com.xzsd.pc.driver.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.util.Date;
 
-public class UserInfo {
-
+/**
+ * 司机管理实体类
+ */
+public class DriverInfo {
     /**
-     * 页码
-     */
-    private int pageSize;
-
-    /**
-     * 页数
-     */
-    private int pageNum;
-    /**
-     * 用户编号
+     * 司机编号（用户编号）
      */
     private String userCode;
+    /**
+     *所在省份编号
+     */
+    private String provinceCode;
+    /**
+     * 所在省名称
+     */
+    private String province;
+    /**
+     * 所在市编号
+     */
+    private String cityCode;
+    /**
+     * 所在市名称
+     */
+    private String city;
+    /**
+     * 所在区/县编号
+     */
+    private String areaCode;
+    /**
+     * 所在区/县
+     */
+    private String area;
     /**
      * 用户名称
      */
@@ -56,6 +73,10 @@ public class UserInfo {
      */
     private String role;
     /**
+     * 操作人编号
+     */
+    private String userId;
+    /**
      * 作废标记 0为存在，1为作废
      */
     private int isDelete;
@@ -81,34 +102,6 @@ public class UserInfo {
      * 版本号
      */
     private String version;
-    /**
-     * 操作人编号
-     */
-    private int userId;
-
-    public int getUserId() {
-        return userId;
-    }
-
-    public void setUserId(int userId) {
-        this.userId = userId;
-    }
-
-    public int getPageSize() {
-        return pageSize;
-    }
-
-    public void setPageSize(int pageSize) {
-        this.pageSize = pageSize;
-    }
-
-    public int getPageNum() {
-        return pageNum;
-    }
-
-    public void setPageNum(int pageNum) {
-        this.pageNum = pageNum;
-    }
 
     public String getUserCode() {
         return userCode;
@@ -116,6 +109,54 @@ public class UserInfo {
 
     public void setUserCode(String userCode) {
         this.userCode = userCode;
+    }
+
+    public String getProvinceCode() {
+        return provinceCode;
+    }
+
+    public void setProvinceCode(String provinceCode) {
+        this.provinceCode = provinceCode;
+    }
+
+    public String getProvince() {
+        return province;
+    }
+
+    public void setProvince(String province) {
+        this.province = province;
+    }
+
+    public String getCityCode() {
+        return cityCode;
+    }
+
+    public void setCityCode(String cityCode) {
+        this.cityCode = cityCode;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getAreaCode() {
+        return areaCode;
+    }
+
+    public void setAreaCode(String areaCode) {
+        this.areaCode = areaCode;
+    }
+
+    public String getArea() {
+        return area;
+    }
+
+    public void setArea(String area) {
+        this.area = area;
     }
 
     public String getUserName() {
@@ -190,20 +231,20 @@ public class UserInfo {
         this.role = role;
     }
 
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
     public int getIsDelete() {
         return isDelete;
     }
 
     public void setIsDelete(int isDelete) {
         this.isDelete = isDelete;
-    }
-
-    public Date getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
     }
 
     public String getCreateUser() {
@@ -214,12 +255,12 @@ public class UserInfo {
         this.createUser = createUser;
     }
 
-    public Date getUpdateTime() {
-        return updateTime;
+    public Date getCreateTime() {
+        return createTime;
     }
 
-    public void setUpdateTime(Date updateTime) {
-        this.updateTime = updateTime;
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
     }
 
     public String getUpdateUser() {
@@ -228,6 +269,14 @@ public class UserInfo {
 
     public void setUpdateUser(String updateUser) {
         this.updateUser = updateUser;
+    }
+
+    public Date getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
     }
 
     public String getVersion() {
