@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xzsd.pc.order.dao.OrderDao">
+    <!--获取操作人编号-->
+    <select id="getUser" parameterType="java.lang.String" resultType="com.xzsd.pc.user.entity.UserInfo">
+        select
+            user_code as userCode,
+            role,
+            version
+        from
+            t_sys_user
+        where
+            user_code = #{userCode}
+        and
+            is_delete = 0
+    </select>
+    <!--查询订单详情-->
+    <select id="findDetailByCode" parameterType="com.xzsd.pc.order.entity.OrderDetails" resultType="com.xzsd.pc.order.entity.OrderDetails">
+        SELECT
+            od.user_code,
+	        od.order_code,
+            odd.com_code comCode,
+            cmd.com_name comName,
+            odd.detail_amount detailAmount,
+            odd.total_price totalPrice,
+            cmd.com_price comPrice,
+            cmd.com_cost comCost
+        FROM
+            t_order od
+        LEFT JOIN
+            t_order_detail odd
+        ON
+            od.order_code = odd.order_code
+        LEFT JOIN
+            t_commodity cmd
+        ON
+            odd.com_code = cmd.com_code
+        where
+            od.is_delete = 0
+        and
+            od.order_code = #{orderCode}
+        order by
+            odd.create_time
+        desc
+    </select>
+    <!--查询订单列表(分页)-->
+    <select id="listOrderByPage" parameterType="com.xzsd.pc.order.entity.OrderInfo" resultType="com.xzsd.pc.order.entity.OrderInfo">
+        SELECT
+            od.order_code orderCode,
+            odd.total_price totalPrice,
+            od.order_status orderStatus,
+            od.store_code storeCode,
+            us.user_name userName,
+            us.phone phone,
+            od.pay_time payTime
+        FROM
+            t_order od
+        LEFT JOIN
+            t_order_detail odd
+        ON
+            od.order_code = odd.order_code
+        LEFT JOIN
+            t_sys_user us
+        ON
+            od.user_code = us.user_code
+        where
+            od.is_delete = 0
+        <if test="role != null and role !='' and role == 2">
+            AND od.store_code in (select store_code from t_sys_store where user_code = #{userId})
+        </if>
+        <if test="userName != null and userName != ''">
+            AND us.user_name like concat ('%',#{userName},'%')
+        </if>
+        <if test="orderCode != null and orderCode != ''">
+            AND od.order_code like concat ('%',#{orderCode},'%')
+        </if>
+        <if test="payTimeStart != null">
+            AND od.pay_time &lt;= #{payTimeStart}
+        </if>
+        <if test="payTimeEnd != null ">
+            AND od.pay_time &gt;= #{payTimeEnd}
+        </if>
+        <if test="phone != null and phone != ''">
+            AND us.phone like concat ('%',#{phone},'%')
+        </if>
+        <if test="orderStatus != null and orderStatus != ''">
+            AND od.order_status = #{orderStatus}
+        </if>
+        order by od.create_time desc
+    </select>
+    <!--修改订单状态-->
+    <update id="updateOrderStatus" parameterType="com.xzsd.pc.order.entity.OrderInfo">
+        update
+            t_order
+        set
+            order_status =  #{orderStatus},
+            update_time = now(),
+            update_user = #{userId},
+            version = version + 1
+        where
+            order_code
+        in
+        <foreach item="item" index="index" collection="listCode" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </update>
+</mapper>
