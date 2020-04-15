@@ -5,7 +5,12 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
-
+/**
+ * @ClassName MenuDao
+ * @Description 菜单管理
+ * @Author hechusheng
+ * @Date 2020-4-10
+ */
 @Mapper
 public interface MenuDao {
     /**

@@ -7,10 +7,14 @@ import com.xzsd.pc.commoditySort.entity.FirstClassSort;
 import com.xzsd.pc.commoditySort.entity.SecondClassSort;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
-import org.springframework.security.access.method.P;
 
 import java.util.List;
-
+/**
+ * @ClassName CmdDao
+ * @Description 商品管理
+ * @Author hechusheng
+ * @Date 2020-03-24
+ */
 @Mapper
 public interface CmdDao {
 

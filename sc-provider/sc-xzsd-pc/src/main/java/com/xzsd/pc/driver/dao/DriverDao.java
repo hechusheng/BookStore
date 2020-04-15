@@ -32,4 +32,11 @@ public interface DriverDao {
      * @return
      */
     DriverInfo findDriverByCode (String userCode);
+
+    /**
+     * 修改司机信息
+     * @param driverInfo
+     * @return
+     */
+    int updateDriverByCode (DriverInfo driverInfo);
 }

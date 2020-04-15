@@ -9,6 +9,12 @@ import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
+/**
+ * @ClassName StoreDao
+ * @Description 门店管理
+ * @Author hechusheng
+ * @Date 2020-4-13
+ */
 @Mapper
 public interface StoreDao {
     /**

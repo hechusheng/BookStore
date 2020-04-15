@@ -5,7 +5,12 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
-
+/**
+ * @ClassName CmdHotDao
+ * @Description 热门商品管理
+ * @Author hechusheng
+ * @Date 2020-04-12
+ */
 @Mapper
 public interface CmdHotDao {
     /**

@@ -7,7 +7,12 @@ import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
-
+/**
+ * @ClassName CarouselDao
+ * @Description 首页轮播图管理
+ * @Author hechusheng
+ * @Date 2020-03-30
+ */
 @Mapper
 public interface CarouselDao {
     /**
