@@ -6,7 +6,6 @@ import com.xzsd.pc.store.entity.ProvinceInfo;
 import com.xzsd.pc.store.entity.StoreInfo;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
-
 import java.util.List;
 
 /**
