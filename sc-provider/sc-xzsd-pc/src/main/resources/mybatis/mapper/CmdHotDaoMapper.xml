@@ -10,9 +10,18 @@
         where
             is_delete = 0
         and
-            (com_code = #{comCode}
-            or
-                hot_num = #{hotNum})
+            com_code = #{comCode}
+    </select>
+    <!--统计热门商品数量-->
+    <select id="countCmdHotNum" parameterType="com.xzsd.pc.commodityHot.entity.CmdHotInfo" resultType="int">
+        select
+            count(*)
+        from
+            t_commodity_hot
+        where
+            is_delete = 0
+        and
+            hot_num = #{hotNum}
     </select>
     <!--新增热门商品-->
     <insert id="addCommodityHot" parameterType="com.xzsd.pc.commodityHot.entity.CmdHotInfo">
@@ -45,7 +54,8 @@
 	        hot.hot_code hotCode,
             hot.hot_num hotNum,
             cmd.com_code comCode,
-            cmd.com_name comName
+            cmd.com_name comName,
+            hot.version version
         FROM
 	        t_commodity_hot hot
         LEFT JOIN
@@ -82,7 +92,8 @@
             hot.com_code comCode,
             cmd.com_name comName,
             cmd.com_price comPrice,
-            cmd.com_present comPresent
+            cmd.com_present comPresent,
+            hot.version version
         FROM
             t_commodity_hot hot
         LEFT JOIN
@@ -115,5 +126,30 @@
             #{item}
         </foreach>
     </update>
-
+    <!--设置展示热门商品数量-->
+    <update id="showCommodityHotNum" parameterType="com.xzsd.pc.commodityHot.entity.ShowNumInfo">
+         update
+            t_field
+         set
+            field_value = #{showNum},
+            update_user = #{userId},
+            update_time = now(),
+            version = version + 1
+        where
+            is_delete = 0
+        and
+            field_code = '123'
+        and
+            version = #{version}
+    </update>
+    <!--查询展示数量-->
+    <select id="getShowNum" resultType="com.xzsd.pc.commodityHot.entity.ShowNumInfo">
+        SELECT
+	       field_value showNum,
+	       version version
+        FROM
+	       t_field
+	    where
+	        field_code = '123'
+    </select>
 </mapper>

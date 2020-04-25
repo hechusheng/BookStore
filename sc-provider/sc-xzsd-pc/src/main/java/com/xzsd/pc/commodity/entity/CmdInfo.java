@@ -5,112 +5,94 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import java.io.Serializable;
 import java.util.Date;
 
+/**
+ * 商品实体类
+ */
 public class CmdInfo implements Serializable {
     /**
      * 商品编号
      */
     private String comCode;
-
     /**
      * 商品名称
      */
     private String comName;
-
     /**
      * 商家名称
      */
     private String bussName;
-
     /**
      * 书号
      */
     private String comNum;
-
     /**
      * 商品库存
      */
-    private String comStock;
-
+    private int comStock;
     /**
      * 成本价
      */
-    private String comCost;
-
+    private float comCost;
     /**
      * 商品售价
      */
-    private String comPrice;
-
+    private float comPrice;
     /**
      * 浏览量
      */
-    private String pageViews;
-
+    private int pageViews;
     /**
      * 定价
      */
-    private String fixedPrice;
-
+    private float fixedPrice;
     /**
      * 商品销量
      */
-    private String comSales;
-
+    private int comSales;
     /**
      * 一级分类编号
      */
     private String firstSortCode;
-
     /**
      * 一级分类名称
      */
     private String firstSortName;
-
     /**
      * 二级分类编号
      */
     private String secondSortCode;
-
     /**
      * 二级分类名称
      */
     private String secondSortName;
-
     /**
      *图片路径
      */
     private String picPath;
-
     /**
      * 商品状态(0在售 1下架 2未发布)
      */
     private String comStatus;
-
     /**
      * 商品介绍
      */
     private String comPresent;
-
     /**
      * 上架时间
      */
     private Date shelvesTime;
-
     /**
      * 广告词
      */
     private String advertisement;
-
     /**
      * 作者
      */
     private String author;
-
     /**
      * 出版社
      */
     private String press;
-
     /**
      * 作废标记 0为存在，1为作废
      */
@@ -122,8 +104,7 @@ public class CmdInfo implements Serializable {
     /**
      * 创建时间
      */
-    @JsonFormat(shape = JsonFormat.Shape.STRING , pattern = "yyyy-MM-dd HH:mm:ss" , timezone = "GMT+8")
-    private Date createTime;
+    private String createTime;
     /**
      * 更新者
      */
@@ -131,22 +112,24 @@ public class CmdInfo implements Serializable {
     /**
      * 更新时间
      */
-    @JsonFormat(shape = JsonFormat.Shape.STRING , pattern = "yyyy-MM-dd HH:mm:ss" , timezone = "GMT+8")
-    private Date updateTime;
+    private String updateTime;
+    /**
+     * 商品星级
+     */
+    private float starLevel;
     /**
      * 版本号
      */
     private String version;
 
-    /**
-     * 页码
-     */
-    private int pageSize;
+    public float getStarLevel() {
+        return starLevel;
+    }
 
-    /**
-     * 页数
-     */
-    private int pageNum;
+    public void setStarLevel(float starLevel) {
+        this.starLevel = starLevel;
+    }
+
     public String getComCode() {
         return comCode;
     }
@@ -179,51 +162,51 @@ public class CmdInfo implements Serializable {
         this.comNum = comNum;
     }
 
-    public String getComStock() {
+    public int getComStock() {
         return comStock;
     }
 
-    public void setComStock(String comStock) {
+    public void setComStock(int comStock) {
         this.comStock = comStock;
     }
 
-    public String getComCost() {
+    public float getComCost() {
         return comCost;
     }
 
-    public void setComCost(String comCost) {
+    public void setComCost(float comCost) {
         this.comCost = comCost;
     }
 
-    public String getComPrice() {
+    public float getComPrice() {
         return comPrice;
     }
 
-    public void setComPrice(String comPrice) {
+    public void setComPrice(float comPrice) {
         this.comPrice = comPrice;
     }
 
-    public String getPageViews() {
+    public int getPageViews() {
         return pageViews;
     }
 
-    public void setPageViews(String pageViews) {
+    public void setPageViews(int pageViews) {
         this.pageViews = pageViews;
     }
 
-    public String getFixedPrice() {
+    public float getFixedPrice() {
         return fixedPrice;
     }
 
-    public void setFixedPrice(String fixedPrice) {
+    public void setFixedPrice(float fixedPrice) {
         this.fixedPrice = fixedPrice;
     }
 
-    public String getComSales() {
+    public int getComSales() {
         return comSales;
     }
 
-    public void setComSales(String comSales) {
+    public void setComSales(int comSales) {
         this.comSales = comSales;
     }
 
@@ -323,14 +306,6 @@ public class CmdInfo implements Serializable {
         this.isDelete = isDelete;
     }
 
-    public Date getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
-
     public String getCreateUser() {
         return createUser;
     }
@@ -339,12 +314,12 @@ public class CmdInfo implements Serializable {
         this.createUser = createUser;
     }
 
-    public Date getUpdateTime() {
-        return updateTime;
+    public String getCreateTime() {
+        return createTime;
     }
 
-    public void setUpdateTime(Date updateTime) {
-        this.updateTime = updateTime;
+    public void setCreateTime(String createTime) {
+        this.createTime = createTime;
     }
 
     public String getUpdateUser() {
@@ -355,6 +330,14 @@ public class CmdInfo implements Serializable {
         this.updateUser = updateUser;
     }
 
+    public String getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(String updateTime) {
+        this.updateTime = updateTime;
+    }
+
     public String getVersion() {
         return version;
     }
@@ -362,24 +345,4 @@ public class CmdInfo implements Serializable {
     public void setVersion(String version) {
         this.version = version;
     }
-
-    public int getPageSize() {
-        return pageSize;
-    }
-
-    public void setPageSize(int pageSize) {
-        this.pageSize = pageSize;
-    }
-
-    public int getPageNum() {
-        return pageNum;
-    }
-
-    public void setPageNum(int pageNum) {
-        this.pageNum = pageNum;
-    }
-
-
-
-
 }

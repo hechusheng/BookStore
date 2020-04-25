@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xzsd.app.client.registered.dao.RegDao">
+    <!--统计用户账号数量-->
+    <select id="countUserAccount" parameterType="com.xzsd.app.client.registered.eneity.UserInfo" resultType="int">
+        select
+            count(user_acc)
+        from
+            t_sys_user
+        where
+            is_delete = 0
+        and
+            user_acc = #{userAccount}
+        <if test="userCode != null and userCode != ''">
+            and user_code != #{userCode}
+        </if>
+    </select>
+    <!--统计身份证数量-->
+    <select id="countIdCard" parameterType="com.xzsd.app.client.registered.eneity.UserInfo" resultType="int" >
+        SELECT
+            COUNT(idcard)
+        FROM
+            t_sys_user
+        WHERE
+            idcard = #{idCard}
+        <if test="userCode != null and userCode != ''">
+            AND user_code != #{userCode}
+        </if>
+    </select>
+    <!--统计门店邀请码-->
+    <select id="countInviteCode" parameterType="com.xzsd.app.client.registered.eneity.UserInfo" resultType="int" >
+        SELECT
+            COUNT(*)
+        FROM
+            t_store
+        WHERE
+            invite_code = #{inviteCode}
+    </select>
+    <!--新增用户(注册)-->
+    <insert id="addUser" parameterType="com.xzsd.app.client.registered.eneity.UserInfo">
+        insert into t_sys_user
+            (user_code,
+             user_name,
+             user_acc,
+             user_pass,
+             idcard,
+             sex,
+             phone,
+             email,
+             role,
+             photo,
+             is_delete,
+             create_time,
+             create_user,
+             update_time,
+             update_user,
+             version)
+        values
+           (
+            #{userCode},
+            #{userName},
+            #{userAccount},
+            #{userPassword},
+            #{idCard},
+            #{sex},
+            #{phone},
+            #{email},
+            3,
+            #{photo},
+            #{isDelete},
+            now(),
+            #{createUser},
+            now(),
+            #{updateUser},
+            0)
+    </insert>
+    <!--新增用户(注册)子表-->
+    <insert id="addUserClient" parameterType="com.xzsd.app.client.registered.eneity.UserInfo">
+        insert into t_user_client
+            (user_code,
+             invite_code,
+             is_delete,
+             create_time,
+             create_user,
+             update_time,
+             update_user,
+             version)
+        values
+           (#{userCode},
+            #{inviteCode},
+            #{isDelete},
+            now(),
+            #{createUser},
+            now(),
+            #{updateUser},
+            0)
+    </insert>
+</mapper>

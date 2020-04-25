@@ -4,10 +4,15 @@ import com.neusoft.core.restful.AppResponse;
 import com.neusoft.util.StringUtil;
 import com.xzsd.pc.menu.dao.MenuDao;
 import com.xzsd.pc.menu.entity.MenuInfo;
+import com.xzsd.pc.user.entity.UserInfo;
+import com.xzsd.pc.util.RoleUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.List;
+
+import static com.xzsd.pc.util.RoleUtil.MANAGER;
 
 /**
  * @DescriptionDemo 实现类
@@ -72,12 +77,29 @@ public class MenuService {
 
     /**
      * 查询菜单列表
-     * @param menuInfo
+     * @param userCode
      * @return
      */
-    public AppResponse listMenu (MenuInfo menuInfo) {
-        List<MenuInfo> menuInfoList = menuDao.listMenu(menuInfo);
-        return AppResponse.success("查询成功",menuInfoList);
+    public AppResponse listMenu (String userCode) {
+        //获取操作人的编号
+        UserInfo userInfo = menuDao.getUser(userCode);
+        System.out.println("aaaaaaaaaaaaaaaaaaaa"+userInfo.getRole());
+        //管理员查全部菜单
+        if (RoleUtil.ADMIN.equals(userInfo.getRole())){
+            List<MenuInfo> menuInfoList = menuDao.listMenu();
+            if (menuInfoList != null){
+                return AppResponse.success("查询菜单列表成功!",menuInfoList);
+            }
+        }else if (RoleUtil.MANAGER.equals(userInfo.getRole())){
+            //店长只有固定模块
+            List<MenuInfo> menuInfoList = new ArrayList<>();
+            menuInfoList.add(new MenuInfo("2020041011160721441","客户管理",null));
+            menuInfoList.add(new MenuInfo("2020041011162790396","订单管理",null));
+            menuInfoList.add(new MenuInfo("2020041011172519573","门店管理",null));
+            menuInfoList.add(new MenuInfo("2020041011170850073","司机管理",null));
+            return AppResponse.success("查询菜单列表成功!",menuInfoList);
+        }
+        return AppResponse.bizError("查询菜单列表失败!");
     }
 
     /**

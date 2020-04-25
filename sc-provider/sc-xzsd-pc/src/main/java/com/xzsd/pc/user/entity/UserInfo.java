@@ -1,20 +1,6 @@
 package com.xzsd.pc.user.entity;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-
-import java.util.Date;
-
 public class UserInfo {
-
-    /**
-     * 页码
-     */
-    private int pageSize;
-
-    /**
-     * 页数
-     */
-    private int pageNum;
     /**
      * 用户编号
      */
@@ -66,8 +52,7 @@ public class UserInfo {
     /**
      * 创建时间
      */
-    @JsonFormat(shape = JsonFormat.Shape.STRING , pattern = "yyyy-MM-dd HH:mm:ss" , timezone = "GMT+8")
-    private Date createTime;
+    private String createTime;
     /**
      * 更新者
      */
@@ -75,8 +60,7 @@ public class UserInfo {
     /**
      * 更新时间
      */
-    @JsonFormat(shape = JsonFormat.Shape.STRING , pattern = "yyyy-MM-dd HH:mm:ss" , timezone = "GMT+8")
-    private Date updateTime;
+    private String updateTime;
     /**
      * 版本号
      */
@@ -84,31 +68,7 @@ public class UserInfo {
     /**
      * 操作人编号
      */
-    private int userId;
-
-    public int getUserId() {
-        return userId;
-    }
-
-    public void setUserId(int userId) {
-        this.userId = userId;
-    }
-
-    public int getPageSize() {
-        return pageSize;
-    }
-
-    public void setPageSize(int pageSize) {
-        this.pageSize = pageSize;
-    }
-
-    public int getPageNum() {
-        return pageNum;
-    }
-
-    public void setPageNum(int pageNum) {
-        this.pageNum = pageNum;
-    }
+    private String userId;
 
     public String getUserCode() {
         return userCode;
@@ -198,14 +158,6 @@ public class UserInfo {
         this.isDelete = isDelete;
     }
 
-    public Date getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
-
     public String getCreateUser() {
         return createUser;
     }
@@ -214,12 +166,12 @@ public class UserInfo {
         this.createUser = createUser;
     }
 
-    public Date getUpdateTime() {
-        return updateTime;
+    public String getCreateTime() {
+        return createTime;
     }
 
-    public void setUpdateTime(Date updateTime) {
-        this.updateTime = updateTime;
+    public void setCreateTime(String createTime) {
+        this.createTime = createTime;
     }
 
     public String getUpdateUser() {
@@ -230,11 +182,27 @@ public class UserInfo {
         this.updateUser = updateUser;
     }
 
+    public String getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(String updateTime) {
+        this.updateTime = updateTime;
+    }
+
     public String getVersion() {
         return version;
     }
 
     public void setVersion(String version) {
         this.version = version;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 }

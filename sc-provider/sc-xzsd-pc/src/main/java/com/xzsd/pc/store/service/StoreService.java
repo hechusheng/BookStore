@@ -3,11 +3,13 @@ package com.xzsd.pc.store.service;
 import com.neusoft.core.restful.AppResponse;
 import com.neusoft.util.StringUtil;
 import com.xzsd.pc.commoditySort.entity.FirstClassSort;
+import com.xzsd.pc.menu.dao.MenuDao;
 import com.xzsd.pc.store.dao.StoreDao;
 import com.xzsd.pc.store.entity.AreaInfo;
 import com.xzsd.pc.store.entity.CityInfo;
 import com.xzsd.pc.store.entity.ProvinceInfo;
 import com.xzsd.pc.store.entity.StoreInfo;
+import com.xzsd.pc.user.entity.UserInfo;
 import com.xzsd.pc.util.RandomUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,7 +29,8 @@ import static com.neusoft.core.page.PageUtils.getPageInfo;
 public class StoreService {
     @Resource
     private StoreDao storeDao;
-
+    @Resource
+    private MenuDao menuDao;
     /**
      * 新增门店
      * @param storeInfo
@@ -93,6 +96,12 @@ public class StoreService {
      * @return
      */
     public AppResponse listStoreByPage (StoreInfo storeInfo) {
+        //获取操作人的用户角色
+        UserInfo userInfo = storeDao.getUser(storeInfo.getUserId());
+        if (userInfo != null && userInfo.getRole() != null){
+            storeInfo.setRole(userInfo.getRole());
+        }
+        System.out.println(storeInfo.getRole());
         List<StoreInfo> storeInfoList = storeDao.listStoreByPage(storeInfo);
         return AppResponse.success("查询门店列表成功！",getPageInfo(storeInfoList));
     }

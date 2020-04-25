@@ -45,7 +45,7 @@ public class OrderInfo {
     /**
      * 订单总价
      */
-    private String totalPrice;
+    private float totalPrice;
     /**
      * 门店编号
      */
@@ -57,18 +57,15 @@ public class OrderInfo {
     /**
      * 支付时间
      */
-    @JsonFormat(shape = JsonFormat.Shape.STRING , pattern = "yyyy-MM-dd HH:mm:ss" , timezone = "GMT+8")
-    private Date payTime;
+    private String payTime;
     /**
      * 付款时间起
      */
-    @JsonFormat(shape = JsonFormat.Shape.STRING , pattern = "yyyy-MM-dd HH:mm:ss" , timezone = "GMT+8")
-    private Date payTimeStart;
+    private String payTimeStart;
     /**
      * 付款时间止
      */
-    @JsonFormat(shape = JsonFormat.Shape.STRING , pattern = "yyyy-MM-dd HH:mm:ss" , timezone = "GMT+8")
-    private Date payTimeEnd;
+    private String payTimeEnd;
     /**
      * 删除标记
      */
@@ -80,8 +77,7 @@ public class OrderInfo {
     /**
      * 创建时间
      */
-    @JsonFormat(shape = JsonFormat.Shape.STRING , pattern = "yyyy-MM-dd HH:mm:ss" , timezone = "GMT+8")
-    private Date createTime;
+    private String createTime;
     /**
      * 更新者
      */
@@ -89,8 +85,7 @@ public class OrderInfo {
     /**
      * 更新时间
      */
-    @JsonFormat(shape = JsonFormat.Shape.STRING , pattern = "yyyy-MM-dd HH:mm:ss" , timezone = "GMT+8")
-    private Date updateTime;
+    private String updateTime;
     /**
      * 版本号
      */
@@ -160,11 +155,11 @@ public class OrderInfo {
         this.payStatus = payStatus;
     }
 
-    public String getTotalPrice() {
+    public float getTotalPrice() {
         return totalPrice;
     }
 
-    public void setTotalPrice(String totalPrice) {
+    public void setTotalPrice(float totalPrice) {
         this.totalPrice = totalPrice;
     }
 
@@ -184,27 +179,27 @@ public class OrderInfo {
         this.remark = remark;
     }
 
-    public Date getPayTime() {
+    public String getPayTime() {
         return payTime;
     }
 
-    public void setPayTime(Date payTime) {
+    public void setPayTime(String payTime) {
         this.payTime = payTime;
     }
 
-    public Date getPayTimeStart() {
+    public String getPayTimeStart() {
         return payTimeStart;
     }
 
-    public void setPayTimeStart(Date payTimeStart) {
+    public void setPayTimeStart(String payTimeStart) {
         this.payTimeStart = payTimeStart;
     }
 
-    public Date getPayTimeEnd() {
+    public String getPayTimeEnd() {
         return payTimeEnd;
     }
 
-    public void setPayTimeEnd(Date payTimeEnd) {
+    public void setPayTimeEnd(String payTimeEnd) {
         this.payTimeEnd = payTimeEnd;
     }
 
@@ -224,11 +219,11 @@ public class OrderInfo {
         this.createUser = createUser;
     }
 
-    public Date getCreateTime() {
+    public String getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(Date createTime) {
+    public void setCreateTime(String createTime) {
         this.createTime = createTime;
     }
 
@@ -240,11 +235,11 @@ public class OrderInfo {
         this.updateUser = updateUser;
     }
 
-    public Date getUpdateTime() {
+    public String getUpdateTime() {
         return updateTime;
     }
 
-    public void setUpdateTime(Date updateTime) {
+    public void setUpdateTime(String updateTime) {
         this.updateTime = updateTime;
     }
 

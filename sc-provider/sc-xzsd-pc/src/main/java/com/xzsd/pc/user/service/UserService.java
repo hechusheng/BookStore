@@ -7,12 +7,15 @@ import com.neusoft.core.restful.AppResponse;
 import com.neusoft.util.StringUtil;
 import com.xzsd.pc.user.dao.UserDao;
 import com.xzsd.pc.user.entity.UserInfo;
+import com.xzsd.pc.util.PasswordUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.Arrays;
 import java.util.List;
+
+import static com.neusoft.core.page.PageUtils.getPageInfo;
 
 /**
  * @DescriptionDemo 实现类
@@ -39,8 +42,23 @@ public class UserService {
         if(0 != countUserAccount){
             return AppResponse.bizError("用户账号已存在，请重新输入！");
         }
+        //校验身份证是否被注册
+        int countIdCard = userDao.countIdCard(userInfo);
+        if  (0 != countIdCard){
+            return AppResponse.bizError("身份证已注册，请重新输入！");
+        }
         userInfo.setUserCode(StringUtil.getCommonCode(2));
+        userInfo.setUserPassword(PasswordUtils.generatePassword(userInfo.getUserPassword()));
         userInfo.setIsDelete(0);
+        //如果性别没填，默认为2 (未知)
+        if(userInfo.getSex() == null || "".equals(userInfo.getSex()))
+        {
+            userInfo.setSex("2");
+        }
+        //如果图片为空，设置默认图片
+        if (userInfo.getPhoto() == null || "".equals(userInfo.getPhoto())){
+            userInfo.setPhoto("https://lgbryant-1301861090.cos.ap-guangzhou.myqcloud.com/lgbryant/2020/3/16/3af8c649-2d63-4f71-904f-79064c7ed2a8.jpg");
+        }
        //新增用户
         int count = userDao.addUser(userInfo);
         if(0 == count) {
@@ -59,11 +77,21 @@ public class UserService {
     @Transactional(rollbackFor = Exception.class)
     public AppResponse updateUserByCode(UserInfo userInfo) {
         AppResponse appResponse = AppResponse.success("修改成功");
-        // 校验账号是否存在
-        int countUserAcctount = userDao.countUserAccount(userInfo);
-        if(countUserAcctount != 0) {
+        //校验账号是否存在
+        int countUserAccount = userDao.countUserAccount(userInfo);
+        if(0 != countUserAccount){
             return AppResponse.bizError("用户账号已存在，请重新输入！");
         }
+        //校验身份证是否被注册
+        int countIdCard = userDao.countIdCard(userInfo);
+        if(0 != countIdCard){
+            return AppResponse.bizError("身份证已注册，请重新输入！");
+        }
+        //如果图片为空，设置默认图片
+        if(userInfo.getPhoto() == null || "".equals(userInfo.getPhoto())){
+            userInfo.setPhoto("https://lgbryant-1301861090.cos.ap-guangzhou.myqcloud.com/lgbryant/2020/3/16/3af8c649-2d63-4f71-904f-79064c7ed2a8.jpg");
+        }
+        userInfo.setUserPassword(PasswordUtils.generatePassword(userInfo.getUserPassword()));
         // 修改用户信息
         int count = userDao.updateUserByCode(userInfo);
         if (0 == count) {
@@ -81,11 +109,9 @@ public class UserService {
      * @Date 2020-03-25
      */
     public AppResponse listUsersByPage(UserInfo userInfo) {
-       // PageHelper.startPage(userInfo.getPageNum(), userInfo.getPageSize());
+        //查询用户列表(分页)
         List<UserInfo> userInfoList = userDao.listUsersByPage(userInfo);
-        // 包装Page对象
-       // PageInfo<UserInfo> pageData = new PageInfo<UserInfo>(userInfoList);
-        return AppResponse.success("查询成功！",userInfoList);
+        return AppResponse.success("查询成功！",getPageInfo(userInfoList));
     }
     /**
      * demo 删除用户

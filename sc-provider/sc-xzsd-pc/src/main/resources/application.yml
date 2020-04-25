@@ -14,6 +14,23 @@ security:
       user-authorization-uri: http://sc-security-uaa/oauth/authorize
   sessions: stateless
 spring:
+#  servlet:
+#    multipart:
+#      enabled: true #是否启用http上传处理
+#      max-request-size: 100MB #最大请求文件的大小
+#      max-file-size: 20MB #设置单个文件最大长度
+#      file-size-threshold: 20MB #当文件达到多少时进行磁盘写入
+  http:
+    multipart:
+      max-request-size: 20MB
+      max-file-size: 20MB
+  tengxun:
+    accessKey: AKIDgAdx0OhTBdpkEfFBbmgKszr63j9HmidH
+    secretKey: h8G81dyrUN2PWbPv85QUHwETQyHyOVNq
+    bucket: ap-guangzhou
+    bucketName: lgbryant-1301861090
+    path: https://lgbryant-1301861090.cos.ap-guangzhou.myqcloud.com
+    qianzui: lgbryant
   redis:
     host: 127.0.0.1
     database: 9
@@ -58,7 +75,8 @@ mybatis:
   config-location: classpath:mybatis/mybatis-config.xml
 sc:
   cloud:
-    dev: true
+    #dev: true
+    debug: true
     task:
       core-pool-size: 20
       max-pool-size: 50

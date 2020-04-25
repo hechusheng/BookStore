@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xzsd.app.driver.dao.DriverDao">
+    <!--查询司机负责门店-->
+    <select id="listStoreByPage" parameterType="java.lang.String" resultType="com.xzsd.app.driver.entity.StoreInfo">
+        SELECT
+            s.store_code storeCode,
+            s.store_name storeName,
+            CONCAT_WS( '-',province.city_name,city.city_name,area.city_name,s.store_address) storeAddress,
+            u.user_name userName,
+            u.phone phone
+        FROM
+            (SELECT area_code areaCode FROM t_user_driver WHERE is_delete = 0 AND user_code = #{userCode}) area
+        LEFT JOIN
+            t_store s
+        ON
+            s.area_code = area.areaCode
+        LEFT JOIN
+            t_sys_user u
+        ON
+            (u.user_code = s.user_code AND u.is_delete = 0)
+        LEFT JOIN
+            city area
+        ON
+          area.id = s.area_code
+        LEFT JOIN
+          city city
+        ON
+          city.id = area.pid
+        LEFT JOIN
+          city province
+        ON
+          province.id = city.pid
+        WHERE
+            s.is_delete = 0
+        order by
+            s.create_time desc
+    </select>
+</mapper>

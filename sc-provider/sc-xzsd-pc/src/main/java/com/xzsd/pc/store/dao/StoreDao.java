@@ -4,6 +4,7 @@ import com.xzsd.pc.store.entity.AreaInfo;
 import com.xzsd.pc.store.entity.CityInfo;
 import com.xzsd.pc.store.entity.ProvinceInfo;
 import com.xzsd.pc.store.entity.StoreInfo;
+import com.xzsd.pc.user.entity.UserInfo;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import java.util.List;
@@ -85,4 +86,11 @@ public interface StoreDao {
      * @return
      */
     List<AreaInfo> listArea (String cityCode);
+
+    /**
+     * 查询操作人角色
+     * @param userId
+     * @return
+     */
+    UserInfo getUser (String userId);
 }

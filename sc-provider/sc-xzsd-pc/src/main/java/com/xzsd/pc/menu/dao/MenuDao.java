@@ -1,6 +1,7 @@
 package com.xzsd.pc.menu.dao;
 
 import com.xzsd.pc.menu.entity.MenuInfo;
+import com.xzsd.pc.user.entity.UserInfo;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -40,10 +41,9 @@ public interface MenuDao {
 
     /**
      * 查询菜单列表
-     * @param menuInfo
      * @return
      */
-    List<MenuInfo> listMenu (MenuInfo menuInfo);
+    List<MenuInfo> listMenu ();
 
     /**
      * 删除菜单
@@ -52,4 +52,11 @@ public interface MenuDao {
      * @return
      */
     int deleteMenu (@Param("menuCode")String menuCode,@Param("userId")String userId);
+
+    /**
+     * 查询操作人角色
+     * @param userCode
+     * @return
+     */
+    UserInfo getUser (@Param("userCode") String userCode);
 }

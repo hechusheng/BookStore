@@ -3,34 +3,49 @@
 <mapper namespace="com.xzsd.pc.user.dao.UserDao">
     <!--统计用户账号数量-->
     <select id="countUserAccount" parameterType="com.xzsd.pc.user.entity.UserInfo" resultType="int">
-        select count(user_acc)
-        from t_sys_user
-        where is_delete = 0
-        and user_acc = #{userAccount}
+        select
+            count(user_acc)
+        from
+            t_sys_user
+        where
+            is_delete = 0
+        and
+            user_acc = #{userAccount}
         <if test="userCode != null and userCode != ''">
             and user_code != #{userCode}
         </if>
     </select>
-
+    <!--统计身份证数量-->
+    <select id="countIdCard" parameterType="com.xzsd.pc.user.entity.UserInfo" resultType="int" >
+        SELECT
+            COUNT(idcard)
+        FROM
+            t_sys_user
+        WHERE
+            idcard = #{idCard}
+        <if test="userCode != null and userCode != ''">
+            AND user_code != #{userCode}
+        </if>
+    </select>
     <!--新增用户-->
     <insert id="addUser" parameterType="com.xzsd.pc.user.entity.UserInfo">
         insert into t_sys_user
-        (user_code,
-         user_name,
-         user_acc,
-         user_pass,
-         idcard,
-         sex,
-         phone,
-         email,
-         role,
-         photo,
-         is_delete,
-         create_time,
-         create_user,
-         update_time,
-         update_user,
-         version)
+            (user_code,
+             user_name,
+             user_acc,
+             user_pass,
+             idcard,
+             sex,
+             phone,
+             email,
+             role,
+             photo,
+             is_delete,
+             create_time,
+             create_user,
+             update_time,
+             update_user,
+             version)
         values
            (
             #{userCode},
@@ -50,10 +65,10 @@
             #{updateUser},
             0)
     </insert>
-
     <!--修改用户信息-->
     <update id="updateUserByCode" parameterType="com.xzsd.pc.user.entity.UserInfo">
-        update t_sys_user
+        update
+            t_sys_user
         set
             user_name = #{userName},
             user_acc = #{userAccount},
@@ -62,18 +77,20 @@
             email = #{email},
             idcard = #{idCard},
             user_pass = #{userPassword},
-            role = #{role},
             photo = #{photo},
+            role = #{role},
             update_time = now(),
             update_user = #{updateUser},
             version = version + 1
-        where user_code = #{userCode}
-        and version = #{version}
+        where
+            user_code = #{userCode}
+        and
+            version = #{version}
     </update>
-
     <!--用户列表-->
     <select id="listUsersByPage" parameterType="com.xzsd.pc.user.entity.UserInfo" resultType="com.xzsd.pc.user.entity.UserInfo">
         select
+            a.user_code userCode,
             a.user_acc userAccount,
             a.user_name userName,
             a.role role,
@@ -82,8 +99,14 @@
             a.email email,
             a.idcard idCard,
             a.user_code userCode
-        from t_sys_user a
-        where a.is_delete = 0
+        from
+            t_sys_user a
+        where
+            a.is_delete = 0
+        and
+            (a.role = 0
+            or
+                a.role = 1)
         <if test="userAccount != null and userAccount != ''">
             and a.user_acc like concat('%', #{userAccount}, '%')
         </if>
@@ -92,27 +115,30 @@
         </if>
         <if test="role != null and role != ''">
             and a.role like concat('%', #{role}, '%')
-         </if>
+        </if>
         order by a.update_time desc
     </select>
     <!--删除用户-->
     <update id="deleteUser" parameterType="com.xzsd.pc.user.entity.UserInfo">
-        update t_sys_user
+        update
+            t_sys_user
         set
             is_delete = 1,
             update_time = now(),
             update_user = #{userId},
             version = version + 1
-        where user_code in
+        where
+            user_code
+        in
         <foreach item="item" index="index" collection="listCode" open="(" separator="," close=")">
             #{item}
         </foreach>
     </update>
-    <!--获取用户信息-->
+    <!--获取用户详情信息-->
     <select id="findUserByCode" parameterType="java.lang.String" resultType="com.xzsd.pc.user.entity.UserInfo">
         select
             user_code userCode,
-            user_acc userAcount,
+            user_acc userAccount,
             user_name userName,
             sex sex,
             phone phone,
@@ -127,11 +153,13 @@
             update_time updateTime,
             update_user updateUser,
             version version
-        from t_sys_user
-        where user_code = #{userCode}
-        and  is_delete = 0
+        from
+            t_sys_user
+        where
+            user_code = #{userCode}
+        and
+            is_delete = 0
     </select>
-
     <!--用户登录-->
     <select id="userLogin" parameterType="java.lang.String" resultType="com.xzsd.pc.user.entity.UserInfo">
         select
@@ -141,10 +169,13 @@
             user_name userName,
             photo photo,
             role role
-        from t_sys_user
-        where user_acc = #{userAccount}
-        and  user_pass = #{userPassword}
-        and  is_delete = 0
-
+        from
+            t_sys_user
+        where
+            user_acc = #{userAccount}
+        and
+            user_pass = #{userPassword}
+        and
+            is_delete = 0
     </select>
 </mapper>

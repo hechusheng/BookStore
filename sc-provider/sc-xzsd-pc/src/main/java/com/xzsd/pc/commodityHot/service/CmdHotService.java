@@ -4,6 +4,7 @@ import com.neusoft.core.restful.AppResponse;
 import com.neusoft.util.StringUtil;
 import com.xzsd.pc.commodityHot.dao.CmdHotDao;
 import com.xzsd.pc.commodityHot.entity.CmdHotInfo;
+import com.xzsd.pc.commodityHot.entity.ShowNumInfo;
 import com.xzsd.pc.commoditySort.dao.CmdSortDao;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -11,6 +12,8 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.Resource;
 import java.util.Arrays;
 import java.util.List;
+
+import static com.neusoft.core.page.PageUtils.getPageInfo;
 
 /**
  * @DescriptionDemo 实现类
@@ -29,9 +32,15 @@ public class CmdHotService {
      */
     @Transactional(rollbackFor = Exception.class)
     public AppResponse addCommodityHot(CmdHotInfo cmdHotInfo) {
-        int countCmdHot = cmdHotDao.countCmdHot(cmdHotInfo);
+        //校验热门商品序号
+        int countCmdHot = cmdHotDao.countCmdHotNum(cmdHotInfo);
         if(0 != countCmdHot) {
-            return AppResponse.bizError("该热门商品已经存在!");
+            return AppResponse.bizError("热门商品新增失败,序号已存在");
+        }
+        //校验热门商品是否存在
+        int countCmdHotNum = cmdHotDao.countCmdHot(cmdHotInfo);
+        if(0 != countCmdHotNum) {
+            return AppResponse.bizError("热门商品新增失败,商品已存在");
         }
         cmdHotInfo.setHotCode(StringUtil.getCommonCode(2));
         cmdHotInfo.setIsDelete(0);
@@ -60,21 +69,15 @@ public class CmdHotService {
      */
     @Transactional(rollbackFor = Exception.class)
     public AppResponse updateCommodityHot (CmdHotInfo cmdHotInfo) {
-        //校验序号跟商品编号是否已存在
-        CmdHotInfo cmd = cmdHotDao.getCommodityHot(cmdHotInfo.getHotCode());
         //校验热门商品序号
-        if(cmd.getHotNum().equals(cmdHotInfo.getHotNum())){
-            int countCmdHot = cmdHotDao.countCmdHot(cmdHotInfo);
-            if(0 != countCmdHot) {
-                return AppResponse.bizError("热门商品修改失败,序号已存在");
-            }
+        int countCmdHot = cmdHotDao.countCmdHotNum(cmdHotInfo);
+        if(0 != countCmdHot) {
+            return AppResponse.bizError("热门商品修改失败,序号已存在");
         }
-        //校验热门商品
-        if(cmd.getComCode().equals(cmdHotInfo.getComCode())){
-            int countCmdHot = cmdHotDao.countCmdHot(cmdHotInfo);
-            if(0 != countCmdHot) {
-                return AppResponse.bizError("热门商品修改失败,商品已存在");
-            }
+        //校验热门商品是否存在
+        int countCmdHotNum = cmdHotDao.countCmdHot(cmdHotInfo);
+        if(0 != countCmdHotNum) {
+            return AppResponse.bizError("热门商品修改失败,商品已存在");
         }
         //修改热门商品
         int count = cmdHotDao.updateCommodityHot(cmdHotInfo);
@@ -91,7 +94,7 @@ public class CmdHotService {
      */
     public AppResponse listHotCommodityByPage (CmdHotInfo cmdHotInfo) {
         List<CmdHotInfo> cmdHotInfoList = cmdHotDao.listHotCommodityByPage(cmdHotInfo);
-        return AppResponse.success("查询热门商品列表成功",cmdHotInfoList);
+        return AppResponse.success("查询热门商品列表成功",getPageInfo(cmdHotInfoList));
     }
 
     /**
@@ -112,11 +115,27 @@ public class CmdHotService {
         return AppResponse.success("热门商品删除成功");
     }
 
+    /**
+     * 展示商品数量
+     * @param userId
+     * @param showNum
+     * @param version
+     * @return
+     */
     public AppResponse showCommodityHotNum (String userId, String showNum, String version) {
         int result = cmdHotDao.showCommodityHotNum(userId,showNum,version);
         if(0 == result){
             return AppResponse.bizError("设置失败");
         }
         return AppResponse.success("设置成功");
+    }
+
+    /**
+     * 获取展示数量
+     * @return
+     */
+    public AppResponse getShowNum () {
+        ShowNumInfo showNumInfo = cmdHotDao.getShowNum();
+        return AppResponse.success("查询成功！",showNumInfo);
     }
 }

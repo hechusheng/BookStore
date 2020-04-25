@@ -31,10 +31,10 @@
             #{sortCode},
             #{sortName},
             #{remark},
-            <if test="firstSortCode==null or firstSortCode==''">
+            <if test="firstSortCode == null or firstSortCode == ''">
                 1,
             </if>
-            <if test="firstSortCode!=null and firstSortCode!=''">
+            <if test="firstSortCode != null and firstSortCode != ''">
                 2,
             </if>
             #{firstSortCode},
@@ -67,21 +67,24 @@
     </select>
     <!--修改商品分类信息-->
     <update id="updateSort" parameterType="com.xzsd.pc.commoditySort.entity.CmdSortInfo">
-        update t_commodity_sort
+        update
+            t_commodity_sort
         set
             sort_name = #{sortName},
             remark = #{remark},
             version = version + 1
-        where sort_code = #{sortCode}
-        and version = #{version}
+        where
+            sort_code = #{sortCode}
+        and
+            version = #{version}
     </update>
 <!--查询商品分类列表-->
     <resultMap id="cmdSortListMap" type="com.xzsd.pc.commoditySort.entity.FirstClassSort">
         <id property="firstSortCode" column="sort_code" jdbcType="VARCHAR"/>
         <result property="firstSortName" column="sort_name" jdbcType="VARCHAR"/>
-        <collection property="secondsortList" ofType="com.xzsd.pc.commoditySort.entity.SecondClassSort">
-            <id property="secondSortCode" column="sort_code" jdbcType="VARCHAR"/>
-            <result property="secondSortName" column="sort_name" jdbcType="VARCHAR"/>
+        <collection property="secondSortList" ofType="com.xzsd.pc.commoditySort.entity.SecondClassSort">
+            <id property="secondSortCode" column="secondSortCode" jdbcType="VARCHAR"/>
+            <result property="secondSortName" column="secondSortName" jdbcType="VARCHAR"/>
         </collection>
     </resultMap>
     <select id="listSorts" resultMap="cmdSortListMap">
@@ -95,21 +98,28 @@
         LEFT JOIN
             t_commodity_sort b
         on
-            (b.parent_code = a.sort_code)
+            (b.parent_code = a.sort_code
+            and
+                b.sort_level=2
+            and
+                b.is_delete=0)
         where
             a.sort_level=1
         and
-            b.sort_level=2
-        and
-            b.is_delete=0
+            a.is_delete=0
         order by
             a.create_time desc
     </select>
     <!--查询该一级分类下二级分类的数量-->
     <select id="countChildSort" parameterType="java.lang.String" resultType="int">
-        select count(sort_code)
-        from t_commodity_sort
-        where parent_code = #{sortCode} and is_delete = 0
+        select
+            count(sort_code)
+        from
+            t_commodity_sort
+        where
+            parent_code = #{sortCode}
+        and
+            is_delete = 0
     </select>
     <!--删除商品分类-->
     <update id="deleteSort" parameterType="com.xzsd.pc.commoditySort.entity.CmdSortInfo">

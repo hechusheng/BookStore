@@ -41,7 +41,7 @@ public class CmdController {
     public AppResponse addCommodity(CmdInfo cmdInfo){
         try{
             //获取用户编号
-            String userCode = AuthUtils.getCurrentUserId();
+            String userCode = SecurityUtils.getCurrentUserId();
             cmdInfo.setCreateUser(userCode);
             cmdInfo.setUpdateUser(userCode);
             return cmdService.addCommodity(cmdInfo);
@@ -58,10 +58,10 @@ public class CmdController {
      * @author hechusheng
      * @Date 2020-03-27
      */
-    @RequestMapping(value = "listCommodity")
+    @RequestMapping(value = "listCommodityByPage")
     public AppResponse listUsers(CmdInfo cmdInfo) {
         try {
-            return cmdService.listCommodity(cmdInfo);
+            return cmdService.listCommodityByPage(cmdInfo);
         } catch (Exception e) {
             logger.error("查询商品列表异常", e);
             System.out.println(e.toString());
@@ -79,7 +79,7 @@ public class CmdController {
     public AppResponse updateCommodityByCode(CmdInfo cmdInfo) {
         try {
             //获取用户编号
-            String userId = AuthUtils.getCurrentUserId();
+            String userId = SecurityUtils.getCurrentUserId();
             cmdInfo.setUpdateUser(userId);
             return cmdService.updateCommodityByCode(cmdInfo);
 
@@ -101,7 +101,7 @@ public class CmdController {
     public AppResponse deleteUser(String comCode) {
         try {
             //获取用户id
-            String userId = AuthUtils.getCurrentUserId();
+            String userId = SecurityUtils.getCurrentUserId();
             return cmdService.deleteCommodity(comCode,userId);
         } catch (Exception e) {
             logger.error("商品删除错误", e);
@@ -134,10 +134,11 @@ public class CmdController {
      * @Date 2020-03-27
      */
     @PostMapping(value = "updateComStatus")
-    public AppResponse updateComStatus(String comCode,String comStatus) {
+    public AppResponse updateComStatus(String comCode,String comStatus,CmdInfo cmdInfo) {
         try {
             //获取用户编号
             String userId = SecurityUtils.getCurrentUserId();
+            cmdInfo.setUpdateUser(userId);
             return cmdService.updateComStatus(comCode,userId,comStatus);
         }catch (Exception e) {
             logger.error("商品修改失败",e);

@@ -11,7 +11,7 @@ import java.util.List;
  * @ClassName UserDao
  * @Description 用户管理
  * @Author zhu.qf@neusoft.com
- * @Date 2018/11/28
+ * @Date 2020-04-17
  */
 public interface UserDao {
     /**

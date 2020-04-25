@@ -14,6 +14,8 @@ import javax.annotation.Resource;
 import java.util.Arrays;
 import java.util.List;
 
+import static com.neusoft.core.page.PageUtils.getPageInfo;
+
 /**
  * @DescriptionDemo 实现类
  * @Author hechusheng
@@ -31,9 +33,15 @@ public class CarouselService {
      */
     @Transactional(rollbackFor = Exception.class)
     public AppResponse addCarousel (CarouselInfo carouselInfo){
-        int countCarousel =  carouselDao.countCarousel(carouselInfo);
-        if(0 != countCarousel) {
-            return AppResponse.bizError("该轮播图已存在");
+        //校验轮播图序号是否已存在
+        int countCaroNum =  carouselDao.countCaroNum(carouselInfo);
+        if(0 != countCaroNum) {
+            return AppResponse.bizError("该轮播图序号已存在！");
+        }
+        //校验轮播图序号是否已存在
+        int countCaroCmd =  carouselDao.countCaroCmd(carouselInfo);
+        if(0 != countCaroCmd) {
+            return AppResponse.bizError("该商品已存在！");
         }
         carouselInfo.setCaroCode(StringUtil.getCommonCode(2));
         carouselInfo.setIsDelete(0);
@@ -49,9 +57,9 @@ public class CarouselService {
      * @param carouselInfo
      * @return
      */
-    public AppResponse listComCarousel (CarouselInfo carouselInfo) {
-        List<CarouselInfo> comCarouselList = carouselDao.listComCarousel(carouselInfo);
-        return AppResponse.success("查询成功！",comCarouselList);
+    public AppResponse listComCarouselByPage (CarouselInfo carouselInfo) {
+        List<CarouselInfo> comCarouselList = carouselDao.listComCarouselByPage(carouselInfo);
+        return AppResponse.success("查询成功！",getPageInfo(comCarouselList));
     }
 
     /**
@@ -81,7 +89,6 @@ public class CarouselService {
     public AppResponse updateCaroStatus(String caroCode,String userId, String caroStatus) {
         List<String> listCode = Arrays.asList(caroCode.split(","));
         AppResponse appResponse = AppResponse.success("更新成功!");
-
         //更新状态
         int count = carouselDao.updateCaroStatus(listCode,userId,caroStatus);
         if(0 == count) {
@@ -96,8 +103,8 @@ public class CarouselService {
      * @param carouselInfo
      * @return
      */
-    public AppResponse listCarousel(CarouselInfo carouselInfo) {
-        List<CarouselInfo> carouselInfoList = carouselDao.listCarousel(carouselInfo);
-        return AppResponse.success("查询成功！",carouselInfo);
+    public AppResponse listCarouselByPage(CarouselInfo carouselInfo) {
+        List<CarouselInfo> carouselInfoList = carouselDao.listCarouselByPage(carouselInfo);
+        return AppResponse.success("查询成功！",getPageInfo(carouselInfoList));
     }
 }

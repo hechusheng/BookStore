@@ -1,6 +1,7 @@
 package com.xzsd.pc.commodityHot.dao;
 
 import com.xzsd.pc.commodityHot.entity.CmdHotInfo;
+import com.xzsd.pc.commodityHot.entity.ShowNumInfo;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -20,6 +21,12 @@ public interface CmdHotDao {
      */
     int countCmdHot(CmdHotInfo cmdHotInfo);
 
+    /**
+     * 统计热门商品序号
+     * @param cmdHotInfo
+     * @return
+     */
+    int countCmdHotNum(CmdHotInfo cmdHotInfo);
     /**
      * 新增热门商品
      * @param cmdHotInfo
@@ -64,4 +71,11 @@ public interface CmdHotDao {
      * @return
      */
     int showCommodityHotNum (@Param("userId")String userId,@Param("showNum")String showNum, @Param("version")String version);
+
+    /**
+     * 获取展示数量
+     * @param
+     * @return
+     */
+    ShowNumInfo getShowNum ();
 }

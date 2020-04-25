@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xzsd.app.client.index.dao.IndexDao">
+    <!--    查询轮播图列表-->
+    <select id="listCarousel" resultType="com.xzsd.app.client.index.entity.CarouselInfo">
+        select
+            caro_code as caroCode,
+            path as path,
+            caro_num as caorNum,
+            caro_status as caroStatus,
+            com_code as comCode,
+            start_time as startTime,
+            end_time as endTime,
+            version
+        from
+            t_carousel
+        where
+            is_delete = 0
+        and
+            caro_status = 0
+        order by caro_num asc
+    </select>
+    <!--查询展示数量-->
+    <select id="getShowNum" resultType="int">
+        SELECT
+	       field_value showNum,
+	       version version
+        FROM
+	       t_field
+	    where
+	        field_code = '123'
+    </select>
+    <!--查询首页热门商品列表-->
+    <select id="listCommodityHot" parameterType="java.lang.Integer" resultType="com.xzsd.app.client.index.entity.CmdHotInfo">
+        SELECT
+            cmd.com_code comCode,
+            cmd.pic_path picPath,
+            cmd.com_name comName,
+            cmd.com_price comPrice,
+            hot.hot_num hot_num
+        FROM
+            t_commodity_hot hot
+        LEFT JOIN
+            t_commodity cmd
+        ON
+            hot.com_code = cmd.com_code
+        WHERE
+            hot.is_delete = 0
+        AND
+            cmd.com_status = 0
+        ORDER BY
+            hot.hot_num ASC
+        LIMIT
+            0,#{showNum}
+    </select>
+</mapper>

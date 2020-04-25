@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xzsd.app.client.personal.dao.PersonalDao">
+    <!--获取操作人角色-->
+    <select id="getUser" parameterType="java.lang.String" resultType="com.xzsd.app.client.registered.eneity.UserInfo">
+        select
+            user_code userCode,
+            user_name userName,
+            user_acc userAccount,
+            photo photo,
+            role role,
+            user_pass userPassword,
+            version version
+        from
+            t_sys_user
+        where
+            user_code = #{userCode}
+        and
+            is_delete = 0
+    </select>
+    <!--获取用户个人信息-->
+    <select id="getUserMessage" parameterType="com.xzsd.app.client.personal.entity.PersonalInfo" resultType="com.xzsd.app.client.personal.entity.PersonalInfo">
+        SELECT
+            u.user_code userCode,
+            u.user_name userName,
+            u.user_acc userAccount,
+            u.photo photo,
+            u.phone phone,
+            u.role role
+        <!--登录用户为店长或者客户时-->
+            <if test="role != null and role != '' and (role == 1 or role == 3)">
+                ,
+                s.invite_code inviteCode,
+                s.store_code storeCode,
+                s.store_name storeName,
+                CONCAT_WS( '-',province.city_name,city.city_name,area.city_name ) AS address
+            </if>
+        FROM
+            t_sys_user u
+        <!--登录用户为客户时-->
+        <if test="role == 3">
+            LEFT JOIN
+                t_user_client uc
+            ON
+                u.user_code = uc.user_code
+            LEFT JOIN
+                t_store s
+            ON
+                (uc.invite_code = s.invite_code
+                and
+                    s.is_delete = 0)
+            LEFT JOIN
+                city area
+            ON
+                area.id = s.area_code
+            LEFT JOIN
+                city city
+            ON
+                city.id = area.pid
+            LEFT JOIN
+                city province
+            ON
+                province.id = city.pid
+        </if>
+        <!--登录用户为店长时-->
+        <if test="role == 1">
+            left join
+                t_store s
+            on
+                (u.user_code = s.user_code
+                and
+                    s.is_delete = 0)
+            LEFT JOIN
+                city area
+            ON
+                area.id = s.area_code
+            LEFT JOIN
+                city city
+            ON
+                city.id = area.pid
+            LEFT JOIN
+                city province
+            ON
+                province.id = city.pid
+        </if>
+        where
+            u.is_delete = 0
+        and
+            u.user_code = #{userCode}
+    </select>
+    <!--修改用户密码-->
+    <update id="updateUserPassword" parameterType="com.xzsd.app.client.personal.entity.PasswordInfo">
+        update
+            t_sys_user
+        set
+            user_pass = #{newUserPassword},
+            update_user = #{userCode},
+            update_time = now(),
+            version = version + 1
+        where
+            user_code = #{userCode}
+        and
+            is_delete = 0
+        and
+            version = #{version}
+    </update>
+    <!--修改客户门店邀请码-->
+    <update id="updateInviteCode" parameterType="com.xzsd.app.client.registered.eneity.UserInfo">
+        update
+            t_user_client
+        set
+            invite_code = #{inviteCode},
+            update_user = #{userCode},
+            update_time = now(),
+            version = version + 1
+        where
+            user_code = #{userCode}
+        and
+            is_delete = 0
+    </update>
+    <!--统计门店邀请码-->
+    <select id="countInviteCode" parameterType="java.lang.String" resultType="int">
+        select
+            count(invite_code)
+        from
+            t_store
+        where
+            is_delete = 0
+        and
+            invite_code = #{inviteCode}
+    </select>
+</mapper>

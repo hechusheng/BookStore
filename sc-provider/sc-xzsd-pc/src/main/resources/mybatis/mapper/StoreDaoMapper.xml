@@ -78,9 +78,13 @@
             st.store_phone storePhone,
             st.invite_code inviteCode,
             c.city_name province,
+            c.id provinceCode,
             b.city_name city,
+            b.id cityCode,
             a.city_name area,
+            a.id areaCode,
             st.store_address storeAddress,
+            st.business_license businessLicense,
             st.version version
         FROM
             t_store st
@@ -133,7 +137,8 @@
             st.store_address storeAddress,
             us.user_name userName,
             st.invite_code inviteCode,
-            us.user_acc userAccount
+            us.user_acc userAccount,
+            st.version version
         FROM
             t_store st
         LEFT JOIN
@@ -142,7 +147,7 @@
             st.user_code = us.user_code
         where
             st.is_delete =  0
-        <if test="role !=null and role !='' and role == 1">
+        <if test="role != null and role !='' and role == 1 ">
             AND st.user_code = #{userId}
         </if>
         <if test="storeCode != null and storeCode !=''">
@@ -221,5 +226,16 @@
         order by
             id desc
     </select>
-
+    <!--获取操作人角色-->
+    <select id="getUser" parameterType="java.lang.String" resultType="com.xzsd.pc.user.entity.UserInfo">
+        select
+            user_code userCode,
+            role role
+        from
+            t_sys_user
+        where
+            user_code = #{userCode}
+        and
+            is_delete = 0
+    </select>
 </mapper>

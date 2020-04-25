@@ -23,6 +23,13 @@ public interface UserDao {
     int countUserAccount(UserInfo userInfo);
 
     /**
+     * 统计身份证数量
+     * @param userInfo
+     * @return
+     */
+    int countIdCard (UserInfo userInfo);
+
+    /**
      * 新增用户
      * @param userInfo 用户信息
      * @return
@@ -66,4 +73,10 @@ public interface UserDao {
      */
     UserInfo userLogin(@Param("userAccount") String userAccount, @Param("userPassword") String userPassword);
 
+    /**
+     * 查询操作人角色
+     * @param userId
+     * @return
+     */
+    UserInfo getUser (String userId);
 }

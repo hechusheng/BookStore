@@ -4,7 +4,7 @@
     <!--统计商品数量-->
     <select id="countCommodity" parameterType="com.xzsd.pc.commodity.entity.CmdInfo" resultType="int">
         select
-            count(*),
+            count(*)
         from
             t_commodity
         where
@@ -33,7 +33,11 @@
              advertisement,
              author,
              press,
+             com_status,
+             shelves_time,
+             star_level,
              is_delete,
+             com_status,
              create_time,
              create_user,
              update_time,
@@ -53,23 +57,27 @@
             #{advertisement},
             #{author},
             #{press},
+            2,
+            now(),
+            #{starLevel},
             #{isDelete},
+            #{comStatus},
             now(),
             #{createUser},
             now(),
             #{updateUser},
             0)
     </insert>
-
     <!--商品列表-->
     <select id="listCommodity" parameterType="com.xzsd.pc.commodity.entity.CmdInfo" resultType="com.xzsd.pc.commodity.entity.CmdInfo">
         SELECT
+            a.com_code comCode,
             a.com_name comName,
             a.buss_name bussName,
             a.com_num comNum,
             a.com_stock comStock,
             a.fixed_price fixedPrice,
-            a.com_sales comSales,
+            a.com_price comPrice,
             a.page_views pageViews,
             c.sort_code firstSortCode,
             c.sort_name firstSortName,
@@ -78,8 +86,10 @@
             a.com_status comStatus,
             a.shelves_time shelvesTime,
             a.advertisement advertisement,
+            a.com_present comPresent,
             a.author author,
-            a.press press
+            a.press press,
+            a.version version
         FROM
             t_commodity a
         LEFT JOIN
@@ -135,6 +145,34 @@
             version = #{version}
     </update>
     <!--删除商品信息-->
+    <select id="hotCmdCount" parameterType="com.xzsd.pc.util.CodeList" resultType="java.lang.String">
+        select distinct
+            com_code
+        from
+            t_commodity_hot
+        where
+            is_delete = 0
+        and
+            com_code
+        in
+        <foreach collection="codeList" index="index" item="comCode" open="(" separator="," close=")">
+            #{comCode}
+        </foreach>
+    </select>
+    <select id="caroselCount" parameterType="com.xzsd.pc.util.CodeList" resultType="java.lang.String">
+        select distinct
+            com_code
+        from
+            t_carousel
+        where
+            is_delete = 0
+        and
+            com_code
+        in
+        <foreach collection="codeList" index="index" item="comCode" open="(" separator="," close=")">
+            #{comCode}
+        </foreach>
+    </select>
     <update id="deleteCommodity" parameterType="com.xzsd.pc.commodity.entity.CmdInfo">
         update
             t_commodity
@@ -146,11 +184,29 @@
         where
             com_code
         in
-        <foreach item="item" index="index" collection="listCode" open="(" separator="," close=")">
-            #{item}
+        <foreach item="code" index="index" collection="codeList" open="(" separator="," close=")">
+            #{code}
         </foreach>
+        <if test = "checkHotList != null">
+            and
+            (com_code
+            not in
+            <foreach collection="checkHotList" item="code" open="(" separator="," close=")" index="index">
+                #{code}
+            </foreach>
+        </if>
+        <if test="checkCaroList != null">
+            or
+            com_code
+            not in
+            <foreach collection="checkCaroList" item="code" open="(" separator="," close=")" index="index">
+                #{code}
+            </foreach>
+            )
+        </if>
+
     </update>
-    <!--获取商品信息-->
+    <!--获取商品详情信息-->
     <select id="findCommodityByCode" parameterType="java.lang.String" resultType="com.xzsd.pc.commodity.entity.CmdInfo">
         SELECT
             a.com_code comCode,
@@ -159,7 +215,8 @@
             a.com_num comNum,
             a.com_stock comStock,
             a.com_cost comCost,
-            a.com_sales comSales,
+            a.com_price comprice,
+            a.com_present comPresent,
             a.page_views pageViews,
             c.sort_code firstSortCode,
             c.sort_name firstSortName,
@@ -168,7 +225,8 @@
             a.pic_path picPath,
             a.advertisement advertisement,
             a.author author,
-            a.press press
+            a.press press,
+            a.version version
         FROM
             t_commodity a
         LEFT JOIN
@@ -190,6 +248,9 @@
             t_commodity
         set
             com_status =  #{comStatus},
+            <if test="comStatus != null and comStatus != '' and comStatus == 0">
+                shelves_time = now(),
+            </if>
             update_time = now(),
             update_user = #{userId},
             version = version + 1

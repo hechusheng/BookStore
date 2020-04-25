@@ -2,6 +2,7 @@ package com.xzsd.pc.carousel.controller;
 
 
 import com.neusoft.core.restful.AppResponse;
+import com.neusoft.security.client.utils.SecurityUtils;
 import com.neusoft.util.AuthUtils;
 import com.xzsd.pc.carousel.entity.CarouselInfo;
 import com.xzsd.pc.carousel.service.CarouselService;
@@ -37,7 +38,7 @@ public class CarouselController {
     public AppResponse addCarousel(CarouselInfo carouselInfo){
         try{
             //获取用户编号
-            String userCode = AuthUtils.getCurrentUserId();
+            String userCode = SecurityUtils.getCurrentUserId();
             carouselInfo.setCreateUser(userCode);
             carouselInfo.setUpdateUser(userCode);
             return carouselService.addCarousel(carouselInfo);
@@ -54,9 +55,9 @@ public class CarouselController {
      * @return
      */
     @RequestMapping(value = "listComCarouselByPage")
-    public AppResponse listComCarousel(CarouselInfo carouselInfo) {
+    public AppResponse listComCarouselByPage(CarouselInfo carouselInfo) {
         try {
-            return carouselService.listComCarousel(carouselInfo);
+            return carouselService.listComCarouselByPage(carouselInfo);
         } catch (Exception e) {
             logger.error("查询商品列表失败",e);
             System.out.println(e.toString());
@@ -73,7 +74,7 @@ public class CarouselController {
     public AppResponse deleteUser(String caroCode) {
         try {
             //获取用户id
-            String userId = AuthUtils.getCurrentUserId();
+            String userId = SecurityUtils.getCurrentUserId();
             return carouselService.deleteCarousel(caroCode,userId);
         } catch (Exception e) {
             logger.error("轮播图删除错误", e);
@@ -82,11 +83,17 @@ public class CarouselController {
         }
     }
 
+    /**
+     * 更新轮播图状态
+     * @param caroCode
+     * @param caroStatus
+     * @return
+     */
     @PostMapping("updateCaroStatus")
     public AppResponse updateCaroStatus(String caroCode,String caroStatus) {
         try {
             //获取用户id
-            String userId = AuthUtils.getCurrentUserId();
+            String userId = SecurityUtils.getCurrentUserId();
             return carouselService.updateCaroStatus(caroCode,userId,caroStatus);
         } catch (Exception e) {
             logger.error("轮播图更新错误", e);
@@ -95,10 +102,15 @@ public class CarouselController {
         }
     }
 
+    /**
+     * 查询轮播图列表(分页)
+     * @param carouselInfo
+     * @return
+     */
     @RequestMapping(value = "listCarouselByPage")
-    public AppResponse listCarousel(CarouselInfo carouselInfo) {
+    public AppResponse listCarouselByPage(CarouselInfo carouselInfo) {
         try {
-            return carouselService.listCarousel(carouselInfo);
+            return carouselService.listCarouselByPage(carouselInfo);
         } catch (Exception e) {
             logger.error("查询轮播图列表失败",e);
             System.out.println(e.toString());

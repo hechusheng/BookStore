@@ -50,8 +50,7 @@ public class CarouselInfo {
     /**
      * 创建时间
      */
-    @JsonFormat(shape = JsonFormat.Shape.STRING , pattern = "yyyy-MM-dd HH:mm:ss" , timezone = "GMT+8")
-    private Date createTime;
+    private String createTime;
     /**
      * 更新者
      */
@@ -59,90 +58,35 @@ public class CarouselInfo {
     /**
      * 更新时间
      */
-    @JsonFormat(shape = JsonFormat.Shape.STRING , pattern = "yyyy-MM-dd HH:mm:ss" , timezone = "GMT+8")
-    private Date updateTime;
+    private String updateTime;
     /**
      * 版本号
      */
     private String version;
-
     /**
      * 商品名称
      */
     private String comName;
-
     /**
      *商品状态
      */
     private String comStatus;
-
     /**
      * 一级分类编号
      */
     private String firstSortCode;
-
     /**
      * 一级分类名称
      */
     private String firstSortName;
-
     /**
      * 二级分类编号
      */
     private String secondSortCode;
-
     /**
      * 二级分类名称
      */
     private String secondSortName;
-
-    public String getComName() {
-        return comName;
-    }
-
-    public void setComName(String comName) {
-        this.comName = comName;
-    }
-
-    public String getComStatus() {
-        return comStatus;
-    }
-
-    public void setComStatus(String comStatus) {
-        this.comStatus = comStatus;
-    }
-
-    public String getFirstSortCode() {
-        return firstSortCode;
-    }
-
-    public void setFirstSortCode(String firstSortCode) {
-        this.firstSortCode = firstSortCode;
-    }
-
-    public String getFirstSortName() {
-        return firstSortName;
-    }
-
-    public void setFirstSortName(String firstSortName) {
-        this.firstSortName = firstSortName;
-    }
-
-    public String getSecondSortCode() {
-        return secondSortCode;
-    }
-
-    public void setSecondSortCode(String secondSortCode) {
-        this.secondSortCode = secondSortCode;
-    }
-
-    public String getSecondSortName() {
-        return secondSortName;
-    }
-
-    public void setSecondSortName(String secondSortName) {
-        this.secondSortName = secondSortName;
-    }
 
     public String getCaroCode() {
         return caroCode;
@@ -208,14 +152,6 @@ public class CarouselInfo {
         this.isDelete = isDelete;
     }
 
-    public Date getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
-
     public String getCreateUser() {
         return createUser;
     }
@@ -224,12 +160,12 @@ public class CarouselInfo {
         this.createUser = createUser;
     }
 
-    public Date getUpdateTime() {
-        return updateTime;
+    public String getCreateTime() {
+        return createTime;
     }
 
-    public void setUpdateTime(Date updateTime) {
-        this.updateTime = updateTime;
+    public void setCreateTime(String createTime) {
+        this.createTime = createTime;
     }
 
     public String getUpdateUser() {
@@ -240,6 +176,14 @@ public class CarouselInfo {
         this.updateUser = updateUser;
     }
 
+    public String getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(String updateTime) {
+        this.updateTime = updateTime;
+    }
+
     public String getVersion() {
         return version;
     }
@@ -248,4 +192,51 @@ public class CarouselInfo {
         this.version = version;
     }
 
+    public String getComName() {
+        return comName;
+    }
+
+    public void setComName(String comName) {
+        this.comName = comName;
+    }
+
+    public String getComStatus() {
+        return comStatus;
+    }
+
+    public void setComStatus(String comStatus) {
+        this.comStatus = comStatus;
+    }
+
+    public String getFirstSortCode() {
+        return firstSortCode;
+    }
+
+    public void setFirstSortCode(String firstSortCode) {
+        this.firstSortCode = firstSortCode;
+    }
+
+    public String getFirstSortName() {
+        return firstSortName;
+    }
+
+    public void setFirstSortName(String firstSortName) {
+        this.firstSortName = firstSortName;
+    }
+
+    public String getSecondSortCode() {
+        return secondSortCode;
+    }
+
+    public void setSecondSortCode(String secondSortCode) {
+        this.secondSortCode = secondSortCode;
+    }
+
+    public String getSecondSortName() {
+        return secondSortName;
+    }
+
+    public void setSecondSortName(String secondSortName) {
+        this.secondSortName = secondSortName;
+    }
 }

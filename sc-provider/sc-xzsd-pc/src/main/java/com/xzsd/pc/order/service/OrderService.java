@@ -38,7 +38,7 @@ public class OrderService {
     public AppResponse listOrderByPage (OrderInfo orderInfo) {
         //获取操作人的角色
         UserInfo userInfo = orderDao.getUser(orderInfo.getUserId());
-        if(userInfo != null && userInfo.getRole() != ""){
+        if(userInfo != null && userInfo.getRole() != null){
             orderInfo.setRole(userInfo.getRole());
         }
         List<OrderInfo> orderInfoList = orderDao.listOrderByPage(orderInfo);

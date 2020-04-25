@@ -52,7 +52,7 @@ public class UserClientInfo {
     /**
      * 角色（0管理员，1店长）
      */
-    private int role;
+    private String role;
     /**
      * 作废标记 0为存在，1为作废
      */
@@ -64,8 +64,7 @@ public class UserClientInfo {
     /**
      * 创建时间
      */
-    @JsonFormat(shape = JsonFormat.Shape.STRING , pattern = "yyyy-MM-dd HH:mm:ss" , timezone = "GMT+8")
-    private Date createTime;
+    private String createTime;
     /**
      * 更新者
      */
@@ -73,8 +72,7 @@ public class UserClientInfo {
     /**
      * 更新时间
      */
-    @JsonFormat(shape = JsonFormat.Shape.STRING , pattern = "yyyy-MM-dd HH:mm:ss" , timezone = "GMT+8")
-    private Date updateTime;
+    private String updateTime;
     /**
      * 版本号
      */
@@ -84,13 +82,6 @@ public class UserClientInfo {
      */
     private String userId;
 
-    public String getUserId() {
-        return userId;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
     public String getClientCode() {
         return clientCode;
     }
@@ -179,11 +170,11 @@ public class UserClientInfo {
         this.photo = photo;
     }
 
-    public int getRole() {
+    public String getRole() {
         return role;
     }
 
-    public void setRole(int role) {
+    public void setRole(String role) {
         this.role = role;
     }
 
@@ -195,14 +186,6 @@ public class UserClientInfo {
         this.isDelete = isDelete;
     }
 
-    public Date getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
-
     public String getCreateUser() {
         return createUser;
     }
@@ -211,12 +194,12 @@ public class UserClientInfo {
         this.createUser = createUser;
     }
 
-    public Date getUpdateTime() {
-        return updateTime;
+    public String getCreateTime() {
+        return createTime;
     }
 
-    public void setUpdateTime(Date updateTime) {
-        this.updateTime = updateTime;
+    public void setCreateTime(String createTime) {
+        this.createTime = createTime;
     }
 
     public String getUpdateUser() {
@@ -227,11 +210,27 @@ public class UserClientInfo {
         this.updateUser = updateUser;
     }
 
+    public String getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(String updateTime) {
+        this.updateTime = updateTime;
+    }
+
     public String getVersion() {
         return version;
     }
 
     public void setVersion(String version) {
         this.version = version;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 }

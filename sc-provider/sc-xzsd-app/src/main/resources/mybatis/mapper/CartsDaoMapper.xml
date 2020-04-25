@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xzsd.app.client.carts.dao.CartsDao">
+    <!--新增购物车-->
+    <insert id="addCarts" parameterType="com.xzsd.app.client.carts.entity.CartsInfo">
+        insert into t_carts(
+            cart_code,
+            user_code,
+            com_code,
+            cart_amount,
+            total_price,
+            is_delete,
+            create_user,
+            create_time,
+            update_user,
+            update_time,
+            version
+        )values (
+            #{cartCode},
+            #{userCode},
+            #{comCode},
+            #{cartAmount},
+            #{totalPrice},
+            #{isDelete},
+            #{createUser},
+            now(),
+            #{updateUser},
+            now(),
+            0
+        )
+    </insert>
+    <!--查询购物车列表信息-->
+    <select id="getCartsByPage" parameterType="java.lang.String" resultType="com.xzsd.app.client.carts.entity.CartsInfo">
+        SELECT
+            carts.cart_code cartCode,
+            carts.user_code userCode,
+            cmd.com_code comCode,
+            cmd.com_name comName,
+            cmd.pic_path picPath,
+            cmd.com_price comPrice,
+            carts.cart_amount cartAmount,
+            carts.version version
+        FROM
+            t_carts carts
+        LEFT JOIN
+            t_commodity cmd
+        ON
+            (cmd.com_code = carts.com_code and cmd.is_delete = 0)
+        where
+            carts.is_delete = 0
+        and
+            carts.user_code = #{userId}
+    </select>
+    <!--修改购物车商品数量-->
+    <update id="updateCarts" parameterType="com.xzsd.app.client.carts.entity.CartsInfo">
+        update
+            t_carts
+        set
+            cart_amount = #{cartAmount},
+            total_price = #{totalPrice},
+            update_user = #{updateUser}
+        where
+            is_delete = 0
+        and
+            cart_code = #{cartCode}
+    </update>
+    <!--统计购物车商品数量-->
+    <select id="countComCode" parameterType="com.xzsd.app.client.carts.entity.CartsInfo" resultType="int">
+        select
+            count(com_code)
+        from
+            t_carts
+        where
+            is_delete = 0
+        and
+            com_code = #{comCode}
+    </select>
+    <!--统计购物车商品详情-->
+    <select id="getCarts" parameterType="java.lang.String" resultType="com.xzsd.app.client.carts.entity.CartsInfo">
+        SELECT
+            carts.cart_code cartCode,
+            carts.user_code userCode,
+            cmd.com_code comCode,
+            cmd.com_name comName,
+            cmd.pic_path picPath,
+            cmd.com_price comPrice,
+            carts.cart_amount cartAmount,
+            carts.version version
+        FROM
+            t_carts carts
+        LEFT JOIN
+            t_commodity cmd
+        ON
+            (cmd.com_code = carts.com_code and cmd.is_delete = 0)
+        where
+            carts.is_delete = 0
+        and
+            carts.user_code = #{userId}
+        and
+            carts.com_code = #{comCode}
+    </select>
+    <!--删除购物车商品-->
+    <update id="deleteCarts" parameterType="com.xzsd.app.client.carts.entity.CartsInfo">
+        update
+            t_carts
+        set
+            is_delete = 1,
+            update_time = now(),
+            update_user = #{userId},
+            version = version + 1
+        where
+            cart_code
+        in
+        <foreach item="item" index="index" collection="listCode" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </update>
+</mapper>

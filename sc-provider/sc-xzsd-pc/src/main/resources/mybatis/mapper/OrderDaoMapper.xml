@@ -4,9 +4,9 @@
     <!--获取操作人编号-->
     <select id="getUser" parameterType="java.lang.String" resultType="com.xzsd.pc.user.entity.UserInfo">
         select
-            user_code as userCode,
-            role,
-            version
+            user_code userCode,
+            role role,
+            version version
         from
             t_sys_user
         where
@@ -17,14 +17,15 @@
     <!--查询订单详情-->
     <select id="findDetailByCode" parameterType="com.xzsd.pc.order.entity.OrderDetails" resultType="com.xzsd.pc.order.entity.OrderDetails">
         SELECT
-            od.user_code,
-	        od.order_code,
+            od.user_code userCode,
+	        od.order_code orderCode,
             odd.com_code comCode,
             cmd.com_name comName,
             odd.detail_amount detailAmount,
             odd.total_price totalPrice,
             cmd.com_price comPrice,
-            cmd.com_cost comCost
+            cmd.com_cost comCost,
+            od.version version
         FROM
             t_order od
         LEFT JOIN
@@ -52,7 +53,8 @@
             od.store_code storeCode,
             us.user_name userName,
             us.phone phone,
-            od.pay_time payTime
+            od.pay_time payTime,
+            od.version version
         FROM
             t_order od
         LEFT JOIN

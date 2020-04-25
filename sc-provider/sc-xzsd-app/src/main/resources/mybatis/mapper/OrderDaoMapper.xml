@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xzsd.app.client.addOrder.dao.OrderDao">
+    <!--新增订单-->
+    <insert id="addOrder" parameterType="com.xzsd.app.client.addOrder.entity.OrderInfo" >
+        insert into t_order
+            (order_code,
+            user_code,
+            order_status,
+            store_code,
+            remark,
+            pay_time,
+            total_price,
+            pay_status,
+            total_cmd,
+            is_delete,
+            create_user,
+            create_time,
+            update_user,
+            update_time,
+            version
+        )
+        values (
+            #{orderCode},
+            #{userCode},
+            #{orderStatus},
+            #{storeCode},
+            #{remark},
+            now(),
+            #{totalPrice},
+            #{payStatus},
+            #{totalCmd},
+            #{isDelete},
+            #{createUser},
+            now(),
+            #{updateUser},
+            now(),
+            0
+        )
+    </insert>
+    <!--新增订单详情-->
+    <insert id="addOrderDetails" parameterType="java.util.List">
+        insert into t_order_detail
+            (detail_code,
+            order_code,
+            com_code,
+            detail_amount,
+            total_price,
+            is_delete,
+            create_user,
+            create_time,
+            update_user,
+            update_time,
+            version
+            )
+        values
+        <foreach collection="detailsList" index="index" item="item" open="" separator="," close="">
+        (
+            #{item.orderDetailsCode},
+            #{item.orderCode},
+            #{item.comCode},
+            #{item.comCount},
+            #{item.comPrice} * #{item.comCount},
+            #{item.isDelete},
+            #{item.createUser},
+            now(),
+            #{item.updateUser},
+            now(),
+            0
+        )
+        </foreach>
+    </insert>
+    <!--查询用户绑定门店信息-->
+    <select id="getStoreMessage" parameterType="java.lang.String" resultType="com.xzsd.app.client.addOrder.entity.StoreInfo">
+        SELECT
+            s.store_code storeCode,
+            s.store_name storeName,
+            s.user_code userCode,
+            s.store_phone storePnone,
+            s.invite_code inviteCode,
+            s.business_license businessLicense,
+            CONCAT_WS('-',province.city_name,city.city_name,area.city_name,s.store_address) AS address
+        FROM
+            t_store s
+        LEFT JOIN
+            t_user_client cl
+        ON
+            s.invite_code = cl.invite_code
+        LEFT JOIN
+          city area
+        ON
+          area.id = s.area_code
+        LEFT JOIN
+          city city
+        ON
+          city.id = area.pid
+        LEFT JOIN
+          city province
+        ON
+          province.id = city.pid
+        WHERE
+           s.is_delete = 0
+        AND
+            cl.user_code = #{userCode}
+    </select>
+    <!--获取商品信息-->
+    <select id="getCmdMessage" parameterType="java.lang.String" resultType="com.xzsd.app.client.addOrder.entity.CommodityInfo">
+        SELECT
+            cmd.com_code comCode,
+            cmd.pic_path picPath,
+            cmd.com_name comName,
+            cmd.com_present comPresent,
+            cmd.com_price comPrice,
+            cmd.com_sales comSale,
+            cmd.com_stock comStock
+        FROM
+            t_commodity cmd
+        WHERE
+            cmd.is_delete = 0
+        AND
+            cmd.com_code = #{comCode}
+    </select>
+    <!--修改商品库存跟销售量-->
+    <update id="updateCmd" parameterType="java.util.List">
+        <foreach collection="detailsList" index="index" item="item" open="" separator=";" close="">
+            update
+                t_commodity
+            set
+                com_sales = com_sales + #{item.comCount},
+                com_stock = com_stock - #{item.comCount}
+            where
+                is_delete = 0
+            and
+                com_code = #{item.comCode}
+        </foreach>
+    </update>
+    <!--    查询商品列表信息-->
+    <select id="cmdList" parameterType="java.util.List" resultType="com.xzsd.app.client.addOrder.entity.CommodityInfo">
+        select
+            cmd.com_code as comCode,
+            cmd.pic_path as picPath,
+            cmd.com_name as comName,
+            cmd.com_present as comPresent,
+            cmd.com_price as comPrice,
+            cmd.com_sales as comSale,
+            cmd.com_stock as comStock,
+            cmd.version
+        from
+            t_commodity cmd
+        where
+            cmd.is_delete = 0
+        and
+            cmd.com_code
+        in
+        <foreach collection="comCode" item="item" index="index" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+        group by cmd.com_code
+    </select>
+</mapper>

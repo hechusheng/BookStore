@@ -7,6 +7,10 @@ import java.util.List;
 
 public class OrderDetails {
     /**
+     * 用户编号
+     */
+    private String userCode;
+    /**
      * 订单编号
      */
     private String orderCode;
@@ -25,19 +29,19 @@ public class OrderDetails {
     /**
      * 商品名
      */
-    private String goodsName;
+    private String comName;
     /**
      * 总价
      */
-    private String totalPrice;
+    private float totalPrice;
     /**
      * 售价
      */
-    private String comPrice;
+    private float comPrice;
     /**
      * 成本价
      */
-    private String comCost;
+    private float comCost;
     /**
      * 删除标记
      */
@@ -49,8 +53,7 @@ public class OrderDetails {
     /**
      * 创建时间
      */
-    @JsonFormat(shape = JsonFormat.Shape.STRING , pattern = "yyyy-MM-dd HH:mm:ss" , timezone = "GMT+8")
-    private Date createTime;
+    private String createTime;
     /**
      * 更新者
      */
@@ -58,12 +61,19 @@ public class OrderDetails {
     /**
      * 更新时间
      */
-    @JsonFormat(shape = JsonFormat.Shape.STRING , pattern = "yyyy-MM-dd HH:mm:ss" , timezone = "GMT+8")
-    private Date updateTime;
+    private String updateTime;
     /**
      * 版本号
      */
     private String version;
+
+    public String getUserCode() {
+        return userCode;
+    }
+
+    public void setUserCode(String userCode) {
+        this.userCode = userCode;
+    }
 
     public String getOrderCode() {
         return orderCode;
@@ -97,35 +107,35 @@ public class OrderDetails {
         this.orderDetailsCode = orderDetailsCode;
     }
 
-    public String getGoodsName() {
-        return goodsName;
+    public String getComName() {
+        return comName;
     }
 
-    public void setGoodsName(String goodsName) {
-        this.goodsName = goodsName;
+    public void setComName(String comName) {
+        this.comName = comName;
     }
 
-    public String getTotalPrice() {
+    public float getTotalPrice() {
         return totalPrice;
     }
 
-    public void setTotalPrice(String totalPrice) {
+    public void setTotalPrice(float totalPrice) {
         this.totalPrice = totalPrice;
     }
 
-    public String getComPrice() {
+    public float getComPrice() {
         return comPrice;
     }
 
-    public void setComPrice(String comPrice) {
+    public void setComPrice(float comPrice) {
         this.comPrice = comPrice;
     }
 
-    public String getComCost() {
+    public float getComCost() {
         return comCost;
     }
 
-    public void setComCost(String comCost) {
+    public void setComCost(float comCost) {
         this.comCost = comCost;
     }
 
@@ -145,11 +155,11 @@ public class OrderDetails {
         this.createUser = createUser;
     }
 
-    public Date getCreateTime() {
+    public String getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(Date createTime) {
+    public void setCreateTime(String createTime) {
         this.createTime = createTime;
     }
 
@@ -161,11 +171,11 @@ public class OrderDetails {
         this.updateUser = updateUser;
     }
 
-    public Date getUpdateTime() {
+    public String getUpdateTime() {
         return updateTime;
     }
 
-    public void setUpdateTime(Date updateTime) {
+    public void setUpdateTime(String updateTime) {
         this.updateTime = updateTime;
     }
 

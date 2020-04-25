@@ -39,7 +39,7 @@ public class UserClientController {
         try {
             String userId = SecurityUtils.getCurrentUserId();
             userClientInfo.setUserId(userId);
-            return userClientService.listUserClient(userClientInfo);
+            return userClientService.listUserClientByPage(userClientInfo);
         } catch (Exception e) {
             logger.error("查询客户列表异常", e);
             System.out.println(e.toString());

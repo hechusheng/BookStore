@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xzsd.app.client.commodity.dao.CmdDao">
+    <!--获取商品详情-->
+    <select id="getCommodity" parameterType="java.lang.String" resultType="com.xzsd.app.client.commodity.entity.CmdInfo">
+        SELECT
+            a.com_code comCode,
+            a.com_name comName,
+            a.buss_name bussName,
+            a.com_num comNum,
+            a.com_present comPresent,
+            a.com_stock comStock,
+            a.com_cost comCost,
+            a.com_price comPrice,
+            a.page_views pageViews,
+            c.sort_code firstSortCode,
+            c.sort_name firstSortName,
+            b.sort_code secondSortCode,
+            b.sort_name secondSortName,
+            a.pic_path picPath,
+            a.advertisement advertisement,
+            a.author author,
+            a.press press
+        FROM
+            t_commodity a
+        LEFT JOIN
+            (SELECT sort_code,sort_name,parent_code FROM t_commodity_sort) b
+        ON
+            a.sort_code = b.sort_code
+        LEFT JOIN
+            (SELECT sort_code,sort_name FROM t_commodity_sort) c
+        ON
+            c.sort_code = b.parent_code
+        WHERE
+            a.is_delete = 0
+        and
+            com_code = #{comCode}
+    </select>
+    <!--    查询商品一级分类列表-->
+    <select id="firstClassList" parameterType="com.xzsd.app.client.commodity.entity.FirstClassSort" resultType="com.xzsd.app.client.commodity.entity.FirstClassSort">
+        select
+            sort_code firstSortCode,
+            sort_name firstSortName,
+            remark remark,
+            version version
+        from
+            t_commodity_sort
+        where
+            is_delete = 0
+        and
+            sort_level = 1
+        order by create_time desc
+    </select>
+    <!--查询商品二级分类-->
+    <resultMap id="SecondSortMap" type="com.xzsd.app.client.commodity.entity.SecondClassSort">
+        <id property="secondSortCode" column="sort_code"/>
+        <result property="secondSortName" column="sort_name"/>
+            <collection property="cmdInfoList" ofType="com.xzsd.app.client.commodity.entity.CmdInfo">
+                <id property="comCode" column="com_code"/>
+                <result property="comName" column="com_name"/>
+                <result property="picPath" column="pic_path"/>
+                <result property="comPrice" column="com_price"/>
+                <result property="version" column="version"/>
+            </collection>
+    </resultMap>
+    <select id="secondClassList" parameterType="java.lang.String" resultMap="SecondSortMap">
+        SELECT
+            sort.sort_code,
+            sort.sort_name,
+            cmd.com_code,
+            cmd.com_name,
+            cmd.pic_path,
+            cmd.com_price,
+            cmd.version
+        FROM
+            t_commodity_sort sort
+        LEFT JOIN
+            t_commodity cmd
+        ON
+            sort.sort_code = cmd.sort_code
+        WHERE
+            sort.sort_level = 2
+        AND
+            sort.is_delete = 0
+        AND
+            cmd.is_delete = 0
+        AND
+            sort.parent_code = #{firstSortCode}
+    </select>
+    <!--查询商品评价列表-->
+    <select id="listCommodityAssessByPage" parameterType="com.xzsd.app.client.commodity.entity.CmdAssess" resultType="com.xzsd.app.client.commodity.entity.CmdAssess">
+        select
+            ass.ass_code assessCode,
+            u.user_code userCode,
+            ass.com_code comCode,
+            u.user_name userName,
+            ass.star_level starLevel,
+            ass.ass_content assContent,
+            ass.ass_time assTime
+        from
+            t_commodity_assess ass
+        left join
+            t_sys_user u on (ass.user_code= u.user_code)
+        where
+            ass.is_delete = 0
+        and
+            ass.com_code = #{comCode}
+        <if test="starLevel == 1">
+            AND ass.star_level in (4,5)
+        </if>
+        <if test="starLevel == 2">
+            AND ass.star_level in (2,3)
+        </if>
+        <if test="starLevel == 3">
+            AND ass.star_level = 1
+        </if>
+        order by
+            ass.create_time desc
+    </select>
+</mapper>

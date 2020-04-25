@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xzsd.pc.topBar.dao.TopBarDao">
+    <!--查询用户信息-->
+    <select id="getTopBar" resultType="com.xzsd.pc.topBar.entity.TopBarInfo">
+        select
+            user_code userCode,
+            user_name userName,
+            photo photo,
+            role role
+        from
+            t_sys_user
+        where
+            user_code = #{userCode}
+        and
+            is_delete = 0
+    </select>
+</mapper>

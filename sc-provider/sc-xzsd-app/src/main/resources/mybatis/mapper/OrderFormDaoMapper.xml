@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xzsd.app.client.orderform.dao.OrderFormDao">
+    <resultMap id="orderMap" type="com.xzsd.app.client.orderform.entity.OrderDetail">
+    <id property="orderCode" column="order_code" javaType="java.lang.String" jdbcType="VARCHAR"/>
+    <result property="totalPrice" column="total_price"/>
+    <result property="orderStatus" column="order_status"/>
+    <result property="createTime" column="create_time"/>
+    <result property="storeName" column="store_name"/>
+    <result property="address" column="address"/>
+    <result property="version" column="version"/>
+    <collection property="cmdInfoList" ofType="com.xzsd.app.client.orderform.entity.CmdInfo" select="orderCmd" column="{orderCode=order_code}">
+        <id property="orderDetailCode" column="detail_code"/>
+        <result property="comCode" column="com_code"/>
+        <result property="picPath" column="pic_path"/>
+        <result property="comName" column="com_name"/>
+        <result property="comPresent" column="com_present"/>
+        <result property="comPrice" column="com_price"/>
+        <result property="comCount" column="detail_amount"/>
+    </collection>
+</resultMap>
+    <resultMap id="orderDetailMap" type="com.xzsd.app.client.orderform.entity.OrderDetail">
+        <id property="orderCode" column="order_code" javaType="java.lang.String" jdbcType="VARCHAR"/>
+        <result property="totalPrice" column="total_price"/>
+        <result property="orderStatus" column="order_status"/>
+        <result property="createTime" column="create_time"/>
+        <result property="storeName" column="store_name"/>
+        <result property="address" column="address"/>
+        <result property="version" column="version"/>
+        <collection property="cmdInfoList" ofType="com.xzsd.app.client.orderform.entity.CmdInfo">
+            <id property="orderDetailCode" column="detail_code"/>
+            <result property="comCode" column="com_code"/>
+            <result property="picPath" column="pic_path"/>
+            <result property="comName" column="com_name"/>
+            <result property="comPresent" column="com_present"/>
+            <result property="comPrice" column="com_price"/>
+            <result property="comCount" column="detail_amount"/>
+        </collection>
+    </resultMap>
+    <!--    查询订单列表-->
+    <select id="listOrderByPage" parameterType="com.xzsd.app.client.orderform.entity.OrderInfo" resultMap="orderMap">
+        select
+            od.order_code,
+            od.total_price,
+            od.order_status,
+            od.version
+        from
+            t_order od
+        where
+            od.is_delete = 0
+        and
+            od.user_code = #{userCode}
+        <if test="orderStatus != null and orderStatus != ''">
+            AND od.order_status = #{orderStatus}
+        </if>
+        order by od.create_time desc
+    </select>
+    <select id="orderCmd" parameterType="com.xzsd.app.client.orderform.entity.OrderInfo" resultType="com.xzsd.app.client.addOrder.entity.CommodityInfo">
+        select
+            od.detail_code,
+            od.detail_amount,
+            od.com_code,
+            cmd.pic_path,
+            cmd.com_name,
+            cmd.com_present,
+            cmd.com_price
+        from
+            t_order_detail od
+        left join
+            t_commodity cmd
+        on
+            (od.com_code = cmd.com_code and cmd.is_delete = 0)
+        where
+            od.is_delete = 0
+        and
+            od.order_code = #{orderCode}
+        order by od.create_time desc , cmd.create_time desc
+    </select>
+    <!--查询订单详情-->
+    <select id="getOrder" parameterType="java.lang.String" resultMap="orderDetailMap">
+        select
+            o.order_code,
+            o.total_price,
+            o.order_status,
+            o.create_time,
+            store.store_name,
+             CONCAT_WS( '-',province.city_name,city.city_name,area.city_name ) address,
+            od.detail_code,
+            od.com_code,
+            cmd.pic_path,
+            cmd.com_name,
+            cmd.com_present,
+            cmd.com_price,
+            od.detail_amount,
+            o.version
+        from
+            t_order o
+        left join
+        t_store store
+        on
+            (o.store_code = store.store_code and store.is_delete = 0)
+        LEFT JOIN
+            city area
+        ON
+            area.id = store.area_code
+        LEFT JOIN
+            city city
+        ON
+            city.id = area.pid
+        LEFT JOIN
+            city province
+        ON
+            province.id = city.pid
+        left join
+            t_order_detail od
+        on
+            (o.order_code = od.order_code and od.is_delete = 0)
+        left join
+            t_commodity cmd
+        on
+            (od.com_code = cmd.com_code and cmd.is_delete = 0)
+        where
+            o.is_delete = 0
+        and
+            o.order_code = #{orderCode}
+        order by
+            o.create_time desc ,
+            od.create_time desc ,
+            cmd.create_time desc
+    </select>
+    <!--    修改订单状态-->
+    <update id="updateOrderStatus" parameterType="com.xzsd.app.client.orderform.entity.OrderInfo">
+        update
+            t_order
+        set
+            order_status = #{orderStatus},
+            update_user = #{updateUser},
+            update_time = now(),
+            version = version + 1
+        where
+            is_delete = 0
+        and
+            order_code = #{orderCode}
+        and
+            version = #{version}
+    </update>
+    <!--新增评价-->
+    <insert id="addCommodityAssess" parameterType="com.xzsd.app.client.orderform.entity.OrderAssess">
+        insert into t_commodity_assess
+            (
+                ass_code,
+                com_code,
+                order_code,
+                user_code,
+                ass_time,
+                star_level,
+                ass_content,
+                is_delete,
+                create_user,
+                create_time,
+                update_user,
+                update_time,
+                version
+            )
+            values
+            <foreach collection="assessInfoList" index="index" item="item" open="" separator="," close="">
+            (
+                #{item.assessCode},
+                #{item.comCode},
+                #{orderCode},
+                #{userCode},
+                now(),
+                #{item.starLevel},
+                #{item.assContent},
+                #{isDelete},
+                #{createUser},
+                now(),
+                #{updateUser},
+                now(),
+                0
+            )
+            </foreach>
+    </insert>
+    <!--查询订单的状态-->
+    <select id="getOrderStatus" parameterType="java.lang.String" resultType="com.xzsd.app.client.orderform.entity.OrderInfo">
+        select
+            o.order_code orderCode,
+            o.order_status orderStatus,
+            o.version version
+        from
+            t_order o
+        where
+            o.is_delete = 0
+        and
+            o.order_code = #{orderCode}
+    </select>
+    <!--    修改商品星级-->
+    <update id="updateStarLevel" parameterType="com.xzsd.app.client.orderform.entity.AssessInfo" >
+        <foreach collection="assessInfoList" item="item" open="" separator=";" close="" index="index">
+            update
+                t_commodity
+            set
+                star_level = (star_level + #{item.starLevel}) / 2
+            where
+                com_code = #{item.comCode}
+        </foreach>
+    </update>
+</mapper>

@@ -1,6 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.xzsd.pc.driver.dao.DriverDao">
+    <!--获取操作人角色-->
+    <select id="getUser" parameterType="java.lang.String" resultType="com.xzsd.pc.user.entity.UserInfo">
+        select
+            user_code userCode,
+            role role
+        from
+            t_sys_user
+        where
+            user_code = #{userCode}
+        and
+            is_delete = 0
+    </select>
     <!--统计司机数量-->
     <select id="countUserAccount" parameterType="com.xzsd.pc.driver.entity.DriverInfo" resultType="int" >
         SELECT
@@ -88,14 +100,19 @@
     <!--查询司机详情-->
     <select id="findDriverByCode" parameterType="com.xzsd.pc.driver.entity.DriverInfo" resultType="com.xzsd.pc.driver.entity.DriverInfo">
         SELECT
+            u.user_code userCode,
             u.user_acc userAccount,
             u.user_name userName,
             u.phone phone,
             u.idcard idCard,
             u.user_pass userPassword,
             c1.city_name province,
+            c1.id  provinceCode,
             c2.city_name city,
-            c3.city_name area
+            c2.id cityCode,
+            c3.city_name area,
+            c3.id areaCode,
+            u.version version
         FROM
             t_user_driver d
         LEFT JOIN
@@ -119,4 +136,125 @@
         AND
             u.user_code = #{userCode}
     </select>
+    <!--    修改司机信息(用户表)-->
+    <update id="updateUserByCode" parameterType="com.xzsd.pc.driver.entity.DriverInfo">
+        update
+            t_sys_user
+        set
+            user_acc = #{userAccount},
+            user_name = #{userName},
+            user_pass = #{userPassword},
+            idcard = #{idCard},
+            phone = #{phone},
+            update_user = #{updateUser},
+            update_time = now(),
+            version = #{version} + 1
+        where
+            is_delete = 0
+        and
+            user_code = #{userCode}
+        and
+            version = #{version}
+    </update>
+    <!--修改司机信息(子表)-->
+    <update id="updateDriverByCode" parameterType="com.xzsd.pc.driver.entity.DriverInfo">
+        update
+            t_user_driver
+        set
+            province_code = #{provinceCode},
+            city_code = #{cityCode},
+            area_code = #{areaCode},
+            update_user = #{updateUser},
+            update_time = now(),
+            version = #{version} + 1
+        where
+            is_delete = 0
+        and
+            user_code = #{userCode}
+        and
+            version = #{version}
+    </update>
+    <!--查询司机列表-->
+    <select id="listDriverByPage" parameterType="com.xzsd.pc.driver.entity.DriverInfo" resultType="com.xzsd.pc.driver.entity.DriverInfo">
+        SELECT
+            u.user_code userCode,
+            u.user_name userName,
+            u.phone phone,
+            u.idcard idCard,
+            u.user_acc userAccount,
+            u.version version
+        FROM
+            t_user_driver d
+        LEFT JOIN
+            t_sys_user u
+        ON
+            d.user_code = u.user_code
+        LEFT JOIN
+            city c3
+        ON
+            c3.id = d.area_code
+        LEFT JOIN
+            city c2
+        ON
+            c2.id = c3.pid
+        LEFT JOIN
+            city c1
+        ON
+            c1.id = c2.pid
+        where
+            u.is_delete = 0
+        and
+            u.role = 2
+        <if test="role != null and role !='' and role == 1">
+            AND d.area_code in (select area_code from t_store where user_code = #{userId} and  is_delete = 0)
+        </if>
+        <if test="userCode !=null and userCode !=''">
+            AND u.user_code like concat ('%',#{userCode},'%')
+        </if>
+        <if test="userName !=null and userName !=''">
+            AND u.user_name like concat ('%',#{userName},'%')
+        </if>
+        <if test="provinceCode !=null and provinceCode !=''">
+            AND c1.id like concat ('%',#{provinceCode},'%')
+        </if>
+        <if test="cityCode !=null and city !=''">
+            AND c2.id like concat ('%',#{cityCode},'%')
+        </if>
+        <if test="areaCode !=null and areaCode !=''">
+            AND c3.id like concat ('%',#{areaCode},'%')
+        </if>
+        order by d.create_time desc
+    </select>
+    <!--删除司机(用户表)-->
+    <update id="deleteUser" parameterType="com.xzsd.pc.driver.entity.DriverInfo">
+        update
+            t_sys_user
+        set
+            is_delete = 1,
+            update_user = #{userId},
+            update_time = now(),
+            version = version + 1
+        where
+            user_code
+        in
+        <foreach collection="listCode" item="userCode" index="index" open="(" separator="," close=")">
+            #{userCode}
+        </foreach>
+    </update>
+    <!--删除司机(子表)-->
+    <update id="deleteDriver" parameterType="com.xzsd.pc.driver.entity.DriverInfo">
+        update
+            t_user_driver
+        set
+            is_delete = 1,
+            update_user = #{userId},
+            update_time = now(),
+            version = version + 1
+        where
+            user_code
+        in
+        <foreach collection="listCode" item="userCode" index="index" open="(" separator="," close=")">
+            #{userCode}
+        </foreach>
+    </update>
 </mapper>

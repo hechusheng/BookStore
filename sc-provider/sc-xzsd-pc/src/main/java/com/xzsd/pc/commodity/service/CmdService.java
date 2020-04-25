@@ -11,12 +11,17 @@ import com.xzsd.pc.commodity.entity.CmdInfo;
 import com.xzsd.pc.commoditySort.entity.CmdSortInfo;
 import com.xzsd.pc.commoditySort.entity.FirstClassSort;
 import com.xzsd.pc.commoditySort.entity.SecondClassSort;
+import com.xzsd.pc.util.CodeList;
+import com.xzsd.pc.util.ListCode;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import static com.neusoft.core.page.PageUtils.getPageInfo;
 
 /**
  * @DescriptionDemo 实现类
@@ -27,12 +32,6 @@ import java.util.List;
 public class CmdService {
     @Resource
     private CmdDao cmdDao;
-//    @Autowired
-//    private RedisOperator redisOperator;
-//    @Autowired
-//    private JmsMessagingTemplate jmsMessagingTemplate;
-//    @Autowired
-//    private Queue queue;
 
     /**
      * demo 新增商品
@@ -49,21 +48,18 @@ public class CmdService {
             return AppResponse.bizError("商品已存在，请重新输入！");
         }
         cmdInfo.setComCode(StringUtil.getCommonCode(2));
+        //如果图片为空，设置默认图片
+        if( cmdInfo.getPicPath() == null || "".equals(cmdInfo.getPicPath())){
+            cmdInfo.setPicPath("https://lgbryant-1301861090.cos.ap-guangzhou.myqcloud.com/lgbryant/2020/3/16/3af8c649-2d63-4f71-904f-79064c7ed2a8.jpg");
+        }
+        cmdInfo.setStarLevel(0);
         cmdInfo.setIsDelete(0);
+        cmdInfo.setComStatus("2");
         //新增商品
         int count = cmdDao.addCommodity(cmdInfo);
         if(0 == count) {
             return AppResponse.bizError("新增失败，请重试");
         }
-
-//        MQ发送消息
-//        try{
-//            jmsMessagingTemplate.convertAndSend(queue,cmdInfo);
-//            System.out.println("消息发送成功");
-//        }catch (Exception e){
-//            e.printStackTrace();
-//        }
-
         return AppResponse.success("新增成功！");
     }
 
@@ -74,13 +70,9 @@ public class CmdService {
      * @Author hechusheng
      * @Date 2020-03-27
      */
-    public AppResponse listCommodity(CmdInfo cmdInfo) {
-        PageHelper.startPage(cmdInfo.getPageNum(),cmdInfo.getPageSize());
+    public AppResponse listCommodityByPage(CmdInfo cmdInfo) {
         List<CmdInfo> cmdInfoList = cmdDao.listCommodity(cmdInfo);
-        // 包装Page对象
-        PageInfo<CmdInfo> pageData = new PageInfo<CmdInfo>(cmdInfoList);
-
-        return AppResponse.success("查询成功！",pageData);
+        return AppResponse.success("查询成功！",getPageInfo(cmdInfoList));
     }
 
     /**
@@ -97,13 +89,11 @@ public class CmdService {
         if(0 != countCommodity){
             return AppResponse.bizError("商品已存在，请重新输入！");
         }
-
         //修改商品
         int count = cmdDao.updateCommodityByCode(cmdInfo);
         if(0 == count){
             return AppResponse.bizError("修改失败，请重试");
         }
-
         return AppResponse.success("修改成功！");
     }
 
@@ -115,14 +105,28 @@ public class CmdService {
      */
     @Transactional(rollbackFor = Exception.class)
     public AppResponse deleteCommodity(String comCode,String userId) {
-        List<String> listCode = Arrays.asList(comCode.split(","));
-        AppResponse appResponse = AppResponse.success("删除成功！");
-        // 删除用户
-        int count = cmdDao.deleteCommodity(listCode,userId);
-        if(0 == count) {
-            appResponse = AppResponse.bizError("删除失败，请重试！");
+        List<String> list = Arrays.asList(comCode.split(","));
+        List<String> comCodeList = new ArrayList<>(list);
+        int codeSize = comCodeList.size();
+        //校验商品是否热门商品或轮播图
+        CodeList codeList = new CodeList();
+        codeList.setCodeList(comCodeList);
+        List<String> checkHotList = cmdDao.hotCmdCount(codeList);
+        List<String> checkCaroList = cmdDao.caroselCount(codeList);
+        // 删除商品
+        if (checkHotList != null && checkHotList.size() != 0){
+            codeList.setCheckHotList(checkHotList);
         }
-        return appResponse;
+        if (checkCaroList != null && checkCaroList.size() != 0){
+            codeList.setCheckCaroList(checkCaroList);
+        }
+        int count = cmdDao.deleteCommodity(codeList);
+        if (0 == count) {
+           return AppResponse.bizError("删除失败，请重试！");
+        }else if (codeSize != count){
+            return AppResponse.success("删除商品成功,存在轮播图、热门商品无法删除");
+        }
+        return AppResponse.success("删除商品成功！");
     }
 
     /**
@@ -164,6 +168,7 @@ public class CmdService {
      * @Date 2020-03-27
      */
     public AppResponse listFirstClass () {
+        //查询一级分类
         List<FirstClassSort> firstClassList = cmdDao.listFirstClass();
         return AppResponse.success("一级分类查询成功",firstClassList);
     }
@@ -175,25 +180,11 @@ public class CmdService {
      * @Date 2020-03-27
      */
     public AppResponse listSecondClass (String firstSortCode) {
+        //查询二级分类
         List<SecondClassSort> secondClassList = cmdDao.listSecondClass(firstSortCode);
         return AppResponse.success("二级分类查询成功",secondClassList);
     }
 }
-//    public AppResponse listCommodity(CmdInfo cmdInfo,String key) {
-//
-//        if (redisOperator.hasKey(key)) {
-//            String result = redisOperator.get(key);
-//            PageInfo pageInfo = JsonUtils.fromJson(result,PageInfo.class);
-//            return AppResponse.success("返回redis成功！",pageInfo);
-//        }else {
-//            PageHelper.startPage(cmdInfo.getPageNum(),cmdInfo.getPageSize());
-//            List<CmdInfo> cmdInfoList = cmdDao.listCommodity(cmdInfo);
-//            // 包装Page对象
-//            PageInfo<CmdInfo> pageData = new PageInfo<CmdInfo>(cmdInfoList);
-//            //存入redis
-//            redisOperator.set(key, JSON.toJSONString(pageData),300);
-//            return AppResponse.success("查询成功！",pageData);
-//        }
-//    }
+
 
 

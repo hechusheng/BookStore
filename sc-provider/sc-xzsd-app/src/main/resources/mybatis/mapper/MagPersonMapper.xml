@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xzsd.app.manager.personal.dao.MagPersonDao">
+    <!--查询店长门下司机-->
+    <select id="listDriver" parameterType="java.lang.String" resultType="com.xzsd.app.manager.personal.entity.DriverInfo">
+        select
+            u.user_code userCode,
+            u.user_name userName,
+            u.phone
+        from
+            t_sys_user u,
+            (select area_code from t_store where user_code = #{userCode} and is_delete = 0) areaCode,
+            t_user_driver dv
+        where
+            u.is_delete = 0
+        and
+            u.role = "2"
+        and
+            u.user_code = dv.user_code
+        and
+            dv.area_code = areaCode.area_code
+        order by
+            dv.create_time desc
+    </select>
+</mapper>

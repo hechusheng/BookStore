@@ -24,7 +24,7 @@ public class FirstClassSort {
     /**
      *二级分类列表
      */
-    private List<SecondClassSort> secondsortList;
+    private List<SecondClassSort> secondSortList;
     /**
      * 作废标记 0为存在，1为作废
      */
@@ -36,8 +36,7 @@ public class FirstClassSort {
     /**
      * 创建时间
      */
-    @JsonFormat(shape = JsonFormat.Shape.STRING , pattern = "yyyy-MM-dd HH:mm:ss" , timezone = "GMT+8")
-    private Date createTime;
+    private String createTime;
     /**
      * 更新者
      */
@@ -45,8 +44,7 @@ public class FirstClassSort {
     /**
      * 更新时间
      */
-    @JsonFormat(shape = JsonFormat.Shape.STRING , pattern = "yyyy-MM-dd HH:mm:ss" , timezone = "GMT+8")
-    private Date updateTime;
+    private String updateTime;
     /**
      * 版本号
      */
@@ -76,12 +74,12 @@ public class FirstClassSort {
         this.remark = remark;
     }
 
-    public List<SecondClassSort> getSecondsortList() {
-        return secondsortList;
+    public List<SecondClassSort> getSecondSortList() {
+        return secondSortList;
     }
 
-    public void setSecondsortList(List<SecondClassSort> secondsortList) {
-        this.secondsortList = secondsortList;
+    public void setSecondSortList(List<SecondClassSort> secondSortList) {
+        this.secondSortList = secondSortList;
     }
 
     public int getIsDelete() {
@@ -100,11 +98,11 @@ public class FirstClassSort {
         this.createUser = createUser;
     }
 
-    public Date getCreateTime() {
+    public String getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(Date createTime) {
+    public void setCreateTime(String createTime) {
         this.createTime = createTime;
     }
 
@@ -116,11 +114,11 @@ public class FirstClassSort {
         this.updateUser = updateUser;
     }
 
-    public Date getUpdateTime() {
+    public String getUpdateTime() {
         return updateTime;
     }
 
-    public void setUpdateTime(Date updateTime) {
+    public void setUpdateTime(String updateTime) {
         this.updateTime = updateTime;
     }
 

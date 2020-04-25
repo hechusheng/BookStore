@@ -28,7 +28,7 @@ public class CmdSortController {
     private CmdSortService cmdSortService;
 
     /**
-     * demo 新增一级商品分类
+     * demo 新增商品分类
      * @param cmdSortInfo
      * @return AppResponse
      * @author hechusheng
@@ -100,6 +100,12 @@ public class CmdSortController {
             throw e;
         }
     }
+
+    /**
+     * 删除商品分类
+     * @param sortCode
+     * @return
+     */
     @PostMapping("deleteSort")
     public AppResponse deleteSort (String sortCode) {
         try {

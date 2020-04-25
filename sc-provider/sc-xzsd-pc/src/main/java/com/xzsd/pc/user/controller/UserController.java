@@ -39,9 +39,10 @@ public class UserController {
     @PostMapping("addUser")
     public AppResponse addUser(UserInfo userInfo){
         try{
-            //获取用户编号
-            String userCode = AuthUtils.getCurrentUserId();
-            userInfo.setCreateUser(userCode);
+            //获取操作人编号
+            String userId = SecurityUtils.getCurrentUserId();
+            userInfo.setCreateUser(userId);
+            userInfo.setUpdateUser(userId);
             AppResponse appResponse = userService.addUser(userInfo);
             return appResponse;
         }catch (Exception e){
@@ -62,9 +63,8 @@ public class UserController {
     public AppResponse updateUser(UserInfo userInfo) {
         try {
             //获取用户id
-            String userCode = AuthUtils.getCurrentUserId();
-            userInfo.setCreateUser(userCode);
-            userInfo.setUpdateUser(userCode);
+            String userId = SecurityUtils.getCurrentUserId();
+            userInfo.setUpdateUser(userId);
             return userService.updateUserByCode(userInfo);
         } catch (Exception e) {
             logger.error("修改用户信息错误", e);
@@ -127,7 +127,6 @@ public class UserController {
             System.out.println(e.toString());
             throw e;
         }
-
     }
 
     /**
@@ -139,7 +138,6 @@ public class UserController {
      */
     @RequestMapping(value = "userLogin")
     public AppResponse userLogin (String userAccount, String userPassword) {
-
         try {
             return userService.userLogin(userAccount,userPassword);
         }catch (Exception e) {

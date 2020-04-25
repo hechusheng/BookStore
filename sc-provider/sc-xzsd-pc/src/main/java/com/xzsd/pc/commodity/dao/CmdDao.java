@@ -2,9 +2,10 @@ package com.xzsd.pc.commodity.dao;
 
 
 import com.xzsd.pc.commodity.entity.CmdInfo;
-import com.xzsd.pc.commoditySort.entity.CmdSortInfo;
 import com.xzsd.pc.commoditySort.entity.FirstClassSort;
 import com.xzsd.pc.commoditySort.entity.SecondClassSort;
+import com.xzsd.pc.util.CodeList;
+import com.xzsd.pc.util.ListCode;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -48,12 +49,12 @@ public interface CmdDao {
 
     /**
      * 删除商品
-     * @param listCode
-     * @param userId
+     * @param codeList
      * @return
      */
-    int deleteCommodity(@Param("listCode") List<String> listCode, @Param("userId") String userId);
-
+    int deleteCommodity(CodeList codeList);
+    List<String> hotCmdCount(CodeList codeList);
+    List<String> caroselCount(CodeList codeList);
     /**
      * 查询商品
      * @param comCode

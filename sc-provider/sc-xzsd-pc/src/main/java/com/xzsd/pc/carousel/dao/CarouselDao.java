@@ -16,11 +16,18 @@ import java.util.List;
 @Mapper
 public interface CarouselDao {
     /**
-     * 统计轮播图数量
+     * 统计轮播图序号数量
      * @param carouselInfo
      * @return
      */
-    int countCarousel(CarouselInfo carouselInfo);
+    int countCaroNum(CarouselInfo carouselInfo);
+
+    /**
+     * 统计轮播图商品数量
+     * @param carouselInfo
+     * @return
+     */
+    int countCaroCmd(CarouselInfo carouselInfo);
 
     /**
      * 新增轮播图
@@ -34,7 +41,7 @@ public interface CarouselDao {
      * @param carouselInfo
      * @return
      */
-    List<CarouselInfo> listComCarousel(CarouselInfo carouselInfo);
+    List<CarouselInfo> listComCarouselByPage(CarouselInfo carouselInfo);
 
     /**
      * 删除轮播图
@@ -57,5 +64,5 @@ public interface CarouselDao {
      * @param carouselInfo
      * @return
      */
-    List<CarouselInfo> listCarousel(CarouselInfo carouselInfo);
+    List<CarouselInfo> listCarouselByPage(CarouselInfo carouselInfo);
 }

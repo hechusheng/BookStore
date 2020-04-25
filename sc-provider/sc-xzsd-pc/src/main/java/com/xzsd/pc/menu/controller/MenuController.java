@@ -79,13 +79,15 @@ public class MenuController {
 
     /**
      * 查询菜单列表
-     * @param menuInfo
      * @return
      */
     @RequestMapping(value = "listMenu")
-    public AppResponse listMenu (MenuInfo menuInfo) {
+    public AppResponse listMenu () {
         try {
-            return menuService.listMenu(menuInfo);
+            //获取操作人编号
+            String userCode = SecurityUtils.getCurrentUserId();
+            System.out.println("usercode"+userCode);
+            return menuService.listMenu(userCode);
         }catch (Exception e) {
             logger.error("查询菜单失败",e);
             System.out.println(e.toString());

@@ -54,4 +54,61 @@ public class DriverController {
             throw e;
         }
     }
+
+    /**
+     * 修改司机信息
+     * @param driverInfo
+     * @return
+     */
+    @PostMapping("updateDriverByCode")
+    public AppResponse updateDriverByCode (DriverInfo driverInfo){
+        try {
+            //获取操作人编号
+            String userId = SecurityUtils.getCurrentUserId();
+            driverInfo.setUpdateUser(userId);
+            return driverService.updateDriverByCode(driverInfo);
+        }catch (Exception e) {
+            logger.error("修改司机信息失败", e);
+            System.out.println(e.toString());
+            throw e;
+        }
+    }
+
+    /**
+     * 查询司机列表(分页)
+     * @param driverInfo
+     * @return
+     */
+    @RequestMapping("listDriverByPage")
+    public AppResponse listDriverByPage (DriverInfo driverInfo) {
+        try {
+            //获取操作人编号
+            String userId = SecurityUtils.getCurrentUserId();
+            driverInfo.setUserId(userId);
+            //查询司机列表
+            return driverService.listDriverByPage(driverInfo);
+        }catch (Exception e) {
+            logger.error("查询司机列表失败", e);
+            System.out.println(e.toString());
+            throw e;
+        }
+    }
+
+    /**
+     * 删除司机
+     * @param userCode
+     * @return
+     */
+    @PostMapping("deleteDriver")
+    public AppResponse deleteDriver(String userCode){
+        try{
+            //获取操作人编号
+            String userId = SecurityUtils.getCurrentUserId();
+            return driverService.deleteDriver(userCode,userId);
+        }catch (Exception e){
+            logger.error("删除失败");
+            System.out.println(e.toString());
+            throw e;
+        }
+    }
 }

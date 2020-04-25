@@ -1,6 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.xzsd.pc.menu.dao.MenuDao">
+    <!--获取操作人角色-->
+    <select id="getUser" parameterType="java.lang.String" resultType="com.xzsd.pc.user.entity.UserInfo">
+        select
+            user_code userCode,
+            role role
+        from
+            t_sys_user
+        where
+            user_code = #{userCode}
+        and
+            is_delete = 0
+    </select>
     <!--统计菜单数量-->
     <select id="countMenu" parameterType="com.xzsd.pc.menu.entity.MenuInfo" resultType="int">
         select count(menu_name)
@@ -39,9 +51,11 @@
     <!--获取菜单详情信息-->
     <select id="findMenuByCode" parameterType="java.lang.String" resultType="com.xzsd.pc.menu.entity.MenuInfo">
         select
-           menu_name menuName,
-           remark remark,
-           path path
+            menu_code menuCode,
+            menu_name menuName,
+            remark remark,
+            path path,
+            version version
         from
             t_menu
         where
@@ -67,8 +81,10 @@
     <!--菜单列表-->
     <select id="listMenu" parameterType="com.xzsd.pc.menu.entity.MenuInfo" resultType="com.xzsd.pc.menu.entity.MenuInfo">
         select
+            a.menu_code menuCode,
             a.menu_name menuName,
-            a.menu_code menuCode
+            a.menu_code menuCode,
+            a.version version
         from
             t_menu a
         where
@@ -76,7 +92,6 @@
         order by
             a.update_time desc
     </select>
-
     <!--删除菜单-->
     <update id="deleteMenu" parameterType="com.xzsd.pc.menu.entity.MenuInfo">
         update t_menu

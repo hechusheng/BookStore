@@ -5,6 +5,10 @@ spring:
   redis:
     host: 127.0.0.1
     database: 10
+  http:
+    multipart:
+      max-request-size: 20MB
+      max-file-size: 20MB
   datasource:
     name: dataSource
     type: com.alibaba.druid.pool.DruidDataSource

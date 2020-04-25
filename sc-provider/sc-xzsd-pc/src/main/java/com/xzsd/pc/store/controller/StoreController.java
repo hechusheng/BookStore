@@ -86,6 +86,8 @@ public class StoreController {
     @RequestMapping("listStoreByPage")
     public AppResponse listStoreByPage (StoreInfo storeInfo) {
         try {
+            String userId = SecurityUtils.getCurrentUserId();
+            storeInfo.setUserId(userId);
             return storeService.listStoreByPage(storeInfo);
         }catch (Exception e){
             logger.error("查询门店信息列表失败", e);

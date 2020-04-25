@@ -33,7 +33,7 @@ public class SecondClassSort {
     /**
      * 创建时间
      */
-    private Date createTime;
+    private String createTime;
     /**
      * 创建者
      */
@@ -41,7 +41,7 @@ public class SecondClassSort {
     /**
      * 更新时间
      */
-    private Date updateTime;
+    private String updateTime;
     /**
      * 更新者
      */
@@ -99,11 +99,11 @@ public class SecondClassSort {
         this.isDelete = isDelete;
     }
 
-    public Date getCreateTime() {
+    public String getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(Date createTime) {
+    public void setCreateTime(String createTime) {
         this.createTime = createTime;
     }
 
@@ -115,11 +115,11 @@ public class SecondClassSort {
         this.createUser = createUser;
     }
 
-    public Date getUpdateTime() {
+    public String getUpdateTime() {
         return updateTime;
     }
 
-    public void setUpdateTime(Date updateTime) {
+    public void setUpdateTime(String updateTime) {
         this.updateTime = updateTime;
     }
 
@@ -138,5 +138,4 @@ public class SecondClassSort {
     public void setVersion(String version) {
         this.version = version;
     }
-
 }

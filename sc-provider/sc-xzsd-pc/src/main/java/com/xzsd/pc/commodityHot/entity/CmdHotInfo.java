@@ -34,8 +34,7 @@ public class CmdHotInfo {
     /**
      * 创建时间
      */
-    @JsonFormat(shape = JsonFormat.Shape.STRING , pattern = "yyyy-MM-dd HH:mm:ss" , timezone = "GMT+8")
-    private Date createTime;
+    private String createTime;
     /**
      * 更新者
      */
@@ -43,8 +42,7 @@ public class CmdHotInfo {
     /**
      * 更新时间
      */
-    @JsonFormat(shape = JsonFormat.Shape.STRING , pattern = "yyyy-MM-dd HH:mm:ss" , timezone = "GMT+8")
-    private Date updateTime;
+    private String updateTime;
     /**
      * 版本号
      */
@@ -53,18 +51,22 @@ public class CmdHotInfo {
      * 商品名称
      */
     private String comName;
-
     /**
      * 商品介绍
      */
     private String comPresent;
 
-    public String getComPresent() {
-        return comPresent;
+    /**
+     *商品价格
+     */
+    private float comPrice;
+
+    public float getComPrice() {
+        return comPrice;
     }
 
-    public void setComPresent(String comPresent) {
-        this.comPresent = comPresent;
+    public void setComPrice(float comPrice) {
+        this.comPrice = comPrice;
     }
 
     public String getHotCode() {
@@ -99,14 +101,6 @@ public class CmdHotInfo {
         this.isDelete = isDelete;
     }
 
-    public Date getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
-
     public String getCreateUser() {
         return createUser;
     }
@@ -115,12 +109,12 @@ public class CmdHotInfo {
         this.createUser = createUser;
     }
 
-    public Date getUpdateTime() {
-        return updateTime;
+    public String getCreateTime() {
+        return createTime;
     }
 
-    public void setUpdateTime(Date updateTime) {
-        this.updateTime = updateTime;
+    public void setCreateTime(String createTime) {
+        this.createTime = createTime;
     }
 
     public String getUpdateUser() {
@@ -129,6 +123,14 @@ public class CmdHotInfo {
 
     public void setUpdateUser(String updateUser) {
         this.updateUser = updateUser;
+    }
+
+    public String getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(String updateTime) {
+        this.updateTime = updateTime;
     }
 
     public String getVersion() {
@@ -145,5 +147,13 @@ public class CmdHotInfo {
 
     public void setComName(String comName) {
         this.comName = comName;
+    }
+
+    public String getComPresent() {
+        return comPresent;
+    }
+
+    public void setComPresent(String comPresent) {
+        this.comPresent = comPresent;
     }
 }

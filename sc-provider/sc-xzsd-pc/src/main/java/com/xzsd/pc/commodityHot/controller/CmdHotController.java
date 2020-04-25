@@ -136,4 +136,19 @@ public class CmdHotController {
             throw e;
         }
     }
+
+    /**
+     * 获取展示数量
+     * @return
+     */
+    @RequestMapping("getShowNum")
+    public AppResponse getShowNum(String showNum,String version) {
+        try {
+            return cmdHotService.getShowNum();
+        }catch (Exception e) {
+            logger.error("获取数量失败", e);
+            System.out.println(e.toString());
+            throw e;
+        }
+    }
 }
