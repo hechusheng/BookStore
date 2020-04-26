@@ -1,5 +1,4 @@
 package com.xzsd.app.manager.order.entity;
-
 /**
  * @ClassName  CmdInfo
  * @Description 店长端商品信息实体类
