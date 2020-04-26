@@ -1,12 +1,12 @@
-package com.xzsd.app.client.orderform.entity;
+package com.xzsd.app.manager.order.entity;
 
 /**
- * @ClassName  OrderInfo
+ * @ClassName  ManagerOrder
  * @Description 客户端订单信息实体类
  * @Author hechusheng
- * @Date 2020-04-24
+ * @Date 2020-04-25
  */
-public class OrderInfo {
+public class ManageOrder {
     /**
      * 用户编号
      */
@@ -23,6 +23,10 @@ public class OrderInfo {
      * 购物车编号
      */
     private String cartCode;
+    /**
+     * 购买数量
+     */
+    private int detailAmount;
     /**
      * 购买商品数量
      */
@@ -84,11 +88,11 @@ public class OrderInfo {
      */
     private String version;
 
-    public OrderInfo () {
+    public ManageOrder() {
 
     }
 
-    public OrderInfo(String orderCode, String orderStatus, String updateUser) {
+    public ManageOrder(String orderCode, String orderStatus, String updateUser) {
         this.orderCode = orderCode;
         this.orderStatus = orderStatus;
         this.updateUser = updateUser;
@@ -124,6 +128,14 @@ public class OrderInfo {
 
     public void setCartCode(String cartCode) {
         this.cartCode = cartCode;
+    }
+
+    public int getDetailAmount() {
+        return detailAmount;
+    }
+
+    public void setDetailAmount(int detailAmount) {
+        this.detailAmount = detailAmount;
     }
 
     public String getComCount() {

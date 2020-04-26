@@ -55,6 +55,30 @@ public class CmdHotInfo {
      * 商品介绍
      */
     private String comPresent;
+    /**
+     * 商品图片
+     */
+    private String picPath;
+    /**
+     *商品价格
+     */
+    private String comPrice;
+
+    public String getPicPath() {
+        return picPath;
+    }
+
+    public void setPicPath(String picPath) {
+        this.picPath = picPath;
+    }
+
+    public String getComPrice() {
+        return comPrice;
+    }
+
+    public void setComPrice(String comPrice) {
+        this.comPrice = comPrice;
+    }
 
     public String getHotCode() {
         return hotCode;

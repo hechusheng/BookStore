@@ -1,10 +1,10 @@
-package com.xzsd.app.client.orderform.entity;
+package com.xzsd.app.manager.order.entity;
 
 /**
  * @ClassName  CmdInfo
- * @Description 客户端商品信息实体类
+ * @Description 店长端商品信息实体类
  * @Author hechusheng
- * @Date 2020-04-24
+ * @Date 2020-04-25
  */
 public class CmdInfo {
     /**
@@ -34,7 +34,7 @@ public class CmdInfo {
     /**
      * 总价
      */
-    private float totalPrice;
+    private float sumPrice;
     /**
      * 售价
      */
@@ -88,12 +88,12 @@ public class CmdInfo {
         this.comCount = comCount;
     }
 
-    public float getTotalPrice() {
-        return totalPrice;
+    public float getSumPrice() {
+        return sumPrice;
     }
 
-    public void setTotalPrice(float totalPrice) {
-        this.totalPrice = totalPrice;
+    public void setSumPrice(float sumPrice) {
+        this.sumPrice = sumPrice;
     }
 
     public float getComPrice() {

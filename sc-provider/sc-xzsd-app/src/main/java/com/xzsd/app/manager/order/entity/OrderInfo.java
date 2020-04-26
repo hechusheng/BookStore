@@ -1,10 +1,10 @@
-package com.xzsd.app.client.orderform.entity;
+package com.xzsd.app.manager.order.entity;
 
 /**
  * @ClassName  OrderInfo
- * @Description 客户端订单信息实体类
+ * @Description 店长端订单信息实体类
  * @Author hechusheng
- * @Date 2020-04-24
+ * @Date 2020-04-25
  */
 public class OrderInfo {
     /**
@@ -84,7 +84,7 @@ public class OrderInfo {
      */
     private String version;
 
-    public OrderInfo () {
+    public OrderInfo() {
 
     }
 

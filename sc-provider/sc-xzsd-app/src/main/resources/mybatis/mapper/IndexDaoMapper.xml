@@ -17,6 +17,8 @@
         where
             is_delete = 0
         and
+            (now() between start_time and end_time)
+        and
             caro_status = 0
         order by caro_num asc
     </select>

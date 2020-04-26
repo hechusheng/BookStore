@@ -37,23 +37,22 @@ public class CartsSerivce {
         //查看改商品是否存在购物车中，若存在，则数量相加
         CartsInfo countComCode = cartsDao.getCarts(cartsInfo.getComCode(),cartsInfo.getUserCode());
         if (countComCode != null){
+            //新建购物车对象
             CartsInfo cartsCmd = new CartsInfo();
+            //设置购物车信息
             cartsCmd.setCartCode(countComCode.getCartCode());
-            System.out.println("购物车编号" + cartsCmd.getCartCode());
             cartsCmd.setComCode(cartsInfo.getComCode());
-            System.out.println("商品编号" + cartsCmd.getComCode());
             cartsCmd.setCartAmount(countComCode.getCartAmount() + cartsInfo.getCartAmount());
-            System.out.println("购买数量 = " + cartsCmd.getCartAmount());
             cartsCmd.setUserCode(cartsInfo.getUserCode());
-            System.out.println("用户编号" + cartsCmd.getUserCode());
             cartsCmd.setTotalPrice(countComCode.getComPrice() * cartsCmd.getCartAmount());
+            //修改购物车信息
             int count = cartsDao.updateCarts(cartsCmd);
             if (0 == count) {
                 return AppResponse.bizError("添加购物车失败！");
             }
             return AppResponse.success("成功添加至购物车！");
         }
-        //生成购物车编号
+        //若购物车没有该商品，则生成购物车编号
         cartsInfo.setCartCode(StringUtil.getCommonCode(2));
         //获取购物车商品详情
         CmdInfo cmdInfo = cmdDao.getCommodity(cartsInfo.getComCode());

@@ -120,13 +120,12 @@
         AND
             cmd.com_code = #{comCode}
     </select>
-    <!--修改商品库存跟销售量-->
+    <!--修改商品库存-->
     <update id="updateCmd" parameterType="java.util.List">
         <foreach collection="detailsList" index="index" item="item" open="" separator=";" close="">
             update
                 t_commodity
             set
-                com_sales = com_sales + #{item.comCount},
                 com_stock = com_stock - #{item.comCount}
             where
                 is_delete = 0

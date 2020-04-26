@@ -2,6 +2,12 @@ package com.xzsd.app.client.orderform.entity;
 
 import java.io.Serializable;
 
+/**
+ * @ClassName  AssessInfo
+ * @Description 客户端订单评价实体类
+ * @Author hechusheng
+ * @Date 2020-04-24
+ */
 public class AssessInfo  implements Serializable {
     /**
      * 客户编号

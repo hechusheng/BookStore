@@ -60,6 +60,7 @@ public class OrderService {
         List<OrderDetails> detailsList = new ArrayList<>();
         //获取商品信息列表
         List<CommodityInfo> commodityInfoList = orderDao.cmdList(commodityList);
+        //新建一个StringBuilder对象
         StringBuilder stock  = new StringBuilder();
         int totalCmd = 0;
         for (int i = 0; i < commodityList.size(); i++){
@@ -81,6 +82,7 @@ public class OrderService {
             if(0 != price){
                 //创建订单详情对象（详情编号，商品编号，商品数量，商品价格）
                 OrderDetails orderDetails = new OrderDetails(orderDetailCode,commodityList.get(i),Integer.parseInt(detailAmountList.get(i)),price);
+                //统计购买商品的总数
                 totalCmd = totalCmd + Integer.parseInt(detailAmountList.get(i));
                 //设置订单详情信息
                 orderDetails.setOrderCode(orderInfo.getOrderCode());
@@ -94,7 +96,7 @@ public class OrderService {
             }
         }
         orderInfo.setTotalCmd(totalCmd);
-        //修改商品库存及销量
+        //修改商品库存
         int countCmd = orderDao.updateCmd(detailsList);
         if (0 == countCmd) {
             return AppResponse.bizError(stock +"库存不足！");
@@ -107,13 +109,14 @@ public class OrderService {
         //新建订单详情
         int countOrderDet = orderDao.addOrderDetails(detailsList);
         if (0 == countOrderDet) {
-            return AppResponse.success("新建详情失败！");
+            return AppResponse.success("新增详情失败！");
         }
         //如果是在购物车里购买 ， 则需要将商品移除购物车
         if (orderInfo.getCartCode() != null && !"".equals(orderInfo.getCartCode())){
+            //新建购物车编号列表
             List<String> cartCodeList = Arrays.asList(orderInfo.getCartCode().split(","));
-            int resultDelete = cartsDao.deleteCarts(cartCodeList,orderInfo.getUserCode());
-            if (0 == resultDelete){
+            int countCart = cartsDao.deleteCarts(cartCodeList,orderInfo.getUserCode());
+            if (0 == countCart){
                 return AppResponse.bizError("删除购物车失败！");
             }
         }

@@ -77,6 +77,10 @@ public class OrderDetails {
      * 省市区加详细地址
      */
     private String address;
+    /**
+     * 门店编号
+     */
+    private String storeCode;
 
     public OrderDetails (){
     }
@@ -86,6 +90,14 @@ public class OrderDetails {
         this.comCode = comCode;
         this.comCount = comCount;
         this.comPrice = comPrice;
+    }
+
+    public String getStoreCode() {
+        return storeCode;
+    }
+
+    public void setStoreCode(String storeCode) {
+        this.storeCode = storeCode;
     }
 
     public List<CommodityInfo> getCmdList() {

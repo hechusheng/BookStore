@@ -11,6 +11,9 @@
             is_delete = 0
         and
             com_code = #{comCode}
+        <if test="hotCode != null and hotCode != ''">
+            and hot_code != #{hotCode}
+        </if>
     </select>
     <!--统计热门商品数量-->
     <select id="countCmdHotNum" parameterType="com.xzsd.pc.commodityHot.entity.CmdHotInfo" resultType="int">
@@ -22,6 +25,9 @@
             is_delete = 0
         and
             hot_num = #{hotNum}
+        <if test="hotCode != null and hotCode != ''">
+            and hot_code != #{hotCode}
+        </if>
     </select>
     <!--新增热门商品-->
     <insert id="addCommodityHot" parameterType="com.xzsd.pc.commodityHot.entity.CmdHotInfo">

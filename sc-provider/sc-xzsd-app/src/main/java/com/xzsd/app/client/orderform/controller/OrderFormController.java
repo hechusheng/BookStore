@@ -14,6 +14,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 
+/**
+ * @ClassName  OrderFormController
+ * @Description 客户端订单信息控制层
+ * @Author hechusheng
+ * @Date 2020-04-24
+ */
 @RestController
 @RequestMapping("/clientOrder")
 public class OrderFormController {

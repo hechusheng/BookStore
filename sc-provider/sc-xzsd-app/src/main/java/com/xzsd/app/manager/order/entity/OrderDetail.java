@@ -1,12 +1,14 @@
-package com.xzsd.app.client.orderform.entity;
+package com.xzsd.app.manager.order.entity;
+
+import com.xzsd.app.client.orderform.entity.CmdInfo;
 
 import java.util.List;
 
 /**
  * @ClassName  OrderDetail
- * @Description 客户端订单详情信息实体类
+ * @Description 店长端订单详情信息实体类
  * @Author hechusheng
- * @Date 2020-04-24
+ * @Date 2020-04-25
  */
 public class OrderDetail {
     /**
@@ -54,22 +56,13 @@ public class OrderDetail {
      */
     private String version;
     /**
-     * 商品列表
-     */
-    private List<CmdInfo> cmdInfoList;
-
-    /**
-     * 商品编号
-     */
-    private String comCode;
-    /**
      * 门店编号
      */
     private String storeCode;
     /**
-     * 购买数量
+     * 商品列表
      */
-    private int comCount;
+    private List<CmdInfo> cmdInfoList;
 
     public String getStoreCode() {
         return storeCode;
@@ -77,22 +70,6 @@ public class OrderDetail {
 
     public void setStoreCode(String storeCode) {
         this.storeCode = storeCode;
-    }
-
-    public int getComCount() {
-        return comCount;
-    }
-
-    public void setComCount(int comCount) {
-        this.comCount = comCount;
-    }
-
-    public String getComCode() {
-        return comCode;
-    }
-
-    public void setComCode(String comCode) {
-        this.comCode = comCode;
     }
 
     public List<CmdInfo> getCmdInfoList() {

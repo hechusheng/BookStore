@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.xzsd.app.client.orderform.dao.OrderFormDao">
+    <!--    查询订单列表-->
     <resultMap id="orderMap" type="com.xzsd.app.client.orderform.entity.OrderDetail">
     <id property="orderCode" column="order_code" javaType="java.lang.String" jdbcType="VARCHAR"/>
     <result property="totalPrice" column="total_price"/>
@@ -18,26 +19,7 @@
         <result property="comPrice" column="com_price"/>
         <result property="comCount" column="detail_amount"/>
     </collection>
-</resultMap>
-    <resultMap id="orderDetailMap" type="com.xzsd.app.client.orderform.entity.OrderDetail">
-        <id property="orderCode" column="order_code" javaType="java.lang.String" jdbcType="VARCHAR"/>
-        <result property="totalPrice" column="total_price"/>
-        <result property="orderStatus" column="order_status"/>
-        <result property="createTime" column="create_time"/>
-        <result property="storeName" column="store_name"/>
-        <result property="address" column="address"/>
-        <result property="version" column="version"/>
-        <collection property="cmdInfoList" ofType="com.xzsd.app.client.orderform.entity.CmdInfo">
-            <id property="orderDetailCode" column="detail_code"/>
-            <result property="comCode" column="com_code"/>
-            <result property="picPath" column="pic_path"/>
-            <result property="comName" column="com_name"/>
-            <result property="comPresent" column="com_present"/>
-            <result property="comPrice" column="com_price"/>
-            <result property="comCount" column="detail_amount"/>
-        </collection>
     </resultMap>
-    <!--    查询订单列表-->
     <select id="listOrderByPage" parameterType="com.xzsd.app.client.orderform.entity.OrderInfo" resultMap="orderMap">
         select
             od.order_code,
@@ -77,12 +59,33 @@
         order by od.create_time desc , cmd.create_time desc
     </select>
     <!--查询订单详情-->
+    <resultMap id="orderDetailMap" type="com.xzsd.app.client.orderform.entity.OrderDetail">
+        <id property="orderCode" column="order_code" javaType="java.lang.String" jdbcType="VARCHAR"/>
+        <result property="totalPrice" column="total_price"/>
+        <result property="orderStatus" column="order_status"/>
+        <result property="createTime" column="create_time"/>
+        <result property="storeCode" column="store_code"/>
+        <result property="storeName" column="store_name"/>
+        <result property="address" column="address"/>
+        <result property="totalCmd" column="total_cmd"/>
+        <result property="version" column="version"/>
+        <collection property="cmdInfoList" ofType="com.xzsd.app.client.orderform.entity.CmdInfo">
+            <id property="orderDetailCode" column="detail_code"/>
+            <result property="comCode" column="com_code"/>
+            <result property="picPath" column="pic_path"/>
+            <result property="comName" column="com_name"/>
+            <result property="comPresent" column="com_present"/>
+            <result property="comPrice" column="com_price"/>
+            <result property="comCount" column="detail_amount"/>
+        </collection>
+    </resultMap>
     <select id="getOrder" parameterType="java.lang.String" resultMap="orderDetailMap">
         select
             o.order_code,
             o.total_price,
             o.order_status,
             o.create_time,
+            store.store_code,
             store.store_name,
              CONCAT_WS( '-',province.city_name,city.city_name,area.city_name ) address,
             od.detail_code,
@@ -92,11 +95,12 @@
             cmd.com_present,
             cmd.com_price,
             od.detail_amount,
+            o.total_cmd,
             o.version
         from
             t_order o
         left join
-        t_store store
+            t_store store
         on
             (o.store_code = store.store_code and store.is_delete = 0)
         LEFT JOIN
@@ -202,6 +206,32 @@
             set
                 star_level = (star_level + #{item.starLevel}) / 2
             where
+                com_code = #{item.comCode}
+        </foreach>
+    </update>
+    <!--修改商品库存-->
+    <update id="updateCmd" parameterType="java.util.List">
+        <foreach collection="detailsList" index="index" item="item" open="" separator=";" close="">
+            update
+                t_commodity
+            set
+                com_stock = com_stock + #{item.comCount}
+            where
+                is_delete = 0
+            and
+                com_code = #{item.comCode}
+        </foreach>
+    </update>
+    <!--修改商品销量-->
+    <update id="updateCmdSale" parameterType="java.util.List">
+        <foreach collection="detailsList" index="index" item="item" open="" separator=";" close="">
+            update
+                t_commodity
+            set
+                com_sales = com_sales + #{item.comCount}
+            where
+                is_delete = 0
+            and
                 com_code = #{item.comCode}
         </foreach>
     </update>
