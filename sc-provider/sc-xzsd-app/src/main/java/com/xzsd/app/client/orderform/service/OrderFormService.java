@@ -57,11 +57,13 @@ public class OrderFormService {
      */
     @Transactional(rollbackFor = Exception.class)
     public AppResponse updateOrderStatus(OrderInfo orderInfo){
+        //修改订单状态
         int result = orderFormDao.updateOrderStatus(orderInfo);
         if (0 == result){
             return AppResponse.bizError("修改订单状态失败!");
         }
-        //若订单状态为取消
+        System.out.println("订单状态"+orderInfo.getOrderStatus());
+        //若订单状态为取消，则修改该商品的库存
         if (RoleUtil.CANCEL_VALUE.equals(orderInfo.getOrderStatus())){
             //获取订单详情
             OrderDetail orderDetail =  orderFormDao.getOrder(orderInfo.getOrderCode());
@@ -78,6 +80,27 @@ public class OrderFormService {
             int count = orderFormDao.updateCmd(orderDetailList);
             if (0 == count){
                 return AppResponse.bizError("修改订单状态失败,商品库存失败!");
+            }
+        }
+        //若订单状态为已完成，则修改该商品的销量
+        if (RoleUtil.SUCCESS_VALUE.equals(orderInfo.getOrderStatus())){
+            //获取订单详情
+            OrderDetail orderDetail1 =  orderFormDao.getOrder(orderInfo.getOrderCode());
+            //获取订单的商品信息列表
+            List<CmdInfo> cmdInfoList1 = orderDetail1.getCmdInfoList();
+            //新建购买数量列表
+            List<OrderDetail> orderDetailList1 = new ArrayList<>();
+            //传入购买的商品编号及数量
+            for (int i = 0; i < cmdInfoList1.size(); i++) {
+                OrderDetail od = new OrderDetail();
+                od.setComCode(cmdInfoList1.get(i).getComCode());
+                od.setComCount(cmdInfoList1.get(i).getComCount());
+                orderDetailList1.add(od);
+            }
+            //更新商品销量
+            int countOd = orderFormDao.updateCmdSale(orderDetailList1);
+            if (0 == countOd){
+                return AppResponse.bizError("修改订单状态失败,商品销量修改失败!");
             }
         }
         return AppResponse.success("修改订单状态成功!");
@@ -104,11 +127,6 @@ public class OrderFormService {
             orderAssess.getAssessInfoList().get(i).setCreateUser(userCode);
             orderAssess.getAssessInfoList().get(i).setIsDelete(0);
         }
-        //更新商品评价星级
-        int countStar = orderFormDao.updateStarLevel(orderAssess.getAssessInfoList());
-        if ( 0 == countStar){
-            return AppResponse.bizError("修改商品星级失败！");
-        }
         //新增评价
         int count = orderFormDao.addCommodityAssess(orderAssess);
         if (orderAssess.getAssessInfoList().size() != count) {
@@ -125,24 +143,12 @@ public class OrderFormService {
         //重新查询订单状态
         OrderInfo orderInfo1 = orderFormDao.getOrderStatus(orderAssess.getOrderCode());
         System.out.println("这是评价后的状态"+orderInfo1.getOrderStatus());
-        //若订单状态为已评价,则将购买商品的销量更新
+        //若订单状态为已评价,则将购买商品的星级更新
         if (RoleUtil.EVALUETED_VALUE.equals(orderInfo1.getOrderStatus())){
-            //获取订单详情
-            OrderDetail orderDetail =  orderFormDao.getOrder(orderInfo1.getOrderCode());
-            //获取订单的商品信息列表
-            List<CmdInfo> cmdInfoList = orderDetail.getCmdInfoList();
-            //新建购买数量列表
-            List<OrderDetail> orderDetailList = new ArrayList<>();
-            //传入购买的商品编号及数量
-            for (int i = 0; i < cmdInfoList.size(); i++) {
-                OrderDetail od = new OrderDetail();
-                od.setComCode(cmdInfoList.get(i).getComCode());
-                od.setComCount(cmdInfoList.get(i).getComCount());
-                orderDetailList.add(od);
-            }
-            int countOd = orderFormDao.updateCmdSale(orderDetailList);
-            if (0 == countOd){
-                return AppResponse.bizError("修改订单状态失败,商品销量修改失败!");
+            //更新商品评价星级
+            int countStar = orderFormDao.updateStarLevel(orderAssess.getAssessInfoList());
+            if ( 0 == countStar){
+                return AppResponse.bizError("修改商品星级失败！");
             }
         }
         return AppResponse.success("评价成功！");

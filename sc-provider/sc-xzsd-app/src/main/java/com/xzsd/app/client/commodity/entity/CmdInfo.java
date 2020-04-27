@@ -124,6 +124,7 @@ public class CmdInfo {
      */
     private String version;
 
+
     public float getStarLevel() {
         return starLevel;
     }

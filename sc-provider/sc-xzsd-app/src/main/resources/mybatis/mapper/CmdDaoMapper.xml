@@ -12,6 +12,7 @@
             a.com_stock comStock,
             a.com_cost comCost,
             a.com_price comPrice,
+            a.star_level starLevel,
             a.page_views pageViews,
             c.sort_code firstSortCode,
             c.sort_name firstSortName,

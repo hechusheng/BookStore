@@ -38,18 +38,25 @@ public class RegService {
         if (0 != countIdCard) {
             return AppResponse.bizError("该身份证已被注册");
         }
-        //校验门店邀请码是否存在
-        int countInviteCode = regDao.countInviteCode(userInfo);
-        if (0 == countInviteCode) {
-            return AppResponse.bizError("门店邀请码不存在");
-        }
+
         userInfo.setUserCode(StringUtil.getCommonCode(2));
         userInfo.setUserPassword(PasswordUtils.generatePassword(userInfo.getUserPassword()));
         //如果图片为空，设置默认图片
         if(userInfo.getPhoto() == null || "".equals(userInfo.getPhoto())){
             userInfo.setPhoto("https://lgbryant-1301861090.cos.ap-guangzhou.myqcloud.com/lgbryant/2020/3/16/3af8c649-2d63-4f71-904f-79064c7ed2a8.jpg");
         }
+        //如果性别没填，默认为2 (未知)
+        if(userInfo.getSex() == null || "".equals(userInfo.getSex())){
+            userInfo.setSex("2");
+        }
         userInfo.setIsDelete(0);
+        //若填入邀请码，则校验门店邀请码是否存在
+        if(userInfo.getInviteCode() != null || !"".equals(userInfo.getInviteCode())){
+            int countInviteCode = regDao.countInviteCode(userInfo);
+            if (0 == countInviteCode) {
+                return AppResponse.bizError("门店邀请码不存在");
+            }
+        }
         //注册
         int countUser = regDao.addUser(userInfo);
         int countUserClient = regDao.addUserClient(userInfo);
