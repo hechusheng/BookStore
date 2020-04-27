@@ -18,7 +18,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.neusoft.core.page.PageUtils.getPageInfo;
-
 /**
  * @ClassName  ManagerOrder
  * @Description 客户端订单信息实现层
