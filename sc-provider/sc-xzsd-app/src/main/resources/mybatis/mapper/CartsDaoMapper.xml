@@ -39,6 +39,7 @@
             cmd.pic_path picPath,
             cmd.com_price comPrice,
             carts.cart_amount cartAmount,
+            carts.total_price totalPrice,
             carts.version version
         FROM
             t_carts carts

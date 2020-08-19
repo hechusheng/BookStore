@@ -1,6 +1,5 @@
 package com.xzsd.app.client.orderform.dao;
 
-import com.xzsd.app.client.addOrder.entity.OrderDetails;
 import com.xzsd.app.client.orderform.entity.*;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -59,16 +58,18 @@ public interface OrderFormDao {
     int updateStarLevel (@Param("assessInfoList") List<AssessInfo> assessInfoList);
 
     /**
-     * 更新商品库存和销量
+     * 更新商品库存
      * @param detailList
      * @return
      */
     int updateCmd (@Param("detailsList") List<OrderDetail> detailList);
 
     /**
-     * 更新商品库存和销量
+     * 更新商品销量
      * @param detailList
      * @return
      */
     int updateCmdSale (@Param("detailsList") List<OrderDetail> detailList);
+
+
 }

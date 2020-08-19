@@ -93,6 +93,7 @@ public class CartsSerivce {
             return AppResponse.bizError("获取商品详情失败");
         }
         cartsInfo.setTotalPrice(cmdInfo.getComPrice() * cartsInfo.getCartAmount());
+        //修改购物车数量
         int count = cartsDao.updateCarts(cartsInfo);
         if (0 == count) {
             return AppResponse.bizError("修改失败！");

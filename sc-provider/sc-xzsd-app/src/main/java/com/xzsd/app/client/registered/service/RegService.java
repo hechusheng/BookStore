@@ -38,7 +38,6 @@ public class RegService {
         if (0 != countIdCard) {
             return AppResponse.bizError("该身份证已被注册");
         }
-
         userInfo.setUserCode(StringUtil.getCommonCode(2));
         userInfo.setUserPassword(PasswordUtils.generatePassword(userInfo.getUserPassword()));
         //如果图片为空，设置默认图片
@@ -51,7 +50,7 @@ public class RegService {
         }
         userInfo.setIsDelete(0);
         //若填入邀请码，则校验门店邀请码是否存在
-        if(userInfo.getInviteCode() != null || !"".equals(userInfo.getInviteCode())){
+        if(userInfo.getInviteCode() != null ){
             int countInviteCode = regDao.countInviteCode(userInfo);
             if (0 == countInviteCode) {
                 return AppResponse.bizError("门店邀请码不存在");

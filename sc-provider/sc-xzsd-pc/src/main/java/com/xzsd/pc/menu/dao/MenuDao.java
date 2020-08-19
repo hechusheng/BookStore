@@ -43,7 +43,7 @@ public interface MenuDao {
      * 查询菜单列表
      * @return
      */
-    List<MenuInfo> listMenu ();
+    List<MenuInfo> listMenu (@Param("role") String role);
 
     /**
      * 删除菜单

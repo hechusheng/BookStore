@@ -108,6 +108,8 @@
             hot.com_code = cmd.com_code
         WHERE
             hot.is_delete = 0
+        and
+            cmd.com_status = 0
         <if test="comName != null and comName != ''">
             AND cmd.com_name like concat ('%',#{comName},'%')
         </if>

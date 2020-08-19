@@ -46,6 +46,8 @@ public class OrderController {
     public AppResponse listOrderByPage(OrderInfo orderInfo){
         try{
             //查询
+            String userId = SecurityUtils.getCurrentUserId();
+            orderInfo.setUserId(userId);
             AppResponse appResponse = orderService.listOrderByPage(orderInfo);
             return appResponse;
         }catch (Exception e){

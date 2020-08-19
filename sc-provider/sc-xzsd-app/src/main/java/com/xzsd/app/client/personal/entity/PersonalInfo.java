@@ -48,6 +48,19 @@ public class PersonalInfo {
      */
     private String phone;
 
+    /**
+     * 版本号
+     */
+    private String version;
+
+    public String getVersion() {
+        return version;
+    }
+
+    public void setVersion(String version) {
+        this.version = version;
+    }
+
     public String getUserCode() {
         return userCode;
     }

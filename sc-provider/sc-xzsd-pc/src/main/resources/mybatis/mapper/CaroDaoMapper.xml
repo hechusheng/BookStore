@@ -135,7 +135,16 @@
             a.end_time endTime
         from
             t_carousel a
-        WHERE a.is_delete = 0
+        left join
+            t_commodity cmd
+        on
+            (a.com_code = cmd.com_code
+            and
+                cmd.is_delete = 0)
+        WHERE
+            a.is_delete = 0
+        and
+            cmd.com_status = 0
         <if test="caroStatus != null and caroStatus != ''">
             and a.caro_status like concat('%', #{caroStatus}, '%')
         </if>

@@ -10,9 +10,7 @@
         where
             is_delete = 0
         and
-            com_name = #{comName}
-        or
-            com_num = #{comNum}
+          com_num = #{comNum}
         <if test="comCode != null and comCode != ''">
             and com_code != #{comCode}
         </if>
@@ -34,10 +32,10 @@
              author,
              press,
              com_status,
-             shelves_time,
              star_level,
+             fixed_price,
+             com_sales,
              is_delete,
-             com_status,
              create_time,
              create_user,
              update_time,
@@ -57,11 +55,11 @@
             #{advertisement},
             #{author},
             #{press},
-            2,
-            now(),
-            #{starLevel},
-            #{isDelete},
             #{comStatus},
+            #{starLevel},
+            #{fixedPrice},
+            #{comSales},
+            #{isDelete},
             now(),
             #{createUser},
             now(),
@@ -87,6 +85,9 @@
             a.shelves_time shelvesTime,
             a.advertisement advertisement,
             a.com_present comPresent,
+            a.com_sales comSales,
+            a.star_level starLevel,
+            a.com_cost comCost,
             a.author author,
             a.press press,
             a.version version
@@ -117,7 +118,8 @@
         <if test="press != null and press != ''">
             and a.press like concat('%', #{press}, '%')
         </if>
-
+        order by
+            a.create_time desc
     </select>
     <!--修改商品信息-->
     <update id="updateCommodityByCode" parameterType="com.xzsd.pc.commodity.entity.CmdInfo">
@@ -144,7 +146,7 @@
         and
             version = #{version}
     </update>
-    <!--删除商品信息-->
+    <!--查询商品是否在热门商品-->
     <select id="hotCmdCount" parameterType="com.xzsd.pc.util.CodeList" resultType="java.lang.String">
         select distinct
             com_code
@@ -159,6 +161,7 @@
             #{comCode}
         </foreach>
     </select>
+    <!--查询商品是否在轮播图-->
     <select id="caroselCount" parameterType="com.xzsd.pc.util.CodeList" resultType="java.lang.String">
         select distinct
             com_code
@@ -173,6 +176,7 @@
             #{comCode}
         </foreach>
     </select>
+    <!--删除商品信息-->
     <update id="deleteCommodity" parameterType="com.xzsd.pc.commodity.entity.CmdInfo">
         update
             t_commodity
@@ -187,24 +191,27 @@
         <foreach item="code" index="index" collection="codeList" open="(" separator="," close=")">
             #{code}
         </foreach>
-        <if test = "checkHotList != null">
-            and
-            (com_code
-            not in
-            <foreach collection="checkHotList" item="code" open="(" separator="," close=")" index="index">
-                #{code}
-            </foreach>
-        </if>
-        <if test="checkCaroList != null">
-            or
-            com_code
-            not in
-            <foreach collection="checkCaroList" item="code" open="(" separator="," close=")" index="index">
-                #{code}
-            </foreach>
+        <if test = "checkHotList != null or checkCaroList != null">
+            and(
+            <if test="checkHotList != null">
+                com_code
+                not in
+                <foreach collection="checkHotList" item="code" open="(" separator="," close=")" index="index">
+                    #{code}
+                </foreach>
+            </if>
+            <if test="checkCaroList != null">
+                <if test="checkHotList != null">
+                    or
+                </if>
+                com_code
+                not in
+                <foreach collection="checkCaroList" item="code" open="(" separator="," close=")" index="index">
+                    #{code}
+                </foreach>
+            </if>
             )
         </if>
-
     </update>
     <!--获取商品详情信息-->
     <select id="findCommodityByCode" parameterType="java.lang.String" resultType="com.xzsd.pc.commodity.entity.CmdInfo">
@@ -248,7 +255,7 @@
             t_commodity
         set
             com_status =  #{comStatus},
-            <if test="comStatus != null and comStatus != '' and comStatus == 0">
+            <if test="comStatus == 0">
                 shelves_time = now(),
             </if>
             update_time = now(),

@@ -25,7 +25,6 @@ import javax.validation.Valid;
 @RequestMapping("/commodityHot")
 @Validated
 public class CmdHotController {
-
     private static final Logger logger = LoggerFactory.getLogger(CmdHotController.class);
     @Resource
     private CmdHotService cmdHotService;
@@ -59,6 +58,7 @@ public class CmdHotController {
     @RequestMapping("getCommodityHot")
     public AppResponse getCommodityHot (String hotCode) {
         try {
+            //查询
             return cmdHotService.getCommodityHot(hotCode);
         }catch (Exception e) {
             logger.error("新增热门商品失败", e);
@@ -94,6 +94,7 @@ public class CmdHotController {
     @RequestMapping("listHotCommodityByPage")
     public AppResponse listHotCommodityByPage (CmdHotInfo cmdHotInfo) {
         try {
+            //查询
             return cmdHotService.listHotCommodityByPage(cmdHotInfo);
         }catch (Exception e) {
             logger.error("查询热门商品列表失败", e);
@@ -110,6 +111,7 @@ public class CmdHotController {
     @PostMapping("deleteCommodityHot")
     public AppResponse deleteCommodityHot (String hotCode) {
         try {
+            //获取操作人编号
             String userId = SecurityUtils.getCurrentUserId();
             return cmdHotService.deleteCommodityHot(hotCode,userId);
         }catch (Exception e) {
@@ -128,6 +130,7 @@ public class CmdHotController {
     @PostMapping("showCommodityHotNum")
     public AppResponse showCommodityHotNum(String showNum,String version) {
         try {
+            //获取操作人编号
             String userId = SecurityUtils.getCurrentUserId();
             return cmdHotService.showCommodityHotNum(userId,showNum,version);
         }catch (Exception e) {
@@ -142,7 +145,7 @@ public class CmdHotController {
      * @return
      */
     @RequestMapping("getShowNum")
-    public AppResponse getShowNum(String showNum,String version) {
+    public AppResponse getShowNum() {
         try {
             return cmdHotService.getShowNum();
         }catch (Exception e) {

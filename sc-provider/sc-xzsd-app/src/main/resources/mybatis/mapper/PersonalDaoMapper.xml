@@ -26,7 +26,8 @@
             u.user_acc userAccount,
             u.photo photo,
             u.phone phone,
-            u.role role
+            u.role role,
+            u.version version
         <!--登录用户为店长或者客户时-->
             <if test="role != null and role != '' and (role == 1 or role == 3)">
                 ,

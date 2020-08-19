@@ -89,13 +89,32 @@ public class CmdSortService {
         return AppResponse.success("查询成功！",firstSortList);
     }
 
+    /**
+     * 删除分类
+     * @param cmdSortInfo
+     * @return
+     */
     @Transactional(rollbackFor = Exception.class)
-    public AppResponse deleteSort (String sortCode,String userId) {
-        int countChildSort = cmdSortDao.countChildSort(sortCode);
-        if (0 != countChildSort) {
-            return AppResponse.bizError("删除失败,改分类存在下级分类");
+    public AppResponse deleteSort (CmdSortInfo cmdSortInfo) {
+        //获取分类编号
+        CmdSortInfo cmdSort = cmdSortDao.findSortByCode(cmdSortInfo.getSortCode());
+        if (cmdSort == null) {
+            return AppResponse.bizError("该分类为空");
+        }else if (Integer.parseInt(cmdSort.getSortLevel()) == 1){
+            //若删除的是一级分类，且有下级分类
+            int countChildSort = cmdSortDao.countChildSort(cmdSortInfo.getSortCode());
+            if (0 != countChildSort) {
+                return AppResponse.bizError("删除失败,改分类存在下级分类");
+            }
+        }else if (Integer.parseInt(cmdSort.getSortLevel()) == 2) {
+            //检查改分类下是否有商品
+            int countCmd = cmdSortDao.countCmd(cmdSortInfo.getSortCode());
+            if (0 != countCmd){
+                return AppResponse.bizError("删除商品二级分类失败，该二级分类下有商品！");
+            }
         }
-        int count = cmdSortDao.deleteSort(sortCode,userId);
+        //删除分类
+        int count = cmdSortDao.deleteSort(cmdSortInfo);
         if (0 == count) {
             return AppResponse.bizError("删除失败");
         }

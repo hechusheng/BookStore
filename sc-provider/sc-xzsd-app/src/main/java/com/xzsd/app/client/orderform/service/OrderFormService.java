@@ -1,7 +1,5 @@
 package com.xzsd.app.client.orderform.service;
 
-
-import com.xzsd.app.client.addOrder.entity.OrderDetails;
 import com.xzsd.app.client.orderform.dao.OrderFormDao;
 import com.xzsd.app.client.orderform.entity.CmdInfo;
 import com.xzsd.app.client.orderform.entity.OrderAssess;
@@ -84,9 +82,9 @@ public class OrderFormService {
         //若订单状态为已完成，则修改该商品的销量
         if (RoleUtil.SUCCESS_VALUE.equals(orderInfo.getOrderStatus())){
             //获取订单详情
-            OrderDetail orderDetail1 =  orderFormDao.getOrder(orderInfo.getOrderCode());
+            OrderDetail orderDetail =  orderFormDao.getOrder(orderInfo.getOrderCode());
             //获取订单的商品信息列表
-            List<CmdInfo> cmdInfoList1 = orderDetail1.getCmdInfoList();
+            List<CmdInfo> cmdInfoList1 = orderDetail.getCmdInfoList();
             //新建购买数量列表
             List<OrderDetail> orderDetailList1 = new ArrayList<>();
             //传入购买的商品编号及数量
@@ -133,22 +131,9 @@ public class OrderFormService {
         }
         System.out.println("这是评价前的状态"+orderInfo.getOrderStatus());
         //设置订单状态为已评价
-        OrderInfo order = new OrderInfo(orderAssess.getOrderCode(),RoleUtil.EVALUETED_VALUE,orderAssess.getUpdateUser());
-        order.setVersion(orderInfo.getVersion());
-        int updateStatus = orderFormDao.updateOrderStatus(order);
-        if (0 == updateStatus){
-            return AppResponse.bizError("评价失败！请稍后重试！");
-        }
-        //重新查询订单状态
-        OrderInfo orderInfo1 = orderFormDao.getOrderStatus(orderAssess.getOrderCode());
-        System.out.println("这是评价后的状态"+orderInfo1.getOrderStatus());
-        //若订单状态为已评价,则将购买商品的星级更新
-        if (RoleUtil.EVALUETED_VALUE.equals(orderInfo1.getOrderStatus())){
-            //更新商品评价星级
-            int countStar = orderFormDao.updateStarLevel(orderAssess.getAssessInfoList());
-            if ( 0 == countStar){
-                return AppResponse.bizError("修改商品星级失败！");
-            }
+        int countStar = orderFormDao.updateStarLevel(orderAssess.getAssessInfoList());
+        if ( 0 == countStar){
+            return AppResponse.bizError("修改商品星级失败！");
         }
         return AppResponse.success("评价成功！");
     }

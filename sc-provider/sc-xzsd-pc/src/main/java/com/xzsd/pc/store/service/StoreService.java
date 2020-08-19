@@ -45,8 +45,8 @@ public class StoreService {
         }
         //校验店长是否存在
         int countUserCode = storeDao.countUserCode(storeInfo);
-        if (0 == countUserCode) {
-            return AppResponse.bizError("店长编号不存在！");
+        if (0 != countUserCode) {
+            return AppResponse.bizError("该店长已有门店！");
         }
         storeInfo.setStoreCode(StringUtil.getCommonCode(2));
         storeInfo.setInviteCode(RandomUtil.getRandomString(6));

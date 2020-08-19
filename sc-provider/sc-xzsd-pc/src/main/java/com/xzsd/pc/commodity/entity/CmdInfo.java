@@ -1,9 +1,6 @@
 package com.xzsd.pc.commodity.entity;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-
 import java.io.Serializable;
-import java.util.Date;
 
 /**
  * 商品实体类
@@ -80,7 +77,7 @@ public class CmdInfo implements Serializable {
     /**
      * 上架时间
      */
-    private Date shelvesTime;
+    private String shelvesTime;
     /**
      * 广告词
      */
@@ -266,11 +263,11 @@ public class CmdInfo implements Serializable {
         this.comPresent = comPresent;
     }
 
-    public Date getShelvesTime() {
+    public String getShelvesTime() {
         return shelvesTime;
     }
 
-    public void setShelvesTime(Date shelvesTime) {
+    public void setShelvesTime(String shelvesTime) {
         this.shelvesTime = shelvesTime;
     }
 

@@ -18,7 +18,6 @@ import java.util.List;
  */
 @Mapper
 public interface CmdDao {
-
     /**
      * 统计商品数量
      * @param cmdInfo 商品信息
@@ -53,8 +52,21 @@ public interface CmdDao {
      * @return
      */
     int deleteCommodity(CodeList codeList);
+
+    /**
+     * 查看删除的商品中是否热门商品
+     * @param codeList
+     * @return
+     */
     List<String> hotCmdCount(CodeList codeList);
+
+    /**
+     * 查看删除商品中是否轮播图
+     * @param codeList
+     * @return
+     */
     List<String> caroselCount(CodeList codeList);
+
     /**
      * 查询商品
      * @param comCode

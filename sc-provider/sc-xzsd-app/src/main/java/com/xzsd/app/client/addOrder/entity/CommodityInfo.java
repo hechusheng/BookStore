@@ -18,7 +18,7 @@ public class CommodityInfo {
     /**
      * 订单详情编号
      */
-    private String orderDeatilCode;
+    private String orderDetailCode;
     /**
      * 商品编号
      */
@@ -64,14 +64,14 @@ public class CommodityInfo {
      */
     private String version;
 
-    private List<CmdInfo> cmdInfoList;
+    private int comCount;
 
-    public List<CmdInfo> getCmdInfoList() {
-        return cmdInfoList;
+    public int getComCount() {
+        return comCount;
     }
 
-    public void setCmdInfoList(List<CmdInfo> cmdInfoList) {
-        this.cmdInfoList = cmdInfoList;
+    public void setComCount(int comCount) {
+        this.comCount = comCount;
     }
 
     public String getOrderCode() {
@@ -90,12 +90,12 @@ public class CommodityInfo {
         this.comStock = comStock;
     }
 
-    public String getOrderDeatilCode() {
-        return orderDeatilCode;
+    public String getOrderDetailCode() {
+        return orderDetailCode;
     }
 
-    public void setOrderDeatilCode(String orderDeatilCode) {
-        this.orderDeatilCode = orderDeatilCode;
+    public void setOrderDetailCode(String orderDetailCode) {
+        this.orderDetailCode = orderDetailCode;
     }
 
     public int getDetailAmount() {

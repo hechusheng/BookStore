@@ -57,7 +57,6 @@ public class OrderDetail {
      * 商品列表
      */
     private List<CmdInfo> cmdInfoList;
-
     /**
      * 商品编号
      */
@@ -70,6 +69,9 @@ public class OrderDetail {
      * 购买数量
      */
     private int comCount;
+
+    public OrderDetail (){
+    }
 
     public String getStoreCode() {
         return storeCode;

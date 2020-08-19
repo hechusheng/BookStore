@@ -1,8 +1,5 @@
 package com.xzsd.pc.carousel.service;
 
-
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
 import com.neusoft.core.restful.AppResponse;
 import com.neusoft.util.StringUtil;
 import com.xzsd.pc.carousel.dao.CarouselDao;
@@ -94,7 +91,6 @@ public class CarouselService {
         if(0 == count) {
             appResponse = AppResponse.bizError("更新失败！请重试");
         }
-
         return appResponse;
     }
 

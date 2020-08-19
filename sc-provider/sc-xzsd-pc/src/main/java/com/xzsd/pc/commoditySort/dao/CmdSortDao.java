@@ -59,9 +59,15 @@ public interface CmdSortDao {
      */
     int countChildSort (String sortCode);
     /**
-     *
+     * 查询二级分类下商品数量
      * @param sortCode
      * @return
      */
-    int deleteSort (@Param("sortCode") String sortCode,@Param("userId") String userId);
+    int countCmd(@Param("sortCode") String sortCode);
+    /**
+     *删除分类
+     * @param cmdSortInfo
+     * @return
+     */
+    int deleteSort (CmdSortInfo cmdSortInfo);
 }

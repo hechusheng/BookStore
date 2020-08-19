@@ -21,6 +21,8 @@
             t_sys_user
         WHERE
             user_acc = #{userAccount}
+        AND
+            is_delete = 0
         <if test="userCode != null and userCode != ''">
             AND user_code != #{userCode}
         </if>
@@ -49,6 +51,7 @@
             sex,
             phone,
             photo,
+            email,
             is_delete,
             create_time,
             create_user,
@@ -60,11 +63,12 @@
             #{userName},
             #{userAccount},
             #{userPassword},
-            2,
+            #{sex},
             #{idCard},
             #{sex},
             #{phone},
             #{photo},
+            #{email},
             #{isDelete},
             now(),
             #{createUser},

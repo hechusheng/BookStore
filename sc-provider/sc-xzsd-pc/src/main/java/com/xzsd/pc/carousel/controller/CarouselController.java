@@ -23,7 +23,6 @@ import javax.annotation.Resource;
 @RequestMapping("/carousel")
 public class CarouselController {
     private static final Logger logger = LoggerFactory.getLogger(CarouselController.class);
-
     @Resource
     private CarouselService carouselService;
 

@@ -27,10 +27,10 @@ public interface OrderDao {
 
     /**
      * 获取操作人的编号
-     * @param userCode
+     * @param userId
      * @return
      */
-    UserInfo getUser(String userCode);
+    UserInfo getUser(@Param("userId") String userId);
 
     /**
      * 修改订单状态
@@ -40,4 +40,18 @@ public interface OrderDao {
      * @return
      */
     int updateOrderStatus(@Param("listCode") List<String> listCode, @Param("orderStatus") String orderStatus,@Param("userId") String userId);
+
+    /**
+     * 查询订单
+     * @param listCode
+     * @return
+     */
+    List<OrderDetails> getOrder(@Param("listCode") List<String> listCode);
+
+    /**
+     * 修改订单对应的商品库存
+     * @param orderDetailsList
+     * @return
+     */
+    int updateStock (@Param("orderDetailsList") List<OrderDetails> orderDetailsList);
 }

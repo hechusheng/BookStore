@@ -6,6 +6,10 @@ public class CmdAssess {
      */
     private String userCode;
     /**
+     * 用户名
+     */
+    private String userName;
+    /**
      * 评价编号
      */
     private String assessCode;
@@ -53,6 +57,14 @@ public class CmdAssess {
      * 版本号
      */
     private String version;
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
 
     public String getUserCode() {
         return userCode;

@@ -55,8 +55,14 @@
             od.is_delete = 0
         and
             od.store_code = #{storeCode}
-        <if test="orderStatus != null and orderStatus != ''">
-            AND od.order_status = #{orderStatus}
+        <if test="orderStatus != null and orderStatus != '' and orderStatus == 0">
+            AND od.order_status = 0
+        </if>
+        <if test="orderStatus != null and orderStatus != '' and orderStatus == 1">
+            AND od.order_status = 1
+        </if>
+        <if test="orderStatus != null and orderStatus != '' and orderStatus == 3">
+            AND (od.order_status = 3 or od.order_status = 4)
         </if>
         order by od.create_time desc
     </select>

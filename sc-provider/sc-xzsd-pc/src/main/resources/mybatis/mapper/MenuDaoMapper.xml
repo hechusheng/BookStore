@@ -15,10 +15,14 @@
     </select>
     <!--统计菜单数量-->
     <select id="countMenu" parameterType="com.xzsd.pc.menu.entity.MenuInfo" resultType="int">
-        select count(menu_name)
-        from t_menu
-        where is_delete = 0
-        and menu_name = #{menuName}
+        select
+            count(menu_name)
+        from
+            t_menu
+        where
+            is_delete = 0
+        and
+            menu_name = #{menuName}
         <if test="menuCode != null and menuCode != ''">
             and menu_code != #{menuCode}
         </if>
@@ -84,17 +88,22 @@
             a.menu_code menuCode,
             a.menu_name menuName,
             a.menu_code menuCode,
+            a.path path,
             a.version version
         from
             t_menu a
         where
             a.is_delete = 0
+        <if test="role == 1">
+            AND menu_code in ('2020041011160721441','2020041011162790396','2020041011172519573','2020041011170850073')
+        </if>
         order by
-            a.update_time desc
+            a.create_time asc
     </select>
     <!--删除菜单-->
     <update id="deleteMenu" parameterType="com.xzsd.pc.menu.entity.MenuInfo">
-        update t_menu
+        update
+            t_menu
         set
             is_delete = 1,
             update_time = now(),

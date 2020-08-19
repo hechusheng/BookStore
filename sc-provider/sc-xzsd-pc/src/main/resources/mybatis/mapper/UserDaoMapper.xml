@@ -118,6 +118,21 @@
         </if>
         order by a.update_time desc
     </select>
+    <!--查询删除的用户，是否存在拥有门店的店长-->
+    <select id="storeCount" parameterType="com.xzsd.pc.util.CodeList" resultType="java.lang.String">
+        select distinct
+            user_code
+        from
+            t_store
+        where
+            is_delete = 0
+        and
+            user_code
+        in
+        <foreach collection="codeList" index="index" item="userCode" open="(" separator="," close=")">
+            #{userCode}
+        </foreach>
+    </select>
     <!--删除用户-->
     <update id="deleteUser" parameterType="com.xzsd.pc.user.entity.UserInfo">
         update
@@ -130,9 +145,17 @@
         where
             user_code
         in
-        <foreach item="item" index="index" collection="listCode" open="(" separator="," close=")">
-            #{item}
+        <foreach item="code" index="index" collection="codeList" open="(" separator="," close=")">
+            #{code}
         </foreach>
+        <if test="checkUserList != null">
+            and
+                user_code
+            not in
+            <foreach collection="checkUserList" item="code" open="(" separator="," close=")" index="index">
+                #{code}
+            </foreach>
+        </if>
     </update>
     <!--获取用户详情信息-->
     <select id="findUserByCode" parameterType="java.lang.String" resultType="com.xzsd.pc.user.entity.UserInfo">

@@ -1,7 +1,9 @@
 package com.xzsd.pc.user.dao;
 
 
+import com.xzsd.pc.store.entity.StoreInfo;
 import com.xzsd.pc.user.entity.UserInfo;
+import com.xzsd.pc.util.CodeList;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -52,11 +54,17 @@ public interface UserDao {
 
     /**
      * 删除用户信息
-     * @param listCode 选中的用户编号集合
-     * @param userId 更新人
+     * @param codeList 选中的用户编号集合
      * @return
      */
-    int deleteUser(@Param("listCode") List<String> listCode, @Param("userId") String userId);
+    int deleteUser(CodeList codeList);
+
+    /**
+     * 查看删除用户中是否存在门店
+     * @param codeList
+     * @return
+     */
+    List<String> storeCount(CodeList codeList);
 
     /**
      * 查询用户详情信息

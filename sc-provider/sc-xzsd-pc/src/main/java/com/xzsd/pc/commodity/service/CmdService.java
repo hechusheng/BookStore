@@ -47,14 +47,18 @@ public class CmdService {
         if(0 != countCommodity){
             return AppResponse.bizError("商品已存在，请重新输入！");
         }
+        //生成商品编号
         cmdInfo.setComCode(StringUtil.getCommonCode(2));
         //如果图片为空，设置默认图片
         if( cmdInfo.getPicPath() == null || "".equals(cmdInfo.getPicPath())){
-            cmdInfo.setPicPath("https://lgbryant-1301861090.cos.ap-guangzhou.myqcloud.com/lgbryant/2020/3/16/3af8c649-2d63-4f71-904f-79064c7ed2a8.jpg");
+            cmdInfo.setPicPath("https://lgbryant-1301861090.cos.ap-guangzhou.myqcloud.com/lgbryant/2020/4/3/4e04b7c9-2c9d-4f4c-8ac9-6d92f670132a.jpg");
         }
-        cmdInfo.setStarLevel(0);
+        //设置商品信息
+        cmdInfo.setStarLevel(5);
         cmdInfo.setIsDelete(0);
         cmdInfo.setComStatus("2");
+        cmdInfo.setComSales(0);
+        cmdInfo.setFixedPrice(cmdInfo.getComCost());
         //新增商品
         int count = cmdDao.addCommodity(cmdInfo);
         if(0 == count) {
@@ -71,6 +75,7 @@ public class CmdService {
      * @Date 2020-03-27
      */
     public AppResponse listCommodityByPage(CmdInfo cmdInfo) {
+        //查询
         List<CmdInfo> cmdInfoList = cmdDao.listCommodity(cmdInfo);
         return AppResponse.success("查询成功！",getPageInfo(cmdInfoList));
     }
@@ -84,10 +89,10 @@ public class CmdService {
      */
     @Transactional(rollbackFor = Exception.class)
     public AppResponse updateCommodityByCode (CmdInfo cmdInfo) {
-        //校验商品是否存在
+        //校验商品书号是否存在
         int countCommodity = cmdDao.countCommodity(cmdInfo);
         if(0 != countCommodity){
-            return AppResponse.bizError("商品已存在，请重新输入！");
+            return AppResponse.bizError("商品书号已存在，请重新输入！");
         }
         //修改商品
         int count = cmdDao.updateCommodityByCode(cmdInfo);
@@ -100,7 +105,6 @@ public class CmdService {
     /**
      * 删除商品
      * @param comCode
-     * @param userId
      * @return
      */
     @Transactional(rollbackFor = Exception.class)
@@ -111,18 +115,23 @@ public class CmdService {
         //校验商品是否热门商品或轮播图
         CodeList codeList = new CodeList();
         codeList.setCodeList(comCodeList);
+        //热门商品列表
         List<String> checkHotList = cmdDao.hotCmdCount(codeList);
+        //轮播图列表
         List<String> checkCaroList = cmdDao.caroselCount(codeList);
-        // 删除商品
+        // 判断删除商品中是否有热门商品
         if (checkHotList != null && checkHotList.size() != 0){
             codeList.setCheckHotList(checkHotList);
         }
+        // 判断删除商品中是否有轮播图
         if (checkCaroList != null && checkCaroList.size() != 0){
             codeList.setCheckCaroList(checkCaroList);
         }
+        codeList.setUserId(userId);
+        //删除商品
         int count = cmdDao.deleteCommodity(codeList);
         if (0 == count) {
-           return AppResponse.bizError("删除失败，请重试！");
+           return AppResponse.bizError("删除失败,删除商品是热门商品或轮播图！");
         }else if (codeSize != count){
             return AppResponse.success("删除商品成功,存在轮播图、热门商品无法删除");
         }

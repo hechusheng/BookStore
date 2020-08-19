@@ -34,10 +34,13 @@ public class UserClientService {
     public AppResponse listUserClientByPage(UserClientInfo userClientInfo) {
         //获取用户角色
         UserInfo userInfo = userDao.findUserByCode(userClientInfo.getUserId());
-//        //判断登录角色是否为空
-//        if (userInfo.getRole() != null || "".equals(userInfo.getRole()) ) {
-//            userClientInfo.setRole(userInfo.getRole());
-//        }
+        String count = null;
+        if (userInfo.getRole().equals("1")) {
+            count = userClientDao.getInvCode(userClientInfo.getUserId());
+        }
+        if (null != count) {
+            userClientInfo.setInviteCode(count);
+        }
         //查询客户
         List<UserClientInfo> userClientInfos = userClientDao.listUserClientByPage(userClientInfo);
         return AppResponse.success("查询客户成功",getPageInfo(userClientInfos));

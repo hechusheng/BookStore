@@ -48,6 +48,7 @@ public class DriverService {
            driverInfo.setPhoto("https://lgbryant-1301861090.cos.ap-guangzhou.myqcloud.com/lgbryant/2020/3/16/3af8c649-2d63-4f71-904f-79064c7ed2a8.jpg");
         }
         driverInfo.setIsDelete(0);
+        driverInfo.setSex("2");
         //新增司机
         int countUser = driverDao.addUser(driverInfo);
         int countDriver = driverDao.addDriver(driverInfo);

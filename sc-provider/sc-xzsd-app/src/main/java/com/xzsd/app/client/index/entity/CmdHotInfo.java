@@ -62,7 +62,7 @@ public class CmdHotInfo {
     /**
      *商品价格
      */
-    private String comPrice;
+    private float comPrice;
 
     public String getPicPath() {
         return picPath;
@@ -72,11 +72,11 @@ public class CmdHotInfo {
         this.picPath = picPath;
     }
 
-    public String getComPrice() {
+    public float getComPrice() {
         return comPrice;
     }
 
-    public void setComPrice(String comPrice) {
+    public void setComPrice(float comPrice) {
         this.comPrice = comPrice;
     }
 

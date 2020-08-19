@@ -81,25 +81,16 @@ public class MenuService {
      * @return
      */
     public AppResponse listMenu (String userCode) {
-        //获取操作人的编号
+        //获取操作人的编号及角色
         UserInfo userInfo = menuDao.getUser(userCode);
-        System.out.println("aaaaaaaaaaaaaaaaaaaa"+userInfo.getRole());
         //管理员查全部菜单
-        if (RoleUtil.ADMIN.equals(userInfo.getRole())){
-            List<MenuInfo> menuInfoList = menuDao.listMenu();
+        if (RoleUtil.ADMIN.equals(userInfo.getRole()) || RoleUtil.MANAGER.equals(userInfo.getRole())){
+            List<MenuInfo> menuInfoList = menuDao.listMenu(userInfo.getRole());
             if (menuInfoList != null){
                 return AppResponse.success("查询菜单列表成功!",menuInfoList);
             }
-        }else if (RoleUtil.MANAGER.equals(userInfo.getRole())){
-            //店长只有固定模块
-            List<MenuInfo> menuInfoList = new ArrayList<>();
-            menuInfoList.add(new MenuInfo("2020041011160721441","客户管理",null));
-            menuInfoList.add(new MenuInfo("2020041011162790396","订单管理",null));
-            menuInfoList.add(new MenuInfo("2020041011172519573","门店管理",null));
-            menuInfoList.add(new MenuInfo("2020041011170850073","司机管理",null));
-            return AppResponse.success("查询菜单列表成功!",menuInfoList);
         }
-        return AppResponse.bizError("查询菜单列表失败!");
+        return AppResponse.bizError("权限不足，无法查看！");
     }
 
     /**

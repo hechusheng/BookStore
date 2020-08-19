@@ -10,13 +10,14 @@
         from
             t_sys_user
         where
-            user_code = #{userCode}
+            user_code = #{userId}
         and
             is_delete = 0
     </select>
     <!--查询订单详情-->
     <select id="findDetailByCode" parameterType="com.xzsd.pc.order.entity.OrderDetails" resultType="com.xzsd.pc.order.entity.OrderDetails">
         SELECT
+            odd.detail_code orderDetailsCode,
             od.user_code userCode,
 	        od.order_code orderCode,
             odd.com_code comCode,
@@ -48,7 +49,7 @@
     <select id="listOrderByPage" parameterType="com.xzsd.pc.order.entity.OrderInfo" resultType="com.xzsd.pc.order.entity.OrderInfo">
         SELECT
             od.order_code orderCode,
-            odd.total_price totalPrice,
+            od.total_price totalPrice,
             od.order_status orderStatus,
             od.store_code storeCode,
             us.user_name userName,
@@ -58,17 +59,13 @@
         FROM
             t_order od
         LEFT JOIN
-            t_order_detail odd
-        ON
-            od.order_code = odd.order_code
-        LEFT JOIN
             t_sys_user us
         ON
             od.user_code = us.user_code
         where
             od.is_delete = 0
-        <if test="role != null and role !='' and role == 2">
-            AND od.store_code in (select store_code from t_sys_store where user_code = #{userId})
+        <if test="role == 1">
+            AND od.store_code in (select store_code from t_store where user_code = #{userId})
         </if>
         <if test="userName != null and userName != ''">
             AND us.user_name like concat ('%',#{userName},'%')
@@ -76,11 +73,11 @@
         <if test="orderCode != null and orderCode != ''">
             AND od.order_code like concat ('%',#{orderCode},'%')
         </if>
-        <if test="payTimeStart != null">
-            AND od.pay_time &lt;= #{payTimeStart}
+        <if test="payTimeStart != null and payTimeStart != ''">
+            AND od.pay_time &gt;= DATE_FORMAT( #{payTimeStart} ,'%Y-%m-%d %h:%i:%S')
         </if>
-        <if test="payTimeEnd != null ">
-            AND od.pay_time &gt;= #{payTimeEnd}
+        <if test="payTimeEnd != null and payTimeEnd != ''">
+            AND od.pay_time &lt;= DATE_FORMAT( #{payTimeEnd} ,'%Y-%m-%d %h:%i:%S')
         </if>
         <if test="phone != null and phone != ''">
             AND us.phone like concat ('%',#{phone},'%')
@@ -104,6 +101,39 @@
         in
         <foreach item="item" index="index" collection="listCode" open="(" separator="," close=")">
             #{item}
+        </foreach>
+    </update>
+    <!--查询订单的商品编号，购买数量，库存-->
+    <select id="getOrder" parameterType="java.util.List" resultType="com.xzsd.pc.order.entity.OrderDetails">
+        select
+            od.com_code comCode,
+            od.detail_amount detailAmount,
+            cmd.com_stock comStock
+        from
+            t_order_detail od
+        left join
+            t_commodity cmd
+        on
+            (od.com_code = cmd.com_code and cmd.is_delete = 0)
+        where
+            od.is_delete = 0
+        and
+            od.order_code in
+        <foreach item="item" index="index" collection="listCode" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+    <!--更新商品库存-->
+    <update id="updateStock" parameterType="java.util.List">
+        <foreach collection="orderDetailsList" index="index" item="item" open="" separator=";" close="">
+            update
+                t_commodity
+            set
+                com_stock = com_stock + #{item.detailAmount}
+            where
+                is_delete = 0
+            and
+                com_code = #{item.comCode}
         </foreach>
     </update>
 </mapper>

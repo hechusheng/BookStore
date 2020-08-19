@@ -136,9 +136,9 @@
     <orderEntry type="library" scope="RUNTIME" name="Gradle: com.netflix.netflix-commons:netflix-commons-util:0.1.1" level="project" />
     <orderEntry type="library" name="Gradle: org.apache.tomcat.embed:tomcat-embed-core:8.5.27" level="project" />
     <orderEntry type="library" name="Gradle: io.zipkin.reporter2:zipkin-sender-amqp-client:2.5.0" level="project" />
-    <orderEntry type="library" name="Gradle: org.apache.tomcat.embed:tomcat-embed-el:8.5.27" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: com.netflix.netflix-commons:netflix-statistics:0.1.1" level="project" />
     <orderEntry type="library" name="Gradle: org.codehaus.jackson:jackson-core-asl:1.9.13" level="project" />
+    <orderEntry type="library" name="Gradle: org.apache.tomcat.embed:tomcat-embed-el:8.5.27" level="project" />
     <orderEntry type="library" name="Gradle: io.zipkin.reporter2:zipkin-reporter:2.5.0" level="project" />
     <orderEntry type="library" name="Gradle: io.zipkin.zipkin2:zipkin:2.6.1" level="project" />
     <orderEntry type="library" name="Gradle: javax.validation:validation-api:1.1.0.Final" level="project" />

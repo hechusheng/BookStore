@@ -4,13 +4,16 @@
     <!--统计分类数量-->
     <select id="countSortName" parameterType="com.xzsd.pc.commoditySort.entity.CmdSortInfo" resultType="int">
         select
-            count(sort_code)
+            count(*)
         from
             t_commodity_sort
         where
             is_delete = 0
         and
             sort_name = #{sortName}
+        <if test="sortCode != null and sortCode != ''">
+            AND sort_code != #{sortCode}
+        </if>
     </select>
     <!--新增商品分类-->
     <insert id="addCommoditySort" parameterType="com.xzsd.pc.commoditySort.entity.CmdSortInfo" >
@@ -63,7 +66,8 @@
             t_commodity_sort
         where
             sort_code = #{sortCode}
-        and  is_delete = 0
+        and
+            is_delete = 0
     </select>
     <!--修改商品分类信息-->
     <update id="updateSort" parameterType="com.xzsd.pc.commoditySort.entity.CmdSortInfo">
@@ -121,13 +125,24 @@
         and
             is_delete = 0
     </select>
+    <!--查询二级分类下商品数量-->
+    <select id="countCmd" parameterType="java.lang.String" resultType="int">
+        select
+            count(*)
+        from
+            t_commodity
+        where
+            is_delete = 0
+        and
+            sort_code = #{sortCode}
+    </select>
     <!--删除商品分类-->
     <update id="deleteSort" parameterType="com.xzsd.pc.commoditySort.entity.CmdSortInfo">
         update t_commodity_sort
         set
             is_delete = 1,
             update_time = now(),
-            update_user = #{userId},
+            update_user = #{updateUser},
             version = version + 1
         where
             sort_code = #{sortCode}

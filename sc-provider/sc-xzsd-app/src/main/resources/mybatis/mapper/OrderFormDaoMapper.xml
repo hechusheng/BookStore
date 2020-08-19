@@ -2,29 +2,51 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.xzsd.app.client.orderform.dao.OrderFormDao">
     <!--    查询订单列表-->
+<!--    <resultMap id="orderMap" type="com.xzsd.app.client.orderform.entity.OrderDetail">-->
+<!--    <id property="orderCode" column="order_code" javaType="java.lang.String" jdbcType="VARCHAR"/>-->
+<!--        <result property="totalPrice" column="total_price"/>-->
+<!--        <result property="orderStatus" column="order_status"/>-->
+<!--        <result property="createTime" column="create_time"/>-->
+<!--        <result property="storeName" column="store_name"/>-->
+<!--        <result property="address" column="address"/>-->
+<!--        <result property="totalCmd" column="total_cmd"/>-->
+<!--        <result property="version" column="version"/>-->
+<!--    <collection property="cmdInfoList" ofType="com.xzsd.app.client.orderform.entity.CmdInfo" select="orderCmd" column="{orderCode=order_code}">-->
+<!--        <id property="orderDetailCode" column="detail_code"/>-->
+<!--        <result property="comCode" column="com_code"/>-->
+<!--        <result property="picPath" column="pic_path"/>-->
+<!--        <result property="comName" column="com_name"/>-->
+<!--        <result property="comPresent" column="com_present"/>-->
+<!--        <result property="comPrice" column="com_price"/>-->
+<!--        <result property="comCount" column="detail_amount"/>-->
+<!--    </collection>-->
+<!--    </resultMap>-->
     <resultMap id="orderMap" type="com.xzsd.app.client.orderform.entity.OrderDetail">
-    <id property="orderCode" column="order_code" javaType="java.lang.String" jdbcType="VARCHAR"/>
-    <result property="totalPrice" column="total_price"/>
-    <result property="orderStatus" column="order_status"/>
-    <result property="createTime" column="create_time"/>
-    <result property="storeName" column="store_name"/>
-    <result property="address" column="address"/>
-    <result property="version" column="version"/>
-    <collection property="cmdInfoList" ofType="com.xzsd.app.client.orderform.entity.CmdInfo" select="orderCmd" column="{orderCode=order_code}">
-        <id property="orderDetailCode" column="detail_code"/>
-        <result property="comCode" column="com_code"/>
-        <result property="picPath" column="pic_path"/>
-        <result property="comName" column="com_name"/>
-        <result property="comPresent" column="com_present"/>
-        <result property="comPrice" column="com_price"/>
-        <result property="comCount" column="detail_amount"/>
-    </collection>
+        <id property="orderCode" column="order_code" javaType="java.lang.String" jdbcType="VARCHAR"/>
+        <result property="totalPrice" column="total_price"/>
+        <result property="orderStatus" column="order_status"/>
+        <result property="createTime" column="create_time"/>
+        <result property="storeCode" column="store_code"/>
+        <result property="storeName" column="store_name"/>
+        <result property="address" column="address"/>
+        <result property="totalCmd" column="total_cmd"/>
+        <result property="version" column="version"/>
+        <collection property="cmdInfoList" ofType="com.xzsd.app.client.orderform.entity.CmdInfo" select="orderCmd" column="{orderCode = order_code}">
+            <id property="orderDetailCode" column="detail_code"/>
+            <result property="comCode" column="com_code"/>
+            <result property="picPath" column="pic_path"/>
+            <result property="comName" column="com_name"/>
+            <result property="comPresent" column="com_present"/>
+            <result property="comPrice" column="com_price"/>
+            <result property="detailAmount" column="detail_amount"/>
+        </collection>
     </resultMap>
     <select id="listOrderByPage" parameterType="com.xzsd.app.client.orderform.entity.OrderInfo" resultMap="orderMap">
         select
             od.order_code,
             od.total_price,
             od.order_status,
+            od.total_cmd,
             od.version
         from
             t_order od
@@ -32,8 +54,14 @@
             od.is_delete = 0
         and
             od.user_code = #{userCode}
-        <if test="orderStatus != null and orderStatus != ''">
-            AND od.order_status = #{orderStatus}
+        <if test="orderStatus != null and orderStatus != '' and orderStatus == 0">
+            AND od.order_status = 0
+        </if>
+        <if test="orderStatus != null and orderStatus != '' and orderStatus == 1">
+            AND od.order_status = 1
+        </if>
+        <if test="orderStatus != null and orderStatus != '' and orderStatus == 3">
+            AND (od.order_status = 3 or od.order_status = 4)
         </if>
         order by od.create_time desc
     </select>
@@ -204,7 +232,7 @@
             update
                 t_commodity
             set
-                star_level = (star_level + #{item.starLevel}) / 2
+                star_level = (select avg(star_level) from t_commodity_assess where is_delete = 0 and com_code = #{item.comCode})
             where
                 com_code = #{item.comCode}
         </foreach>

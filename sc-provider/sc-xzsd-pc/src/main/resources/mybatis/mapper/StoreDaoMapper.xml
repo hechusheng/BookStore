@@ -22,13 +22,11 @@
         select
             count(*)
         from
-            t_sys_user
+            t_store
         where
             user_code = #{userCode}
         and
             is_delete = 0
-        and
-            role = 1
     </select>
     <!--新增门店-->
     <insert id="addStore" parameterType="com.xzsd.pc.store.entity.StoreInfo">
@@ -230,7 +228,8 @@
     <select id="getUser" parameterType="java.lang.String" resultType="com.xzsd.pc.user.entity.UserInfo">
         select
             user_code userCode,
-            role role
+            role role,
+            version version
         from
             t_sys_user
         where

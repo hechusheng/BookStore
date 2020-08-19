@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.annotation.Resource;
 
 @RestController
-@RequestMapping("driverIndex")
+@RequestMapping("/driverIndex")
 public class DriverController {
     private static final Logger logger = LoggerFactory.getLogger(DriverController.class);
 

@@ -148,9 +148,9 @@
     <orderEntry type="library" name="Gradle: org.springframework.security:spring-security-jwt:1.0.9.RELEASE" level="project" />
     <orderEntry type="library" name="Gradle: org.aspectj:aspectjweaver:1.8.13" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: io.reactivex:rxnetty-contexts:0.4.9" level="project" />
+    <orderEntry type="library" name="Gradle: org.aspectj:aspectjrt:1.8.13" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: io.reactivex:rxnetty:0.4.9" level="project" />
     <orderEntry type="library" name="Gradle: io.swagger:swagger-annotations:1.5.14" level="project" />
-    <orderEntry type="library" name="Gradle: org.aspectj:aspectjrt:1.8.13" level="project" />
     <orderEntry type="library" name="Gradle: org.springframework.security:spring-security-crypto:4.2.4.RELEASE" level="project" />
     <orderEntry type="library" name="Gradle: org.apache.httpcomponents:httpclient:4.5.5" level="project" />
     <orderEntry type="library" name="Gradle: org.bouncycastle:bcpkix-jdk15on:1.56" level="project" />

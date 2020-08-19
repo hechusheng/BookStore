@@ -4,23 +4,29 @@
     <!--    查询轮播图列表-->
     <select id="listCarousel" resultType="com.xzsd.app.client.index.entity.CarouselInfo">
         select
-            caro_code as caroCode,
-            path as path,
-            caro_num as caorNum,
-            caro_status as caroStatus,
-            com_code as comCode,
-            start_time as startTime,
-            end_time as endTime,
-            version
+            c.caro_code as caroCode,
+            c.path as path,
+            c.caro_num as caorNum,
+            c.caro_status as caroStatus,
+            c.com_code as comCode,
+            c.start_time as startTime,
+            c.end_time as endTime,
+            c.version
         from
-            t_carousel
+            t_carousel c
+        left join
+            t_commodity cmd
+        on
+            (c.com_code = cmd.com_code and cmd.is_delete = 0)
         where
-            is_delete = 0
+            c.is_delete = 0
         and
-            (now() between start_time and end_time)
+            cmd.com_status = 0
         and
-            caro_status = 0
-        order by caro_num asc
+            (now() between c.start_time and c.end_time)
+        and
+            c.caro_status = 0
+        order by c.caro_num asc
     </select>
     <!--查询展示数量-->
     <select id="getShowNum" resultType="int">

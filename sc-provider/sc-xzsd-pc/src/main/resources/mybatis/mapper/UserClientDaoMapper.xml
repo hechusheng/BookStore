@@ -1,6 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.xzsd.pc.userClient.dao.UserClientDao">
+    <!--    获取查询人的门店邀请码-->
+    <select id="getInvCode" resultType="java.lang.String" parameterType="java.lang.String">
+        select
+            invite_code inviteCode
+        from
+            t_store
+        where
+            is_delete = 0
+        and
+            user_code = #{userId}
+    </select>
+    <!--获取操作人角色-->
+    <select id="getUser" parameterType="java.lang.String" resultType="com.xzsd.pc.user.entity.UserInfo">
+        select
+            user_code userCode,
+            role role
+        from
+            t_sys_user
+        where
+            user_code = #{userId}
+        and
+            is_delete = 0
+    </select>
     <!--用户列表-->
     <select id="listUserClientByPage" parameterType="com.xzsd.pc.userClient.entity.UserClientInfo" resultType="com.xzsd.pc.userClient.entity.UserClientInfo">
         SELECT
@@ -29,8 +52,8 @@
         <if test="userName != null and userName != ''">
             and us.user_name like concat('%', #{userName}, '%')
         </if>
-        <if test="role == 1">
-            AND cl.invite_code in (select invite_code from t_store where user_code = #{userId})
+        <if test="inviteCode != null and inviteCode != ''">
+            AND cl.invite_code = #{inviteCode}
         </if>
         order by us.update_time desc
     </select>

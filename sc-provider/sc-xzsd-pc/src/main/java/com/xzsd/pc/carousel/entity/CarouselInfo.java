@@ -9,32 +9,26 @@ public class CarouselInfo {
      * 轮播图编号
      */
     private String caroCode;
-
     /**
      * 轮播图序号
      */
     private String caroNum;
-
     /**
      * 图片路径
      */
     private String path;
-
     /**
      * 轮播图状态态(0启用 1禁用)
      */
     private String caroStatus;
-
     /**
      *有效时间起
      */
     private String startTime;
-
     /**
      * 有效时间止
      */
     private String endTime;
-
     /**
      * 商品编号
      */

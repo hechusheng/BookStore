@@ -66,6 +66,18 @@ public class OrderDetails {
      * 版本号
      */
     private String version;
+    /**
+     * 商品库存
+     */
+    private String comStock;
+
+    public String getComStock() {
+        return comStock;
+    }
+
+    public void setComStock(String comStock) {
+        this.comStock = comStock;
+    }
 
     public String getUserCode() {
         return userCode;

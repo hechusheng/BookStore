@@ -37,7 +37,7 @@ public interface CmdDao {
      * @return
      */
     List<SecondClassSort> secondClassList (String firstSortCode);
-
+    List<CmdInfo> comSortCode (String secondSortCode);
     /**
      * 查询商品评价列表(分页)
      * @param cmdAssess

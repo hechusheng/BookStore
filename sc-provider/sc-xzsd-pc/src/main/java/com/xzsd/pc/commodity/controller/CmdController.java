@@ -26,7 +26,6 @@ import javax.annotation.Resource;
 @RequestMapping("/commodity")
 public class CmdController {
     private static final Logger logger = LoggerFactory.getLogger(CmdController.class);
-
     @Resource
     private CmdService cmdService;
 
@@ -61,6 +60,7 @@ public class CmdController {
     @RequestMapping(value = "listCommodityByPage")
     public AppResponse listUsers(CmdInfo cmdInfo) {
         try {
+            //查询
             return cmdService.listCommodityByPage(cmdInfo);
         } catch (Exception e) {
             logger.error("查询商品列表异常", e);
@@ -82,7 +82,6 @@ public class CmdController {
             String userId = SecurityUtils.getCurrentUserId();
             cmdInfo.setUpdateUser(userId);
             return cmdService.updateCommodityByCode(cmdInfo);
-
         }catch (Exception e) {
             logger.error("商品修改失败",e);
             System.out.println(e.toString());
@@ -118,6 +117,7 @@ public class CmdController {
     @RequestMapping(value = "findCommodityByCode")
     public AppResponse findCommodityByCode (String comCode) {
         try{
+            //查询
             return cmdService.findCommodityByCode(comCode);
         }catch(Exception e) {
             logger.error("查询商品失败",e);
@@ -154,6 +154,7 @@ public class CmdController {
     @RequestMapping(value = "listFirstClass")
     public AppResponse listFirstClass (){
         try{
+            //查询
             return cmdService.listFirstClass();
         }catch (Exception e) {
             logger.error("一级分类下拉查询失败！",e);
@@ -170,6 +171,7 @@ public class CmdController {
     @RequestMapping(value = "listSecondClass")
     public AppResponse listSecondClass (String firstSortCode){
         try{
+            //查询
             return cmdService.listSecondClass(firstSortCode);
         }catch (Exception e) {
             logger.error("一级分类下拉查询失败！",e);
@@ -177,15 +179,4 @@ public class CmdController {
             throw e;
         }
     }
-//    @RequestMapping(value = "listCommodity")
-//    public AppResponse listUsers(CmdInfo cmdInfo,String key) {
-//        try {
-//            return cmdService.listCommodity(cmdInfo,key);
-//        } catch (Exception e) {
-//            logger.error("查询商品列表异常", e);
-//            System.out.println(e.toString());
-//            throw e;
-//        }
-//    }
-
 }

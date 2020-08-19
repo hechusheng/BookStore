@@ -42,13 +42,13 @@ public class CmdHotService {
         if(0 != countCmdHotNum) {
             return AppResponse.bizError("热门商品新增失败,商品已存在");
         }
+        //生成编号
         cmdHotInfo.setHotCode(StringUtil.getCommonCode(2));
         cmdHotInfo.setIsDelete(0);
         int count = cmdHotDao.addCommodityHot(cmdHotInfo);
         if(0 == count){
             return AppResponse.bizError("新增失败");
         }
-
         return AppResponse.success("新增成功");
     }
 

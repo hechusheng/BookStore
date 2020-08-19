@@ -56,6 +56,10 @@ public class MenuInfo {
      * 操作人编号
      */
     private String userId;
+    /**
+     * 用户角色
+     */
+    private String role;
 
     public MenuInfo() {
     }
@@ -64,6 +68,14 @@ public class MenuInfo {
         this.menuCode = menuCode;
         this.menuName = menuName;
         this.remark = remark;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 
     public String getMenuCode() {

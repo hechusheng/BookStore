@@ -103,14 +103,15 @@ public class CmdSortController {
 
     /**
      * 删除商品分类
-     * @param sortCode
+     * @param cmdSortInfo
      * @return
      */
     @PostMapping("deleteSort")
-    public AppResponse deleteSort (String sortCode) {
+    public AppResponse deleteSort (CmdSortInfo cmdSortInfo) {
         try {
             String userId = SecurityUtils.getCurrentUserId();
-            return cmdSortService.deleteSort(sortCode,userId);
+            cmdSortInfo.setUpdateUser(userId);
+            return cmdSortService.deleteSort(cmdSortInfo);
         }catch (Exception e) {
             logger.error("查询用户列表异常", e);
             System.out.println(e.toString());
